@@ -132,7 +132,7 @@ WHERE
       <span class="icon_close"></span>
     </div>
     <div class="logo">
-      <a href="./index.php">
+      <a href="index.php">
         <img src="img/logo-main.png" alt="">
       </a>
     </div>
@@ -154,13 +154,37 @@ WHERE
         <div class="row">
           <div class="col-lg-2">
             <div class="logo">
-              <a href="./index.html"><img src="img/logo-main.png" alt=""></a><br>
+              <a href="index.php"><img src="img/logo-main.png" alt=""></a><br>
               <!-- <ul>Business Directory</ul> -->
             </div>
           </div>
-          <div class="col-lg-10">
+          <div class="col-lg">
             <div class="ht-widget">
               <button onclick="document.getElementById('id01').style.display='block'">Login</a>
+            </div>
+          </div>
+          <div class="">
+            <div class="ht-widget">
+              <div class="hs-nav">
+                <nav class="nav-menu">
+                  <ul>
+                    <li class="profile-dropdown">
+                      <div class="user-profile">
+                        <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
+                      </div>
+                      <ul class="dropdown dropleft">
+                        <li>
+                          <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] ?></h2>
+                        </li>
+                        <li><a href="user.html">MY PROFILE</a></li>
+                        <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                        <li><a href="listing-form.html">ADD BUSINESS</a></li>
+                        <li><a href="#">LOGOUT</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>

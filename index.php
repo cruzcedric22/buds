@@ -2,71 +2,6 @@
 require_once "includes/config.php";
 session_start();
 
-// if (isset($_POST['txtEmail']) && isset($_POST['txtUserPass'])) {
-//     $e = addslashes($_POST['txtEmail']);
-//     $p = addslashes($_POST['txtUserPass']);
-//     $sql = "SELECT * FROM login WHERE email='$e' AND password='$p'";
-
-//     if ($rs = $conn->query($sql)) {
-//         if ($rs->num_rows > 0) {
-//             $row = $rs->fetch_assoc();
-//             $userType = $row['userType'];
-
-
-//             // Redirect based on userType
-//             if ($userType == "1") {
-//                 // Guest redirection
-//                 // header("location: index.php");
-//             } elseif ($userType == "2") {
-//                 // Business admin redirection
-//                 $_SESSION['email'] = $e;
-// 								// Retrieve ownerId for the logged-in user
-// 							 $ownerSql = "SELECT ID FROM owner_list WHERE Email='$e'";
-// 							 $ownerResult = $conn->query($ownerSql);
-
-// 							 if ($ownerResult->num_rows > 0) {
-// 									 $ownerRow = $ownerResult->fetch_assoc();
-// 									 $_SESSION['ownerId'] = $ownerRow['ID']; // Store ownerId in a session variable
-// 							 }
-
-//                 header('location: homepage.php');
-//             } elseif ($userType == "3") {
-//                 // Regular user redirection
-//                 // header('location: index.php');
-//             } elseif ($userType == "4") {
-//                 // Superadmin redirection
-//                 // header('location: index.php');
-//         } else {
-//             // Login failed
-//             echo '<script> alert("Login Failed: Invalid Credentials!")</script>';
-//         }
-//     } else {
-//         // Query error
-//         echo $conn->error;
-//     }
-// 	}
-// }
-
-//GUEST USER SIGN IN
-if (isset($_POST["signguest"])) {
-
-  $firstname      = $_POST['fname'];
-  $middlename     = $_POST['mname'];
-  $lastname       = $_POST['lname'];
-  $email          = $_POST['email'];
-  $password       = $_POST['password'];
-  $passconfirm    = $_POST['passwordconfirm'];
-
-  $sql1 = "INSERT INTO `guest_login`( `firstName`, `middleName`, `lastName`, `email`, `password`, `confirmPassword`) VALUES ('$firstname','$middlename','$lastname','$email','$password','$passconfirm')";
-  $result1 = $conn->query($sql1);
-
-  $sql2 = "INSERT INTO `login` (`email`,`password`,`userType`) VALUES ('$email','$password', 'guest')";
-  $result2 = $conn->query($sql2);
-
-  header("Location: index.php");
-  exit();
-}
-
 //BUSINESS SIGN UP
 
 if (isset($_POST["btnbusiness"])) {
@@ -128,6 +63,13 @@ if (isset($_POST["btnbusiness"])) {
   <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
   <link rel="stylesheet" href="css/style.css" type="text/css">
   <link rel="stylesheet" href="css/templatemo-plot-listing.css" type="text/css">
+  <style>
+    /* Add this CSS to your stylesheet */
+    .swal-confirm-button {
+      width: 100px;
+      /* Adjust the width as needed */
+    }
+  </style>
 
 </head>
 
@@ -170,15 +112,37 @@ if (isset($_POST["btnbusiness"])) {
               <!-- <ul>Business Directory</ul> -->
             </div>
           </div>
-          <div class="col-lg-10">
+
+          <div class="col-lg-9">
             <div class="ht-widget">
               <button onclick="document.getElementById('id01').style.display='block'">Login</a>
             </div>
-
           </div>
-
+          <div class="col-lg-1">
+            <div class="ht-widget">
+              <div class="hs-nav">
+                <nav class="nav-menu">
+                  <ul>
+                    <li class="profile-dropdown">
+                      <div class="user-profile">
+                        <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
+                      </div>
+                      <ul class="dropdown dropleft">
+                        <li>
+                          <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] ?></h2>
+                        </li>
+                        <li><a href="user.html">MY PROFILE</a></li>
+                        <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                        <li><a href="listing-form.html">ADD BUSINESS</a></li>
+                        <li><a href="#">LOGOUT</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
         </div>
-
         <div class="canvas-open">
           <span class="icon_menu"></span>
         </div>
@@ -240,7 +204,7 @@ if (isset($_POST["btnbusiness"])) {
       </div>
     </div>
   </div>
-
+  <!-- modal for user create -->
   <div id="id02" class="modal">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content w-100">
@@ -256,34 +220,34 @@ if (isset($_POST["btnbusiness"])) {
               </form>
               <div class="row">
                 <div class="col">
-                  <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text">
+                  <div class="forms-inputs mb-4"> <span>First Name</span> <input id="f_name" type="text">
                   </div>
                 </div>
                 <div class="col">
-                  <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text">
+                  <div class="forms-inputs mb-4"> <span>Middle Name</span> <input id="m_name" type="text">
                   </div>
                 </div>
 
                 <div class="col">
-                  <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text">
+                  <div class="forms-inputs mb-4"> <span>Last Name</span> <input id="l_name" type="text">
                   </div>
                 </div>
               </div>
 
               <div class="row">
                 <div class="col">
-                  <div class="forms-inputs mb-4"> <span>Email</span> <input type="text"> </div>
+                  <div class="forms-inputs mb-4"> <span>Email</span> <input type="text" id="emailUser"> </div>
                 </div>
               </div>
-              <div class="forms-inputs mb-4"> <span>Password</span> <input type="password">
+              <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" id="pass">
               </div>
-              <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password">
+              <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" id="con_pass">
               </div>
               <!-- <div class="form-group form-check">
                               <input type="checkbox" class="form-check-input" id="exampleCheck1">
                               <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
                             </div> -->
-              <div class="mb-3"> <button class="btn w-100">SIGN UP</button> </div>
+              <div class="mb-3"> <button class="btn w-100" onclick="createUser()">SIGN UP</button> </div>
             </div>
             <!-- <div class="success-data" v-else>
                           <div class="text-center d-flex flex-column"> <i class='bx bxs-badge-check'></i> <h6 class="text-center fs-1">Already have an Account? <a href="#id01" data-toggle="modal">Sign In</a></h6> </div>
@@ -293,7 +257,7 @@ if (isset($_POST["btnbusiness"])) {
       </div>
     </div>
   </div>
-
+  <!-- modal for business create -->
   <div id="id03" class="modal">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content w-100">
@@ -748,6 +712,7 @@ if (isset($_POST["btnbusiness"])) {
   <script src="js/main.js"></script>
   <script src="js/main1.js"></script>
   <script src="js/login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     $('#id02, #id03').on('show.bs.modal', function(e) {
       $('#id01').modal('hide'); // Close the first modal when the second modal is shown
@@ -763,6 +728,62 @@ if (isset($_POST["btnbusiness"])) {
         window.location.href = "listing.php?a=" + searchVal;
       }, 1);
     }
+
+    function createUser() {
+      var fname = $('#f_name').val();
+      var mname = $('#m_name').val();
+      var lname = $('#l_name').val();
+      var email = $('#emailUser').val();
+      var pass = $('#pass').val();
+      var conpass = $('#con_pass').val();
+
+      var payload = {
+        fname: fname,
+        mname: mname,
+        lname: lname,
+        email: email,
+        pass: pass
+      };
+
+      if (pass == conpass) {
+        console.log(payload)
+        $.ajax({
+          type: "POST",
+          url: 'controllers/users.php',
+          data: {
+            payload: JSON.stringify(payload),
+            setFunction: 'createUser'
+          },
+          success: function(response) {
+            data = JSON.parse(response);
+            Swal.fire({
+              title: data.title,
+              text: data.message,
+              icon: data.icon,
+              customClass: {
+                confirmButton: 'swal-confirm-button',
+              },
+              showCancelButton: false,
+            });
+            //for normal UI AHAHAHHAHAHA
+            // swal.fire(data.title, data.message, data.icon);
+            setTimeout(function() {
+              window.location.reload();
+            }, 2000);
+          }
+        });
+      } else {
+        Swal.fire({
+          title: 'Warning',
+          text: 'Passwords didn\'t match',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+      }
+    };
   </script>
 </body>
 

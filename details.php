@@ -17,7 +17,7 @@ if ($rs = $conn->query($sql)) {
                         <div class="col-lg-4">
                             <div class="profile-agent-info">
                                 <div class="pi-pic">
-                                    <img src='.$row['Businesslogo'].' alt="">
+                                    <img src=' . $row['Businesslogo'] . ' alt="">
                                     <div class="rating-point">
                                         4.5
                                     </div>
@@ -136,23 +136,28 @@ if ($rs = $conn->query($sql)) {
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
-                    <div class="col-lg-10">
+                    <div class="col-lg">
+                        <div class="ht-widget">
+                            <button onclick="document.getElementById('id01').style.display='block'">Login</a>
+                        </div>
+                    </div>
+                    <div class="">
                         <div class="ht-widget">
                             <div class="hs-nav">
                                 <nav class="nav-menu">
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <img src="img/testimonial-author/blankpic.jpg" alt="User's Name">
+                                                <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
                                             </div>
-
                                             <ul class="dropdown dropleft">
                                                 <li>
-                                                    <h2> $data['Surname'] .' , '. $data['Firstname']</h2>
+                                                    <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] ?></h2>
                                                 </li>
-                                                <li><a href="user.php">MY PROFILE</a></li>
-                                                <li><a href="manage.php">MANAGE BUSINESS</a></li>
-                                                <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                                                <li><a href="user.html">MY PROFILE</a></li>
+                                                <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                                                <li><a href="listing-form.html">ADD BUSINESS</a></li>
+                                                <li><a href="#">LOGOUT</a></li>
                                             </ul>
                                         </li>
                                     </ul>
