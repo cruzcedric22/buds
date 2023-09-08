@@ -185,7 +185,7 @@ if(isset($_POST['SubmitProperty'])){
             <span class="icon_close"></span>
         </div>
         <div class="logo">
-            <a href="./homepage.php">
+            <a href="./index.php">
                 <img src="img/logo-main.png" alt="">
             </a>
         </div>
@@ -201,7 +201,7 @@ if(isset($_POST['SubmitProperty'])){
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./homepage.php"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="./index.php"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
@@ -237,7 +237,7 @@ if(isset($_POST['SubmitProperty'])){
                     <div class="col-lg-9">
                         <nav class="nav-menu">
                             <ul>
-                                <li><a href="./homepage.html">Home</a></li>
+                                <li><a href="./index.php">Home</a></li>
                                 <!-- <li><a href="./listing.html">BUSINESS LISTING</a></li> -->
                             </ul>
                         </nav>
@@ -447,6 +447,7 @@ if(isset($_POST['SubmitProperty'])){
     <script src="js/jquery.richtext.min.js"></script>
     <script src="js/image-uploader.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
     function get_subcategory(){
       var category = $('#category').val();

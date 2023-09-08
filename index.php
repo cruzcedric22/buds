@@ -2,39 +2,6 @@
 require_once "includes/config.php";
 session_start();
 
-//BUSINESS SIGN UP
-
-if (isset($_POST["btnbusiness"])) {
-  $Email          = $_POST['email'];
-  $Firstname      = $_POST['firstname'];
-  $Middlename     = $_POST['middlename'];
-  $Surname        = $_POST['surname'];
-  $Birthday        = $_POST['birthday'];
-  $Age            = $_POST['age'];
-  $Sex            = $_POST['sex'];
-  $Address        = $_POST['address'];
-  $Contactnumber  = $_POST['contactnumber'];
-  $Password       = $_POST['password'];
-  $Passconfirm    = $_POST['passwordconfirm'];
-
-  $sql3 = "INSERT INTO owner_list (Surname, Firstname, MiddleName, Email, contactNumber, Address, Sex, Birthday, Age) VALUES ('$Surname','$Firstname','$Middlename','$Email','$Contactnumber','$Address','$Sex','$Birthday','$Age')";
-
-
-  if ($Password !== $Passconfirm) {
-    echo '<script>alert("Password do not match! Please Try Again.")</script>';
-  } elseif ($conn->query($sql3)) {
-    $sql4 = "INSERT INTO login (email,password,usertype) VALUES ('$Email', '$Password', '2')";
-    $result4 = $conn->query($sql4);
-    echo '<script>alert("Registration Success!")</script>';
-    header("Location: index.php");
-    exit();
-  } else {
-    die("Error:" . $conn->error);
-    echo '<script>alert("Registration Failed!")</script>';
-  }
-}
-
-
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -133,7 +100,7 @@ if (isset($_POST["btnbusiness"])) {
                         </li>
                         <li><a href="user.html">MY PROFILE</a></li>
                         <li><a href="manage.html">MANAGE BUSINESS</a></li>
-                        <li><a href="listing-form.html">ADD BUSINESS</a></li>
+                        <li><a href="listing-form.php">ADD BUSINESS</a></li>
                         <li><a href="#">LOGOUT</a></li>
                       </ul>
                     </li>
@@ -216,7 +183,6 @@ if (isset($_POST["btnbusiness"])) {
           <div class="card px-2 py-3" id="form2">
             <div class="form-data" v-if="!submitted">
               <form class="" action="index.php" method="post">
-
               </form>
               <div class="row">
                 <div class="col">
@@ -233,7 +199,6 @@ if (isset($_POST["btnbusiness"])) {
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col">
                   <div class="forms-inputs mb-4"> <span>Email</span> <input type="text" id="emailUser"> </div>
@@ -243,15 +208,8 @@ if (isset($_POST["btnbusiness"])) {
               </div>
               <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" id="con_pass">
               </div>
-              <!-- <div class="form-group form-check">
-                              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                              <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
-                            </div> -->
               <div class="mb-3"> <button class="btn w-100" onclick="createUser()">SIGN UP</button> </div>
             </div>
-            <!-- <div class="success-data" v-else>
-                          <div class="text-center d-flex flex-column"> <i class='bx bxs-badge-check'></i> <h6 class="text-center fs-1">Already have an Account? <a href="#id01" data-toggle="modal">Sign In</a></h6> </div>
-                      </div> -->
           </div>
         </div>
       </div>
@@ -268,34 +226,33 @@ if (isset($_POST["btnbusiness"])) {
         <div class="container mt-4">
           <div class="card px-2 py-3" id="form2">
             <div class="form-data" v-if="!submitted">
-              <form class="" action="index.php" method="post">
+              <form>
                 <div class="row">
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Email</span> <input type="email" name="email"></div>
+                    <div class="forms-inputs mb-4"> <span>Email</span> <input type="email" name="email" id="ownerEmail"></div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text" name="firstname"></div>
+                    <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text" name="firstname" id="ownerFname"></div>
                   </div>
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text" name="middlename"></div>
+                    <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text" name="middlename" id="ownerMname"></div>
                   </div>
 
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text" name="surname">
+                    <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text" name="surname" id="ownerLname">
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" required></div>
+                    <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" required id="ownerBirthday"></div>
                   </div>
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age" required></div>
+                    <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age" required id="ownerAge"></div>
                   </div>
                 </div>
-
                 <div class="row">
                   <div class="col">
                     <div class="form-group form-check">
@@ -305,24 +262,20 @@ if (isset($_POST["btnbusiness"])) {
                       <input type="radio" id="Male" name="sex" value="Male" required> Male
                     </div>
                   </div>
-
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Contact Number</span> <input type="tell" name="contactnumber"></div>
+                    <div class="forms-inputs mb-4"> <span>Contact Number</span> <input type="tell" name="contactnumber" id="ownerNumber"></div>
                   </div>
                 </div>
-                <div class="forms-inputs mb-4"> <span>Address</span> <input type="text" name="address"></div>
-                <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" name="password"></div>
-                <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" name="passwordconfirm"></div>
+                <div class="forms-inputs mb-4"> <span>Address</span> <input type="text" name="address" id="ownerAddress"></div>
+                <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" name="password" id="ownerPass"></div>
+                <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" name="passwordconfirm" id="ownerConPass"></div>
                 <div class="form-group form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                  <input type="checkbox" class="form-check-input" id="checkTerms">
                   <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
                 </div>
-                <div class="mb-3"> <button class="btn w-100" name="btnbusiness">SIGN UP</button></div>
+                <div class="mb-3"> <button disabled class="btn w-100" id="signUp" onclick="createBusinessOwner()" name="btnbusiness" type="button">SIGN UP</button></div>
             </div>
             </form>
-            <!-- <div class="success-data" v-else>
-                          <div class="text-center d-flex flex-column"> <i class='bx bxs-badge-check'></i> <h6 class="text-center fs-1">Already have an Account? <a href="#id01" data-toggle="modal">Sign In</a></h6> </div>
-                      </div> -->
           </div>
         </div>
       </div>
@@ -714,6 +667,28 @@ if (isset($_POST["btnbusiness"])) {
   <script src="js/login.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
+    $(document).ready(function() {
+      // Get a reference to the checkbox element
+      var checkbox = $("#checkTerms");
+      var signUpButton = $("#signUp");
+
+      // Add a change event handler
+      checkbox.change(function() {
+        // Check if the checkbox is checked
+        if (checkbox.is(":checked")) {
+          // Checkbox is checked
+          // alert("Checkbox is checked!");
+          signUpButton.prop("disabled", false);
+          // You can add your code to handle the checked state here
+        } else {
+          // Checkbox is unchecked
+          // alert("Checkbox is unchecked!");
+          signUpButton.prop("disabled", true);
+          // You can add your code to handle the unchecked state here
+        }
+      });
+    });
+
     $('#id02, #id03').on('show.bs.modal', function(e) {
       $('#id01').modal('hide'); // Close the first modal when the second modal is shown
     });
@@ -722,12 +697,13 @@ if (isset($_POST["btnbusiness"])) {
       $('#id01').modal('show'); // Reopen the first modal when the second or third modal is closed
     });
 
+
     function searchpage() {
       var searchVal = encodeURIComponent($('#searchVal').val()); // Encode the searchVal
       setTimeout(function() {
         window.location.href = "listing.php?a=" + searchVal;
       }, 1);
-    }
+    };
 
     function createUser() {
       var fname = $('#f_name').val();
@@ -746,7 +722,7 @@ if (isset($_POST["btnbusiness"])) {
       };
 
       if (pass == conpass) {
-        console.log(payload)
+        // console.log(payload)
         $.ajax({
           type: "POST",
           url: 'controllers/users.php',
@@ -773,6 +749,72 @@ if (isset($_POST["btnbusiness"])) {
           }
         });
       } else {
+        Swal.fire({
+          title: 'Warning',
+          text: 'Passwords didn\'t match',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+      }
+    };
+
+    function createBusinessOwner() {
+      var ownerEmail = $('#ownerEmail').val();
+      var ownerFname = $('#ownerFname').val();
+      var ownerMname = $('#ownerMname').val();
+      var ownerLname = $('#ownerLname').val();
+      var ownerBirthday = $('#ownerBirthday').val();
+      var ownerAge = $('#ownerAge').val();
+      var ownerSex = $("[name='sex']:checked").val();
+      var ownerNumber = $('#ownerNumber').val();
+      var ownerAddress = $('#ownerAddress').val();
+      var ownerPass = $('#ownerPass').val();
+      var ownerConPass = $('#ownerConPass').val();
+
+      var payload = {
+        ownerEmail: ownerEmail,
+        ownerFname: ownerFname,
+        ownerMname: ownerMname,
+        ownerLname: ownerLname,
+        ownerBirthday: ownerBirthday,
+        ownerAge: ownerAge,
+        ownerSex: ownerSex,
+        ownerNumber: ownerNumber,
+        ownerAddress: ownerAddress,
+        ownerPass: ownerPass
+      };
+
+      if(ownerPass == ownerConPass){
+        // console.log(payload)
+        $.ajax({
+          type: "POST",
+          url: 'controllers/users.php',
+          data: {
+            payload: JSON.stringify(payload),
+            setFunction: 'createOwner'
+          },
+          success: function(response) {
+            data = JSON.parse(response);
+            Swal.fire({
+              title: data.title,
+              text: data.message,
+              icon: data.icon,
+              customClass: {
+                confirmButton: 'swal-confirm-button',
+              },
+              showCancelButton: false,
+            });
+            //for normal UI AHAHAHHAHAHA
+            // swal.fire(data.title, data.message, data.icon);
+            setTimeout(function() {
+              window.location.reload();
+            }, 2000);
+          }
+        });
+      }else{
         Swal.fire({
           title: 'Warning',
           text: 'Passwords didn\'t match',
