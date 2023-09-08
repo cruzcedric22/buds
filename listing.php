@@ -177,7 +177,7 @@ WHERE
                   <ul>
                     <li class="profile-dropdown">
                       <div class="user-profile">
-                        <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
+                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                       </div>
                       <ul class="dropdown dropleft">
                         <li>

@@ -92,13 +92,13 @@ session_start();
                   <ul>
                     <li class="profile-dropdown">
                       <div class="user-profile">
-                        <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
+                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                       </div>
                       <ul class="dropdown dropleft">
                         <li>
                           <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] ?></h2>
                         </li>
-                        <li><a href="user.html">MY PROFILE</a></li>
+                        <li><a href="user.php">MY PROFILE</a></li>
                         <li><a href="manage.html">MANAGE BUSINESS</a></li>
                         <li><a href="listing-form.php">ADD BUSINESS</a></li>
                         <li><a href="#">LOGOUT</a></li>

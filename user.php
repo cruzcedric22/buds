@@ -2,41 +2,6 @@
 include('includes/config.php');
 session_start();
 
-if (isset($_SESSION['email'])) {
-   $email = $_SESSION['email'];
-   $sql = "SELECT * FROM owner_list WHERE Email = '$email'";
-   $row = $conn->query($sql);
-   $data = $row->fetch_assoc();
-}
-
-
-if(isset($_POST['updatepass'])){
-    $oldpass = $_POST['oldpass'];
-    $newpass  = $_POST['newpass'];
-    $confirmpass = $_POST['confirmpass'];
-
-    // Check if the old password matches the current password
-    $check_sql = "SELECT * FROM login WHERE email = '$email' AND password = '$oldpass'";
-    $check_result = $conn->query($check_sql);
-
-    if ($check_result->num_rows === 0) {
-        // Old password doesn't match
-        echo '<script>alert("Old password is incorrect!")</script>';
-    } elseif ($newpass !== $confirmpass) {
-        // New passwords don't match
-        echo '<script>alert("New passwords do not match!")</script>';
-    } else {
-        // Update the password
-        $sql = "UPDATE login SET password ='$newpass' WHERE email = '$email'";
-        if ($conn->query($sql)) {
-            echo '<script>alert("Password updated successfully!")</script>';
-        } else {
-            die("Error: " . $conn->error);
-        }
-    }
-}
-
-
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -83,7 +48,7 @@ if(isset($_POST['updatepass'])){
             <span class="icon_close"></span>
         </div>
         <div class="logo">
-            <a href="./index.html">
+            <a href="./index.php">
                 <img src="img/logo-main.png" alt="">
             </a>
         </div>
@@ -98,7 +63,7 @@ if(isset($_POST['updatepass'])){
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./index.html"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="./index.php"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
@@ -109,7 +74,7 @@ if(isset($_POST['updatepass'])){
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
+                                                <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                             </div>
                                             <ul class="dropdown dropleft">
                                                 <li><a href="user.php">MY PROFILE</a></li>
@@ -134,7 +99,7 @@ if(isset($_POST['updatepass'])){
                     <div class="col-lg-9">
                         <nav class="nav-menu">
                             <ul>
-                              <li><a href="./index.html">Home</a></li>
+                              <li><a href="./index.php">Home</a></li>
                               <!-- <li><a href="./listing.html">Business Listing</a></li> -->
                             </ul>
                         </nav>
@@ -157,20 +122,6 @@ if(isset($_POST['updatepass'])){
                                     <h4>MY PROFILE</h4>
                                 </div>
                             </div>
-                            <!-- <div class="pd-agent">
-                                <div class="agent-pic">
-                                    <img src="img/testimonial-author/Gutierrez.jpg" alt="">
-                                </div>
-                                <div class="agent-text">
-                                    <div class="at-title">
-                                        <h6>[NAME OF THE OWNER]</h6>
-                                        <span>[POSITION TO THE COMPANY]</span>
-                                        <a href="listing-form.html" class="primary-btn">ADD BUSINESS</a>
-                                    </div>
-                                    <p>DETAILS OF THE OWNER</p>
-
-                                </div>
-                            </div> -->
                                 <div class="container">
                                     <div class="bg-white shadow rounded-lg d-block d-sm-flex">
                                         <div class="profile-tab-nav border-right">
@@ -208,50 +159,50 @@ if(isset($_POST['updatepass'])){
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                               <label>Name: </label>
-                                                              <p class="dispname" id="idName"><?php echo $data['Surname'] .' , '. $data['Firstname'] .' '. $data['MiddleName'] ?></p>
-                                                                <input type="hidden" id="token" value="<?php echo $data['ID'] ?>">
-                                                                <input type="text" name="surname" id="inputSurname" value="<?php echo $data['Surname'] ?>" placeholder="Input your Surname">
-                                                                <input type="text" name="firstname" id="inputFirstname" value="<?php echo $data['Firstname'] ?>" placeholder="Input your Firstname">
-                                                                <input type="text" name="middlename" id="inputMiddlename" value="<?php echo $data['MiddleName']; ?>" placeholder="Input your Middle Name">
+                                                              <p class="dispname" id="idName">$data['Surname'] .' , '. $data['Firstname'] .' '. $data['MiddleName']</p>
+                                                                <input type="hidden" id="token" value="$data['ID']">
+                                                                <input type="text" name="surname" id="inputSurname" value="$data['Surname" placeholder="Input your Surname">
+                                                                <input type="text" name="firstname" id="inputFirstname" value="$data['Firstname']" placeholder="Input your Firstname">
+                                                                <input type="text" name="middlename" id="inputMiddlename" value="$data['MiddleName'];" placeholder="Input your Middle Name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                           <label>Email</label>
-                                                          <p><?php echo $data['Email']?></p>
+                                                          <p>$data['Email']</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                           <label>Age:</label>
-                                                          <p class="dispage" id="idAge"><?php echo $data['Age']?></p>
-                                                          <input type="text" name="age" id="inputAge" value="<?php echo $data['Age'] ?>" placeholder="Input your Age">
+                                                          <p class="dispage" id="idAge">echo $data['Age']</p>
+                                                          <input type="text" name="age" id="inputAge" value="echo $data['Age']" placeholder="Input your Age">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                               <label>Birthday</label>
-                                                              <p class="dispbirthday"><?php echo $data['Birthday']?></p>
+                                                              <p class="dispbirthday">$data['Birthday']</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                               <label>Sex</label>
-                                                              <p><?php echo $data['Sex']?></p>
+                                                              <p>$data['Sex']</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                               <label>Address</label>
-                                                              <p class="dispaddress" id="idAddress"><?php echo $data['Address']?></p>
-                                                              <input type="text" name="address" id="inputAddress" value="<?php echo $data['Address'] ?>"placeholder="Input your Address">
+                                                              <p class="dispaddress" id="idAddress">$data['Address']</p>
+                                                              <input type="text" name="address" id="inputAddress" value="$data['Address']"placeholder="Input your Address">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                               <label>Contact Number</label>
-                                                              <p class="dispcontactnumber" id="idContactnumber"><?php echo $data['contactNumber']?></p>
-                                                              <input type="text" name="contactnumber" id="inputContactnumber" value="<?php echo $data['contactNumber'] ?>" placeholder="Input your Contact Number">
+                                                              <p class="dispcontactnumber" id="idContactnumber">$data['contactNumber']</p>
+                                                              <input type="text" name="contactnumber" id="inputContactnumber" value="$data['contactNumber']" placeholder="Input your Contact Number">
                                                         </div>
                                                     </div>
                                                 </div>
