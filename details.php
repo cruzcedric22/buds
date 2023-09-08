@@ -1,5 +1,6 @@
 <?php
 require_once('./includes/config.php');
+session_start();
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
@@ -95,12 +96,12 @@ if ($rs = $conn->query($sql)) {
     <link rel="stylesheet" href="css/star.css" type="text/css">
     <link rel="stylesheet" href="css/templatemo-plot-listing.css" type="text/css">
     <style>
-    /* Add this CSS to your stylesheet */
-    .swal-confirm-button {
-      width: 100px;
-      /* Adjust the width as needed */
-    }
-  </style>
+        /* Add this CSS to your stylesheet */
+        .swal-confirm-button {
+            width: 100px;
+            /* Adjust the width as needed */
+        }
+    </style>
 
 </head>
 
@@ -139,39 +140,48 @@ if ($rs = $conn->query($sql)) {
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="index.php"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="./index.php"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
-                    <div class="col-lg">
-                        <div class="ht-widget">
-                            <button onclick="document.getElementById('id01').style.display='block'">Login</a>
-                        </div>
-                    </div>
-                    <div class="">
-                        <div class="ht-widget">
-                            <div class="hs-nav">
-                                <nav class="nav-menu">
-                                    <ul>
-                                        <li class="profile-dropdown">
-                                            <div class="user-profile">
-                                                <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                            </div>
-                                            <ul class="dropdown dropleft">
-                                                <li>
-                                                    <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] ?></h2>
-                                                </li>
-                                                <li><a href="user.html">MY PROFILE</a></li>
-                                                <li><a href="manage.html">MANAGE BUSINESS</a></li>
-                                                <li><a href="listing-form.php">ADD BUSINESS</a></li>
-                                                <li><a href="#">LOGOUT</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </nav>
+                    <?php if (empty($_SESSION['email'])) { ?>
+                        <div class="col-lg-9">
+                            <div class="ht-widget">
+                                <button onclick="document.getElementById('id01').style.display='block'">Login</a>
                             </div>
                         </div>
-                    </div>
+                    <?php } else { ?>
+                        <div class="col-lg-9">
+                            <div class="ht-widget">
+                                <div class="hs-nav">
+                                    <nav class="nav-menu">
+                                        <ul>
+                                            <li class="profile-dropdown">
+                                                <div class="user-profile">
+                                                    <?php if (isset($_SESSION['photo'])) { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } else { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } ?>
+                                                </div>
+                                                <ul class="dropdown dropleft">
+                                                    <li>
+                                                        <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
+                                                    </li>
+                                                    <li><a href="user.php">MY PROFILE</a></li>
+                                                    <?php if ($_SESSION['role'] == 2) { ?>
+                                                        <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                                                        <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                                                    <?php } ?>
+                                                    <li><a href="logout.php">LOGOUT</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="canvas-open">
                     <span class="icon_menu"></span>
@@ -205,18 +215,20 @@ if ($rs = $conn->query($sql)) {
                     <div class="card px-2 py-3" id="form1">
                         <div class="form-data" v-if="!submitted">
                             <div class="forms-inputs mb-4">
+                                <!-- <form method="post"> -->
                                 <span>Email</span>
-                                <input type="text">
+                                <input type="text" name="txtEmail" id="email_log" required>
                             </div>
                             <div class="forms-inputs mb-4">
                                 <span>Password</span>
-                                <input type="password">
+                                <input type="password" name="txtUserPass" id="password_log" required>
                                 <h6><a href="#">Forgot Password?</a></h6>
                             </div>
                             <div class="mb-3">
-                                <button class="btn w-100">LOG IN</button>
+                                <button type="button" class="btn w-100" onclick="loginUser()">LOG IN</button>
                             </div>
                         </div>
+                        </form>
                         <div class="success-data" v-else>
                             <div class="text-center d-flex flex-column">
                                 <h6 class="text-center fs-1">Don't have a user account? <a href="#id02" data-toggle="modal">Sign Up</a></h6>
@@ -786,6 +798,42 @@ if ($rs = $conn->query($sql)) {
                     showCancelButton: false,
                 });
             }
+        };
+
+        function loginUser() {
+            var username = $("#email_log").val();
+            var pass = $('#password_log').val();
+
+            var payload = {
+                username: username,
+                pass: pass
+            };
+
+            $.ajax({
+                type: "POST",
+                url: 'controllers/users.php',
+                data: {
+                    payload: JSON.stringify(payload),
+                    setFunction: 'loginUser'
+                },
+                success: function(response) {
+                    data = JSON.parse(response);
+                    Swal.fire({
+                        title: data.title,
+                        text: data.message,
+                        icon: data.icon,
+                        customClass: {
+                            confirmButton: 'swal-confirm-button',
+                        },
+                        showCancelButton: false,
+                    });
+                    //for normal UI AHAHAHHAHAHA
+                    // swal.fire(data.title, data.message, data.icon);
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                }
+            });
         };
     </script>
 </body>

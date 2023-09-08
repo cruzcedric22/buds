@@ -17,8 +17,7 @@ session_start();
     <title>BuDS</title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
@@ -74,12 +73,19 @@ session_start();
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                <?php if (isset($_SESSION['photo'])) { ?>
+                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                <?php } else { ?>
+                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                <?php } ?>
                                             </div>
                                             <ul class="dropdown dropleft">
                                                 <li><a href="user.php">MY PROFILE</a></li>
-                                                <li><a href="manage.php">MANAGE BUSINESS</a></li>
-                                                <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                                                <?php if ($_SESSION['role'] == 2) { ?>
+                                                    <li><a href="manage.php">MANAGE BUSINESS</a></li>
+                                                    <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                                                <?php } ?>
+                                                <li><a href="logout.php">LOGOUT</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -99,8 +105,8 @@ session_start();
                     <div class="col-lg-9">
                         <nav class="nav-menu">
                             <ul>
-                              <li><a href="./index.php">Home</a></li>
-                              <!-- <li><a href="./listing.html">Business Listing</a></li> -->
+                                <li><a href="./index.php">Home</a></li>
+                                <!-- <li><a href="./listing.html">Business Listing</a></li> -->
                             </ul>
                         </nav>
                     </div>
@@ -116,137 +122,142 @@ session_start();
             <div class="row">
                 <div class="col-lg-12">
                     <div class="pd-text">
-                        <br><div class="pd-widget">
+                        <br>
+                        <div class="pd-widget">
                             <div class="col-lg-5">
                                 <div class="section-title">
                                     <h4>MY PROFILE</h4>
                                 </div>
                             </div>
-                                <div class="container">
-                                    <div class="bg-white shadow rounded-lg d-block d-sm-flex">
-                                        <div class="profile-tab-nav border-right">
-                                          <form class="" action="user.php" method="post">
+                            <div class="container">
+                                <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+                                    <div class="profile-tab-nav border-right">
+                                        <form class="" action="user.php" method="post">
                                             <div class="p-4">
                                                 <div class="img-circle text-center mb-3" style="position: relative;">
-                                                    <img src="img/testimonial-author/arceo.jpg" alt="Image" class="shadow">
+                                                    <?php if (isset($_SESSION['photo'])) { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } else { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } ?>
                                                     <input type="file" id="uploadButton" name="uploadProfilePic" style="position: absolute; top: 0; left: 0; opacity: 0; width: 100%; height: 100%;">
                                                     <!-- You can style the input to make it look like a button -->
                                                     <label for="uploadButton" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; color: #fff; display: flex; justify-content: center; align-items: center;">
                                                         Upload
                                                     </label>
                                                 </div>
-                                                <h4 class="text-center">Kenjie P. Arceo</h4>
+                                                <h4 class="text-center"><?php echo $_SESSION['fname'].' '.$_SESSION['mname'].', '.$_SESSION['lname'] ?></h4>
                                             </div>
-                                            </form>
+                                        </form>
 
-                                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                                <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
-                                                    <i class="fa fa-home text-center mr-1"></i>
-                                                    My Profile
-                                                </a>
-                                                <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
-                                                    <i class="fa fa-key text-center mr-1"></i>
-                                                    Password
-                                                </a>
-                                            </div>
+                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                            <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+                                                <i class="fa fa-home text-center mr-1"></i>
+                                                My Profile
+                                            </a>
+                                            <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
+                                                <i class="fa fa-key text-center mr-1"></i>
+                                                Password
+                                            </a>
                                         </div>
-                                        <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
-                                            <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                                                <h3 class="mb-4">User's Information</h3>
+                                    </div>
+                                    <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+                                        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                                            <h3 class="mb-4">User's Information</h3>
 
-                                              <form class="" action="user.php" method="post">
+                                            <form class="" action="user.php" method="post">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                              <label>Name: </label>
-                                                              <p class="dispname" id="idName">$data['Surname'] .' , '. $data['Firstname'] .' '. $data['MiddleName']</p>
-                                                                <input type="hidden" id="token" value="$data['ID']">
-                                                                <input type="text" name="surname" id="inputSurname" value="$data['Surname" placeholder="Input your Surname">
-                                                                <input type="text" name="firstname" id="inputFirstname" value="$data['Firstname']" placeholder="Input your Firstname">
-                                                                <input type="text" name="middlename" id="inputMiddlename" value="$data['MiddleName'];" placeholder="Input your Middle Name">
+                                                            <label>Name: </label>
+                                                            <p class="dispname" id="idName"><?php echo $_SESSION['fname'].' '.$_SESSION['mname'].', '.$_SESSION['lname'] ?></p>
+                                                            <input type="hidden" id="token" value="<?php echo $_SESSION['email'] ?>">
+                                                            <input type="text" name="surname" id="inputSurname" value="<?php echo $_SESSION['lname'] ?>" placeholder="Input your Surname">
+                                                            <input type="text" name="firstname" id="inputFirstname" value="<?php echo $_SESSION['fname'] ?>" placeholder="Input your Firstname">
+                                                            <input type="text" name="middlename" id="inputMiddlename" value="<?php echo $_SESSION['mname'] ?>" placeholder="Input your Middle Name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                          <label>Email</label>
-                                                          <p>$data['Email']</p>
+                                                            <label>Email</label>
+                                                            <p><?php echo $_SESSION['email'] ?></p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                          <label>Age:</label>
-                                                          <p class="dispage" id="idAge">echo $data['Age']</p>
-                                                          <input type="text" name="age" id="inputAge" value="echo $data['Age']" placeholder="Input your Age">
+                                                            <label>Age:</label>
+                                                            <p class="dispage" id="idAge"><?php echo $_SESSION['Age'] ?></p>
+                                                            <input type="text" name="age" id="inputAge" value="<?php echo $_SESSION['Age'] ?>" placeholder="Input your Age">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                              <label>Birthday</label>
-                                                              <p class="dispbirthday">$data['Birthday']</p>
+                                                            <label>Birthday</label>
+                                                            <p class="dispbirthday"><?php echo $_SESSION['Birthday'] ?></p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                              <label>Sex</label>
-                                                              <p>$data['Sex']</p>
+                                                            <label>Sex</label>
+                                                            <p><?php echo $_SESSION['Sex'] ?></p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                              <label>Address</label>
-                                                              <p class="dispaddress" id="idAddress">$data['Address']</p>
-                                                              <input type="text" name="address" id="inputAddress" value="$data['Address']"placeholder="Input your Address">
+                                                            <label>Address</label>
+                                                            <p class="dispaddress" id="idAddress"><?php echo $_SESSION['Address'] ?></p>
+                                                            <input type="text" name="address" id="inputAddress" value="<?php echo $_SESSION['Address'] ?>" placeholder="Input your Address">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                              <label>Contact Number</label>
-                                                              <p class="dispcontactnumber" id="idContactnumber">$data['contactNumber']</p>
-                                                              <input type="text" name="contactnumber" id="inputContactnumber" value="$data['contactNumber']" placeholder="Input your Contact Number">
+                                                            <label>Contact Number</label>
+                                                            <p class="dispcontactnumber" id="idContactnumber"><?php echo $_SESSION['contactNumber'] ?></p>
+                                                            <input type="text" name="contactnumber" id="inputContactnumber" value="<?php echo $_SESSION['contactNumber'] ?>" placeholder="Input your Contact Number">
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="col">
-                                                  <div class="form-group">
+                                                    <div class="form-group">
                                                         <button class="btn btn-success" type="button" name="update" id="btnupdate">Update</button>
                                                         <button class="btn btn-success" type="button" name="save" id="btnsave" onclick="UpdateInfo()">Save</button>
                                                         <button class="btn btn-success" type="button" name="cancel" id="btncancel">Cancel</button>
-                                                  </div>
-                                              </div>
-                                              </form>
-                                            </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
 
-                                            <!-- changing password -->
-                                            <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
-                                                <h3 class="mb-4">Password Settings</h3>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                              <label>Old password</label>
-                                                            <input type="password" name="oldpass" class="form-control">
-                                                        </div>
+                                        <!-- changing password -->
+                                        <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+                                            <h3 class="mb-4">Password Settings</h3>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Old password</label>
+                                                        <input type="password" name="oldpass" class="form-control">
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                              <label>New password</label>
-                                                              <input type="password" name="newpass" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                              <label>Confirm new password</label>
-                                                              <input type="password" name="confirmpass" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-right">
-                                                    <button class="btn btn-success" type="submit" name="updatepass">Update</button>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>New password</label>
+                                                        <input type="password" name="newpass" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Confirm new password</label>
+                                                        <input type="password" name="confirmpass" class="form-control">
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <div class="text-right">
+                                                <button class="btn btn-success" type="submit" name="updatepass">Update</button>
+                                            </div>
+                                        </div>
+                                    </div>
 
     </section>
 
