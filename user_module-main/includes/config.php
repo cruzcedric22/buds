@@ -5,7 +5,7 @@
 $server="localhost";
 $user="root";		
 $pass="";		
-$dbname="resume";
+$dbname="buds";
 
 
 $conn= new mysqli($server,$user,$pass,$dbname);
@@ -15,7 +15,7 @@ if($conn->connect_error){
 
 class Database {
     private static $host = "localhost";
-    private static $dbname = "resume";
+    private static $dbname = "buds";
     private static $user = "root";
     private static $pass = "";
     // private static $host = "localhost";
