@@ -59,7 +59,6 @@ if ($rs = $conn->query($sql)) {
                     </div>
                     <div class="fu-links">
                         <a href=' . $row['BusinessFb'] . ' class="facebook"><i class="fa fa-facebook"></i></a>
-                        <a href=' . $row['BusinessTwitter'] . ' class="twitter"><i class="fa fa-twitter"></i></a>
                         <a href=' . $row['BusinessInstagram'] . ' class="instagram"><i class="fa fa-instagram"></i></a>
                     </div>';
         }
@@ -169,6 +168,9 @@ if ($rs = $conn->query($sql)) {
                                                         <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
                                                     </li>
                                                     <li><a href="user.php">MY PROFILE</a></li>
+                                                    <?php if ($_SESSION['role'] == 3) { ?>
+                                                        <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
+                                                    <?php } ?>
                                                     <?php if ($_SESSION['role'] == 2) { ?>
                                                         <li><a href="manage.html">MANAGE BUSINESS</a></li>
                                                         <li><a href="listing-form.php">ADD BUSINESS</a></li>
@@ -453,7 +455,7 @@ if ($rs = $conn->query($sql)) {
                                                 <li>April 30, 2023</li>
                                             </ul>
                                             <p>You can make your own combination. Enjoy the New Promo Combo Mix & Match for the first time for only 89 pesos!</p>
-                                            <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a>
+                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
                                         </div>
                                     </div>
                                     <div class="blog-item">
@@ -466,7 +468,7 @@ if ($rs = $conn->query($sql)) {
                                                 <li>June 29, 2023</li>
                                             </ul>
                                             <p>Enjoy the Updated Price of our Family Meal for only 1,099 pesos! Visit Jollibee Now!</p>
-                                            <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a>
+                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
                                         </div>
                                     </div>
                                 </div>
@@ -494,7 +496,7 @@ if ($rs = $conn->query($sql)) {
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="co-item reply-item">
+                                            <!-- <div class="co-item reply-item">
                                                 <div class="ci-pic">
                                                     <img src="img/testimonial-author/roy.jpg" alt="">
                                                 </div>
@@ -512,7 +514,7 @@ if ($rs = $conn->query($sql)) {
                                                         <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
                                                     </ul>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="co-item">
                                                 <div class="ci-pic">
                                                     <img src="img/testimonial-author/ramil.jpg" alt="">

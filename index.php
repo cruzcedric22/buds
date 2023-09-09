@@ -105,6 +105,9 @@ session_start();
                             <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
                           </li>
                           <li><a href="user.php">MY PROFILE</a></li>
+                          <?php if($_SESSION['role'] == 3){ ?>
+                            <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
+                          <?php } ?>
                           <?php if($_SESSION['role'] == 2) { ?>
                           <li><a href="manage.html">MANAGE BUSINESS</a></li>
                           <li><a href="listing-form.php">ADD BUSINESS</a></li>
@@ -320,7 +323,7 @@ session_start();
         <div class="col-lg-10 offset-lg-1">
           <ul class="categories">
             <li><a href="category.html"><span class="icon"><img src="img/categories/search-icon-01.png" alt="Home"></span> Real Estate</a></li>
-            <li><a href="listing.html"><span class="icon"><img src="img/categories/search-icon-02.png" alt="Food"></span> Food & Dining</a></li>
+            <li><a href="listing.html"><span class="icon"><img src="img/categories/search-icon-02.png" alt="food"></span> Food & Dining</a></li>
             <li><a href="#"><span class="icon"><img src="img/categories/search-icon-03.png" alt="Vehicle"></span> Automotive</a></li>
             <li><a href="#"><span class="icon"><img src="img/categories/search-icon-04.png" alt="Shopping"></span> Shopping</a></li>
             <li><a href="#"><span class="icon"><img src="img/categories/search-icon-05.png" alt="Travel"></span> More</a></li>
@@ -341,6 +344,7 @@ session_start();
           </div>
         </div>
         <div class="col-lg-7">
+          <!-- dito siya nag search -->
           <div class="property-controls">
             <ul>
               <li data-filter="all">All</li>
@@ -414,6 +418,7 @@ session_start();
             </div>
           </div>
         </div>
+        <!-- ito sinesearch niya -->
         <div class="col-lg-4 col-md-6 mix all food">
           <div class="property-item">
             <div class="pi-pic set-bg" data-setbg="img/property/listing-07.jpg">

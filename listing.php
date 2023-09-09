@@ -128,9 +128,9 @@ WHERE
 
 <body>
   <!-- Page Preloder -->
-  <div id="preloder">
+  <!-- <div id="preloder">
     <div class="loader"></div>
-  </div>
+  </div> -->
 
   <!-- Offcanvas Menu Wrapper Begin -->
   <div class="offcanvas-menu-overlay"></div>
@@ -190,6 +190,9 @@ WHERE
                             <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
                           </li>
                           <li><a href="user.php">MY PROFILE</a></li>
+                          <?php if($_SESSION['role'] == 3){ ?>
+                            <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
+                          <?php } ?>
                           <?php if ($_SESSION['role'] == 2) { ?>
                             <li><a href="manage.html">MANAGE BUSINESS</a></li>
                             <li><a href="listing-form.php">ADD BUSINESS</a></li>
@@ -409,13 +412,8 @@ WHERE
                   <div class="box border-bottom">
                     <div class="box-label text-uppercase d-flex align-items-center">Location </div>
                     <div class="my-1">
-                      <?php
-                      $query = "SELECT * FROM location_list";
-                      $result = $conn->query($query);
-                      while ($row = $result->fetch_assoc()) {
-                        echo '<div><input type="checkbox" class="tick" value="' . $row['ID'] . '" id="brand_' . $row['ID'] . '"> <label> ' . $row['location'] . ' </label></div>';
-                      }
-                      ?>
+                      <div><input type="checkbox" class="tick" value="north" id="north"> <label>NORTH </label></div>
+                      <div><input type="checkbox" class="tick" value="south" id="south"> <label>SOUTH </label></div>
                     </div>
                   </div>
                   <div class="box border-bottom">

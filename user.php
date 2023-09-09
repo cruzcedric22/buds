@@ -81,6 +81,9 @@ session_start();
                                             </div>
                                             <ul class="dropdown dropleft">
                                                 <li><a href="user.php">MY PROFILE</a></li>
+                                                <?php if ($_SESSION['role'] == 3) { ?>
+                                                    <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
+                                                <?php } ?>
                                                 <?php if ($_SESSION['role'] == 2) { ?>
                                                     <li><a href="manage.php">MANAGE BUSINESS</a></li>
                                                     <li><a href="listing-form.php">ADD BUSINESS</a></li>
@@ -146,7 +149,7 @@ session_start();
                                                         Upload
                                                     </label>
                                                 </div>
-                                                <h4 class="text-center"><?php echo $_SESSION['fname'].' '.$_SESSION['mname'].', '.$_SESSION['lname'] ?></h4>
+                                                <h4 class="text-center"><?php echo $_SESSION['fname'] . ' ' . $_SESSION['mname'] . ', ' . $_SESSION['lname'] ?></h4>
                                             </div>
                                         </form>
 
@@ -170,7 +173,7 @@ session_start();
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Name: </label>
-                                                            <p class="dispname" id="idName"><?php echo $_SESSION['fname'].' '.$_SESSION['mname'].', '.$_SESSION['lname'] ?></p>
+                                                            <p class="dispname" id="idName"><?php echo $_SESSION['fname'] . ' ' . $_SESSION['mname'] . ', ' . $_SESSION['lname'] ?></p>
                                                             <input type="hidden" id="token" value="<?php echo $_SESSION['email'] ?>">
                                                             <input type="text" name="surname" id="inputSurname" value="<?php echo $_SESSION['lname'] ?>" placeholder="Input your Surname">
                                                             <input type="text" name="firstname" id="inputFirstname" value="<?php echo $_SESSION['fname'] ?>" placeholder="Input your Firstname">
