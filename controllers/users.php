@@ -197,13 +197,14 @@ function loginUser($request = null)
         $numRows = $stmt->rowCount();
         if ($numRows == 0) {
             $msg['title'] = "Warning";
-            $msg['message'] = "There's no such user";
-            $msg['icon'] = "info";
+            $msg['message'] = "Wrong username or password";
+            $msg['icon'] = "warning";
             echo json_encode($msg);
         } else {
             foreach ($datas as $data) {
                 $role = $data['userType'];
                 $_SESSION['role'] = $data['userType'];
+                $_SESSION['ownerId'] = $data['ID'];
                 $_SESSION['email'] = $data['email'];
                 $_SESSION['lname'] = $data['Surname'];
                 $_SESSION['mname'] = $data['MiddleName'];

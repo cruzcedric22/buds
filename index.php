@@ -1,7 +1,7 @@
 <?php
 require_once "includes/config.php";
 session_start();
-// echo $_SESSION['fname'];
+// echo $_SESSION['ownerId'];
 
 ?>
 <!DOCTYPE html>

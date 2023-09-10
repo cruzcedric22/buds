@@ -1,5 +1,5 @@
 <?php
-include('includes/config.php');
+require_once './includes/config.php';
 session_start();
 
 
@@ -11,24 +11,24 @@ if (isset($_GET['a'])) {
   $search_query = $_GET['a'];
 
   $search_query = '%' . $search_query . '%';
-  // var_dump($search_query);
 
-
-  $sql1 = "SELECT *
-FROM business_list AS bl
-INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
-INNER JOIN barangay_list AS blg ON bl.BusinessBrgy = blg.ID
-WHERE
-    blg.Barangay LIKE '$search_query'
-    OR
-    cl.category LIKE '$search_query'
-    OR
-    bl.BusinessName LIKE '$search_query'
-";
-
-  $stmt = $pdo->prepare($sql1);
-  // $stmt->bindParam(':searchquery', $search_query, PDO::PARAM_STR);
+  // Assuming you're using PHP's PDO for database interactions
+  $stmt = $pdo->prepare("
+      SELECT *
+      FROM business_list AS bl
+      INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+      INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+      WHERE
+          blg.Barangay LIKE :search_query
+          OR
+          cl.category LIKE :search_query
+          OR
+          bl.BusinessName LIKE :search_query
+  ");
+  
+  $stmt->bindParam(':search_query', $search_query, PDO::PARAM_STR);
   $stmt->execute();
+
 
   if ($stmt === false) {
     $errorInfo = $pdo->errorInfo();

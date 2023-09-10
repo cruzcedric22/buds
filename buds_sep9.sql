@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2023 at 05:26 PM
+-- Generation Time: Sep 10, 2023 at 12:53 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -504,22 +504,12 @@ CREATE TABLE `business_list` (
   `BusinessCloseHour` varchar(255) NOT NULL,
   `BusinessAddress` varchar(255) NOT NULL,
   `BusinessBrgy` varchar(255) NOT NULL,
-  `BusinessPostal` varchar(255) NOT NULL,
+  `BusinessZone` varchar(255) NOT NULL,
   `BusinessCategory` varchar(255) DEFAULT NULL,
   `BusinessSubCategory` varchar(255) NOT NULL,
   `BusinessLocation` varchar(255) NOT NULL,
-  `Status` varchar(255) NOT NULL
+  `BusinessStatus` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `business_list`
---
-
-INSERT INTO `business_list` (`bus_id`, `ownerId`, `BusinessName`, `Businesslogo`, `BusinessEmail`, `BusinessBranch`, `BusinessEstablish`, `BusinessDescrip`, `BusinessNumber`, `BusinessOpenHour`, `BusinessCloseHour`, `BusinessAddress`, `BusinessBrgy`, `BusinessPostal`, `BusinessCategory`, `BusinessSubCategory`, `BusinessLocation`, `Status`) VALUES
-(6, 1, 'Jollibee', '', '', '', '', 'dsa', '', '10:17', '22:17', 'Mcdo burger city', '1', '178', '4', '28', '', ''),
-(7, 2, 'Tapsilog', '', '', '', '', 'ew', '', '10:18', '22:18', 'Bida Biday CItyyyyyy', '1', '456', '4', '29', '', ''),
-(8, 2, 'Sardina', '', '', '', '', 'asdfghjkl', '', '02:24', '14:24', 'Mcdollibee street', '2', '1000', '4', '28', '', ''),
-(9, 1, '11', '', '', '', '', '1                                ', '', '', '', '', 'Barangay 14', '2', '2', '14', '', '');
 
 -- --------------------------------------------------------
 
@@ -1023,7 +1013,7 @@ ALTER TABLE `business_links`
 -- AUTO_INCREMENT for table `business_list`
 --
 ALTER TABLE `business_list`
-  MODIFY `bus_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `bus_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `business_location`

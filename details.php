@@ -6,7 +6,12 @@ ini_set('display_startup_errors', 0);
 error_reporting(0);
 
 $id = $_GET['ID'];
-$sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
+//old query
+// $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
+$sql = "SELECT * FROM business_list AS bl 
+INNER JOIN business_links AS bll ON bl.ownerId = bll.bus_id
+WHERE 
+bl.bus_id = $id";
 $disp = "";
 $overview = "";
 $FAQs = "";
@@ -58,8 +63,8 @@ if ($rs = $conn->query($sql)) {
                         <h5>FOLLOW US</h5>
                     </div>
                     <div class="fu-links">
-                        <a href=' . $row['BusinessFb'] . ' class="facebook"><i class="fa fa-facebook"></i></a>
-                        <a href=' . $row['BusinessInstagram'] . ' class="instagram"><i class="fa fa-instagram"></i></a>
+                        <a href=' . $row['bus_fb'] . ' class="facebook"><i class="fa fa-facebook"></i></a>
+                        <a href=' . $row['bus_ig'] . ' class="instagram"><i class="fa fa-instagram"></i></a>
                     </div>';
         }
     }
