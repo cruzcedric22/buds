@@ -53,6 +53,11 @@ session_start();
             grid-gap: 10px;
             font-size: 18px;
         }
+
+        .swal-confirm-button {
+            width: 100px;
+            /* Adjust the width as needed */
+        }
     </style>
 
 </head>
