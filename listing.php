@@ -19,7 +19,7 @@ if (isset($_GET['a'])) {
       INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
       INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
       WHERE
-          blg.Barangay LIKE :search_query
+          blg.barangay LIKE :search_query
           OR
           cl.category LIKE :search_query
           OR
