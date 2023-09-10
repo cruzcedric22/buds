@@ -29,8 +29,8 @@ session_start();
   <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
   <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
   <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-  <link rel="stylesheet" href="css/style.css" type="text/css">
-  <link rel="stylesheet" href="css/templatemo-plot-listing.css" type="text/css">
+  <link rel="stylesheet" href="css/style1.css" type="text/css">
+  <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
   <style>
     /* Add this CSS to your stylesheet */
     .swal-confirm-button {
@@ -38,6 +38,7 @@ session_start();
       /* Adjust the width as needed */
     }
   </style>
+  
 
 </head>
 
@@ -320,16 +321,15 @@ session_start();
             </div>
           </form>
         </div>
-        <div class="col-lg-10 offset-lg-1">
-          <ul class="categories">
-            <li><a href="category.html"><span class="icon"><img src="img/categories/search-icon-01.png" alt="Home"></span> Real Estate</a></li>
-            <li><a href="listing.html"><span class="icon"><img src="img/categories/search-icon-02.png" alt="food"></span> Food & Dining</a></li>
-            <li><a href="#"><span class="icon"><img src="img/categories/search-icon-03.png" alt="Vehicle"></span> Automotive</a></li>
-            <li><a href="#"><span class="icon"><img src="img/categories/search-icon-04.png" alt="Shopping"></span> Shopping</a></li>
-            <li><a href="#"><span class="icon"><img src="img/categories/search-icon-05.png" alt="Travel"></span> More</a></li>
-
-          </ul>
-        </div>
+        <div class="col-lg-12 mt-3">
+        <fieldset>
+          <button class="oblong-button">Automotive</button>
+          <button class="oblong-button">Restaurant</button>
+          <button class="oblong-button">Salon</button>
+          <button class="oblong-button">Hotel</button>
+          <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a>
+        </fieldset>
+      </div>
       </div>
     </div>
   </div>

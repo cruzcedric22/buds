@@ -1,74 +1,7 @@
 <?php
-require_once('./includes/config.php');
+require_once "includes/config.php";
 session_start();
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
-
-$id = $_GET['ID'];
-//old query
-// $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
-$sql = "SELECT * FROM business_list AS bl 
-INNER JOIN business_links AS bll ON bl.ownerId = bll.bus_id
-WHERE 
-bl.bus_id = $id";
-$disp = "";
-$overview = "";
-$FAQs = "";
-$socialMedia = "";
-if ($rs = $conn->query($sql)) {
-    if ($rs->num_rows > 0) {
-        while ($row = $rs->fetch_assoc()) {
-            $disp .= '<div class="row">
-                        <div class="col-lg-4">
-                            <div class="profile-agent-info">
-                                <div class="pi-pic">
-                                    <img src=' . $row['Businesslogo'] . ' alt="">
-                                    <div class="rating-point">
-                                        4.5
-                                    </div>
-                                </div>
-                                <div class="pi-text">
-                                    <h5>' . $row['BusinessName'] . '</h5>
-                                    <p>Since April 2001</p>
-                                    <p>Opening Time: ' . $row['BusinessOpenHour'] . ' Closing Time: ' . $row['BusinessCloseHour'] . '</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="profile-agent-widget">
-                                <ul>
-                                    <li>Address <span>' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . ' Zone: ' . $row['BusinessZone'] . '</span></li>
-                                    <li>Contact Us <span>123-456-789</span><br><span>123-456-789</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="profile-agent-newslatter">
-                                <h5>Mark Us!</h5>
-                                <form action="#">
-                                    <div class="btn btn-success mx"><i class="fa fa-phone"></i> Call</div>
-                                    <div class="btn btn-success mx"><i class="fa fa-star"></i> Rate Us!</div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>';
-            $overview .= '<div class="tab-desc">
-                        <p>' . $row['BusinessDescrip'] . '</p>
-                  </div>';
-            $FAQs .= '<div class="tab-desc">
-                <p>FAQs AREA</p>
-              </div>';
-            $socialMedia .= '<div class="section-title sidebar-title">
-                        <h5>FOLLOW US</h5>
-                    </div>
-                    <div class="fu-links">
-                        <a href=' . $row['bus_fb'] . ' class="facebook"><i class="fa fa-facebook"></i></a>
-                        <a href=' . $row['bus_ig'] . ' class="instagram"><i class="fa fa-instagram"></i></a>
-                    </div>';
-        }
-    }
-}
+// echo $_SESSION['ownerId'];
 
 ?>
 <!DOCTYPE html>
@@ -81,6 +14,7 @@ if ($rs = $conn->query($sql)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="css/profilestyle.css">
     <title>BuDS</title>
 
     <!-- Google Font -->
@@ -96,14 +30,28 @@ if ($rs = $conn->query($sql)) {
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="css/star.css" type="text/css">
     <link rel="stylesheet" href="css/style1.css" type="text/css">
-  <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+    <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+
     <style>
-        /* Add this CSS to your stylesheet */
-        .swal-confirm-button {
-            width: 100px;
-            /* Adjust the width as needed */
+        .category-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .category {
+            width: calc(33.33% - 10px);
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .subcategory {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            font-size: 18px;
         }
     </style>
 
@@ -122,18 +70,11 @@ if ($rs = $conn->query($sql)) {
             <span class="icon_close"></span>
         </div>
         <div class="logo">
-            <a href="index.php">
+            <a href="./index.php">
                 <img src="img/logo-main.png" alt="">
             </a>
         </div>
         <div id="mobile-menu-wrap"></div>
-        <div class="om-widget">
-            <!-- <ul>
-                <li><i class="icon_mail_alt"></i> Aler.support@gmail.com</li>
-                <li><i class="fa fa-mobile-phone"></i> 125-711-811 <span>125-668-886</span></li>
-            </ul> -->
-            <a href="#" class="hw-btn">Sign-In</a>
-        </div>
     </div>
     <!-- Offcanvas Menu Wrapper End -->
 
@@ -144,7 +85,7 @@ if ($rs = $conn->query($sql)) {
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./index.php"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="./index.html"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
@@ -195,14 +136,15 @@ if ($rs = $conn->query($sql)) {
                 </div>
             </div>
         </div>
+
         <div class="hs-nav">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
                         <nav class="nav-menu">
                             <ul>
-                                <li class="active"><a href="index.php">Home</a></li>
-                                <!-- <li><a href="./listing.php">Business Listing</a></li> -->
+                                <li><a href="./index.php">Home</a></li>
+                                <li><a href="./listing.php">Business Listing</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -210,7 +152,61 @@ if ($rs = $conn->query($sql)) {
             </div>
         </div>
     </header>
+    <!-- Header End -->
 
+
+    <!-- Property Details Section Begin -->
+    <section class="property-details-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pd-text">
+                        <br>
+                        <div class="pd-widget">
+                            <div class="col-lg-5">
+                                <div class="section-title">
+                                    <h4>FIND BY CATEGORY</h4>
+                                </div>
+                            </div>
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-8 col-sm-10 col-12 order-2">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="search-button">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-success my-sm-0 mb-2" role="button">Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 bg-white border rounded px-2 py-3 p-md-4">
+                                <!-- Category 1 -->
+                                <div class="col-lg-12">
+                                    <h3><a href="#" class="category-link"><i class="fa fa-car circular-icon" style="font-size: 25px;"></i> Automotive</a></h3><br>
+                                    <div class="subcategory">
+                                        <a href="#" class="subcategory-link">Subcategory 1.1</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.2</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.3</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.4</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.5</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.6</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.7</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.8</a>
+                                        <a href="#" class="subcategory-link">Subcategory 1.9</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
     <div id="id01" class="modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
@@ -251,8 +247,9 @@ if ($rs = $conn->query($sql)) {
             </div>
         </div>
     </div>
+    <!-- End of Login Modal -->
 
-    <!-- modal for user create -->
+    <!-- User Signup Modal -->
     <div id="id02" class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
@@ -264,7 +261,6 @@ if ($rs = $conn->query($sql)) {
                     <div class="card px-2 py-3" id="form2">
                         <div class="form-data" v-if="!submitted">
                             <form class="" action="index.php" method="post">
-
                             </form>
                             <div class="row">
                                 <div class="col">
@@ -281,7 +277,6 @@ if ($rs = $conn->query($sql)) {
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col">
                                     <div class="forms-inputs mb-4"> <span>Email</span> <input type="text" id="emailUser"> </div>
@@ -291,22 +286,16 @@ if ($rs = $conn->query($sql)) {
                             </div>
                             <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" id="con_pass">
                             </div>
-                            <!-- <div class="form-group form-check">
-                              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                              <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
-                            </div> -->
                             <div class="mb-3"> <button class="btn w-100" onclick="createUser()">SIGN UP</button> </div>
                         </div>
-                        <!-- <div class="success-data" v-else>
-                          <div class="text-center d-flex flex-column"> <i class='bx bxs-badge-check'></i> <h6 class="text-center fs-1">Already have an Account? <a href="#id01" data-toggle="modal">Sign In</a></h6> </div>
-                      </div> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- End of User Signup Modal -->
 
-    <!-- modal for business create -->
+    <!-- Business Signup Modal -->
     <div id="id03" class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
@@ -372,252 +361,7 @@ if ($rs = $conn->query($sql)) {
             </div>
         </div>
     </div>
-    <!-- Header End -->
-
-    <!-- Property Details Section Begin -->
-    <section class="property-section latest-property-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="section-title">
-                        <h4>BUSINESS INFORMATION</h4>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="profile-agent-content">
-                        <?php echo $disp ?>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="pd-text">
-                                <div class="pd-board">
-                                    <br>
-                                    <div class="tab-board">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Overview</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">FAQs</a>
-                                            </li>
-                                        </ul><!-- Tab panes -->
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                                <?php echo $overview; ?>
-                                            </div>
-                                            <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                                <?php echo $FAQs ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="pd-widget">
-                                    <h4>GALLERYS</h4>
-                                    <div class="fp-slider owl-carousel">
-                                        <div class="fp-item set-bg" data-setbg="img/gallery/1.jpg">
-                                            <div class="fp-text">
-                                                <h5 class="title">Jollibee</h5>
-                                                <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-                                            </div>
-                                        </div>
-                                        <div class="fp-item set-bg" data-setbg="img/gallery/2.jpg">
-                                            <div class="fp-text">
-                                                <h5 class="title">Jollibee</h5>
-                                                <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-                                            </div>
-                                        </div>
-                                        <div class="fp-item set-bg" data-setbg="img/gallery/3.jpg">
-                                            <div class="fp-text">
-                                                <h5 class="title">Jollibee</h5>
-                                                <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pd-widget">
-                                    <h4>Map Location</h4>
-                                    <div class="map">
-                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7720.486527481873!2d120.96689102135043!3d14.642127909103934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b54965fb6673%3A0x4c29f2c590dd763f!2sJollibee!5e0!3m2!1sen!2sph!4v1680867618471!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                    </div>
-                                </div>
-                                <br>
-
-                                <div class="blog-item-list"><br><br>
-                                    <div class="pd-widget">
-                                        <br>
-                                        <h4>FEATURE POST</h4>
-                                    </div>
-                                    <div class="blog-item">
-                                        <div class="bi-pic">
-                                            <img src="img/post/1.jpg" alt="">
-                                        </div>
-                                        <div class="bi-text">
-                                            <h5><a href="#">NEW PROMO: Mix & Match</a></h5>
-                                            <ul>
-                                                <li>April 30, 2023</li>
-                                            </ul>
-                                            <p>You can make your own combination. Enjoy the New Promo Combo Mix & Match for the first time for only 89 pesos!</p>
-                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
-                                        </div>
-                                    </div>
-                                    <div class="blog-item">
-                                        <div class="bi-pic">
-                                            <img src="img/post/2.jpg" alt="">
-                                        </div>
-                                        <div class="bi-text">
-                                            <h5><a href="#">Updated Price: Family Meal</a></h5>
-                                            <ul>
-                                                <li>June 29, 2023</li>
-                                            </ul>
-                                            <p>Enjoy the Updated Price of our Family Meal for only 1,099 pesos! Visit Jollibee Now!</p>
-                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="blog-details-content">
-                                    <div class="bc-widget">
-                                        <h4>3 REVIEWS</h4>
-                                        <div class="comment-option">
-                                            <div class="co-item">
-                                                <div class="ci-pic">
-                                                    <img src="img/testimonial-author/arceo.jpg" alt="">
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>Kenjie P. Arceo</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                    <p>Basta may comment dito uwu</p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- <div class="co-item reply-item">
-                                                <div class="ci-pic">
-                                                    <img src="img/testimonial-author/roy.jpg" alt="">
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>Roy Lewis Collo</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                    <p>Tapos may reply dito uwu</p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
-                                                    </ul>
-                                                </div>
-                                            </div> -->
-                                            <div class="co-item">
-                                                <div class="ci-pic">
-                                                    <img src="img/testimonial-author/ramil.jpg" alt="">
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>Princess Angelica Ramil</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                    <p>Comment to pero pangalawa naman </p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1,2023</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pd-widget">
-                                    <div class="col-sm-12">
-                                        <div class="row">
-                                            <h4>LEAVE A COMMENT</h4><br>
-                                        </div>
-                                        <div class="row">
-                                            <fieldset class="rating">
-                                                <input type="radio" id="star5" name="rating" value="5" />
-                                                <label for="star5">5 stars</label>
-                                                <input type="radio" id="star4" name="rating" value="4" />
-                                                <label for="star4">4 stars</label>
-                                                <input type="radio" id="star3" name="rating" value="3" />
-                                                <label for="star3">3 stars</label>
-                                                <input type="radio" id="star2" name="rating" value="2" />
-                                                <label for="star2">2 stars</label>
-                                                <input type="radio" id="star1" name="rating" value="1" />
-                                                <label for="star1">1 star</label>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                    <form action="#" class="review-form">
-                                        <textarea placeholder="Leave a Comment"></textarea>
-
-                                        <button type="submit" class="site-btn">Send</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="property-sidebar">
-                                <div class="blog-sidebar">
-                                    <div class="follow-us">
-                                        <br><br>
-                                        <?php echo $socialMedia; ?>
-                                    </div>
-                                </div>
-                                <div class="single-sidebar">
-                                    <div class="section-title sidebar-title">
-                                        <h5>Related Business</h5>
-                                    </div>
-                                    <div class="top-agent">
-                                        <div class="ta-item">
-                                            <div class="ta-pic set-bg" data-setbg="img/property/listing-08.jpg"></div>
-                                            <div class="ta-text">
-                                                <h6><a href="#">Mc Donalds</a></h6>
-                                                <span>10th Avenue, Caloocan City</span>
-                                                <div class="ta-num">123-456-789</div>
-                                            </div>
-                                        </div>
-                                        <div class="ta-item">
-                                            <div class="ta-pic set-bg" data-setbg="img/property/listing-09.jpg"></div>
-                                            <div class="ta-text">
-                                                <h6><a href="#">KFC</a></h6>
-                                                <span>Grace Park, Caloocan City</span>
-                                                <div class="ta-num">123-456-789</div>
-                                            </div>
-                                        </div>
-                                        <div class="ta-item">
-                                            <div class="ta-pic set-bg" data-setbg="img/property/listing-04.jpg"></div>
-                                            <div class="ta-text">
-                                                <h6><a href="#">Silver Crown</a></h6>
-                                                <span>Sangandaan, Caloocan City</span>
-                                                <div class="ta-num">123-456-789</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- End of Business Signup Modal -->
 
     <footer class="footer-section">
         <div class="container">
@@ -626,7 +370,7 @@ if ($rs = $conn->query($sql)) {
                     <div class="fs-about">
                         <div class="fs-logo">
                             <a href="#">
-                                <img src="img/logo-main.png" alt="">
+                                <img src="img/flogo.png" alt="">
                             </a>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
@@ -639,7 +383,6 @@ if ($rs = $conn->query($sql)) {
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
@@ -651,7 +394,6 @@ if ($rs = $conn->query($sql)) {
     <script src="js/jquery.richtext.min.js"></script>
     <script src="js/image-uploader.min.js"></script>
     <script src="js/main.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-76614800-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
@@ -676,14 +418,13 @@ if ($rs = $conn->query($sql)) {
             });
         });
 
-        window.dataLayer = window.dataLayer || [];
+        $('#id02, #id03').on('show.bs.modal', function(e) {
+            $('#id01').modal('hide'); // Close the first modal when the second modal is shown
+        });
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-76614800-1');
+        $('#id02, #id03').on('hidden.bs.modal', function(e) {
+            $('#id01').modal('show'); // Reopen the first modal when the second or third modal is closed
+        });
 
         function createUser() {
             var fname = $('#f_name').val();
@@ -702,7 +443,7 @@ if ($rs = $conn->query($sql)) {
             };
 
             if (pass == conpass) {
-                console.log(payload)
+                // console.log(payload)
                 $.ajax({
                     type: "POST",
                     url: 'controllers/users.php',

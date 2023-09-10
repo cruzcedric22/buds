@@ -203,8 +203,8 @@ if ($rs = $conn->query($sql)) {
   <link rel="stylesheet" href="css/richtext.min.css" type="text/css">
   <link rel="stylesheet" href="css/image-uploader.min.css" type="text/css">
   <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-  <link rel="stylesheet" href="css/style.css" type="text/css">
-  <link rel="stylesheet" href="css/templatemo-plot-listing.css" type="text/css">
+  <link rel="stylesheet" href="css/style1.css" type="text/css">
+  <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
   <style>

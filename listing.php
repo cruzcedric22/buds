@@ -55,12 +55,12 @@ if (isset($_GET['a'])) {
       while ($row = $rs->fetch_assoc()) {
         $disp .= '
         <div class="row">
-          <div class="col-lg-3">
-            <img src="img/property/listing-07.jpg" alt="">
+          <div class="col-lg-4">
+            <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
           </div>
-          <div class="col-lg-9">
+          <div class="col-lg-8">
              <div class="d-md-flex align-items-md-center">
-               <div class="name"><h4><a href="./details.php?ID=' . $row['bus_id'] . '">' . $row['BusinessName'] . '</a></h4>
+               <div class="name"><h4><a href="./details.php?ID=' . $row['bus_id'] . '"><strong>' . $row['BusinessName'] . '</strong></a></h4>
                <span class="city">' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . '</span>
                </div>
              </div>
@@ -74,10 +74,6 @@ if (isset($_GET['a'])) {
               <p class="text-truncate mb-4 mb-md-0">
                 ' . $row['BusinessDescrip'] . '
               </p>
-                <div class="d-flex justify-content-end pb-1">
-                  <a href="#"> <div class="btn btn-success text-uppercase mx-2"><i class="fa fa-search"></i> Map</div></a>
-                  <a href="#"> <div class="btn btn-success text-uppercase mx-2"><i class="fa fa-phone"></i> Call</div></a>
-                </div>
               </div>
             </div>';
       }
@@ -114,8 +110,8 @@ if (isset($_GET['a'])) {
   <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
   <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
   <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-  <link rel="stylesheet" href="css/style.css" type="text/css">
-  <link rel="stylesheet" href="css/templatemo-plot-listing.css" type="text/css">
+  <link rel="stylesheet" href="css/style1.css" type="text/css">
+  <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
   <style>
     /* Add this CSS to your stylesheet */
     .swal-confirm-button {
@@ -402,11 +398,11 @@ if (isset($_GET['a'])) {
         <div class="container">
           <div id="content">
             <div class="d-sm-flex align-items-sm-center py-sm-3 location">
-              <input type="text" required placeholder="Search" class="mx-sm-2 my-sm-0 form-control">
-              <input type="submit" value="Search" class="btn btn-success my-sm-0 mb-2">
+              <input type="text" required placeholder="Search" id="searchVal" class="mx-sm-2 my-sm-0 form-control">
+              <button type="button" onclick="searchpage()" class="btn btn-success my-sm-0 mb-2">Search</button>
             </div>
             <div class="d-sm-flex">
-              <div class="me-sm-2">
+              <div class="col-lg-4 me-sm-2">
                 <div id="filter" class="p-5 bg-light ms-lg-4 ms-lg-2 border">
                   <div class="border-bottom h5 text-uppercase">Filter By</div>
                   <div class="box border-bottom">
@@ -430,19 +426,19 @@ if (isset($_GET['a'])) {
                   </div>
                 </div>
               </div>
-              <div class="bg-white p-2 border">
+              <div class="col-lg-8 bg-white p-2 border">
                 <div class="py-3 px-2 pb-1 border-bottom">
                   <?php if (isset($_GET['a'])) { ?>
                     <?php foreach ($datas as $data) {
                     ?>
                       <div class="row">
-                        <div class="col-lg-3">
-                          <img src="img/property/listing-07.jpg" alt="">
+                        <div class="col-lg-4">
+                          <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
                         </div>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                           <div class="d-md-flex align-items-md-center">
                             <div class="name">
-                              <h4><a href=<?php echo "details.php?ID=" . $data['bus_id'] ?>><?php echo $data['BusinessName'] ?></a></h4>
+                              <h4><a href=<?php echo "details.php?ID=" . $data['bus_id'] ?>><strong><?php echo $data['BusinessName'] ?></strong></a></h4>
                               <span class="city"><?php echo $data['BusinessAddress'] . ' Brgy ' . $data['BusinessBrgy'] ?></span>
                             </div>
                           </div>
@@ -456,14 +452,6 @@ if (isset($_GET['a'])) {
                           <p class="text-truncate mb-4 mb-md-0">
                             <?php echo $data['BusinessDescrip'] ?>
                           </p>
-                          <div class="d-flex justify-content-end pb-1">
-                            <a href="#">
-                              <div class="btn btn-success text-uppercase mx-2"><i class="fa fa-search"></i> Map</div>
-                            </a>
-                            <a href="#">
-                              <div class="btn btn-success text-uppercase mx-2"><i class="fa fa-phone"></i> Call</div>
-                            </a>
-                          </div>
                         </div>
                       </div>
                     <?php } ?>
@@ -534,6 +522,13 @@ if (isset($_GET['a'])) {
         }
       });
     });
+
+    function searchpage() {
+      var searchVal = encodeURIComponent($('#searchVal').val()); // Encode the searchVal
+      setTimeout(function() {
+        window.location.href = "listing.php?a=" + searchVal;
+      }, 1);
+    };
 
     function createUser() {
       var fname = $('#f_name').val();
