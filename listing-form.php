@@ -1,5 +1,5 @@
 <?php
-include('includes/config.php');
+require_once './includes/config.php';
 session_start();
 
 if (isset($_SESSION['email'])) {
@@ -9,146 +9,8 @@ if (isset($_SESSION['email'])) {
   $data = $row->fetch_assoc();
 }
 
-if (isset($_POST['SubmitProperty'])) {
+$ownerId = $_SESSION['ownerId'];
 
-  $ownerId              = $_SESSION['ownerId'];
-  $BusinessName         = $_POST['BusinessName'];
-  $BusinessEmail        = $_POST['BusinessEmail'];
-  $BusinessBranch       = $_POST['BusinessBranch'];
-  $BusinessEstablish    = $_POST['BusinessEstablish'];
-  $BusinessDescrip      = $_POST['BusinessDescrip'];
-  $BusinessNumber       = $_POST['BusinessNumber'];
-  $BusinessOpenHour     = $_POST['BusinessOpenHour'];
-  $BusinessCloseHour    = $_POST['BusinessCloseHour'];
-  $BusinessAddress      = $_POST['BusinessAddress'];
-  $BusinessBrgy         = $_POST['BusinessBrgy'];
-  $BusinessZone         = $_POST['BusinessZone'];
-  $BusinessCategory     = $_POST['BusinessCategory'];
-  $BusinessSubCategory  = $_POST['BusinessSubCategory'];
-  $location             = $_POST['location'];
-
-  $BusinessFb           = $_POST['BusinessFb'];
-  $BusinessIg           = $_POST['BusinessIg'];
-
-  $Latitude             = $_POST['Latitude'];
-  $Longtitude           = $_POST['Longtitude'];
-
-  $sql = "INSERT INTO business_list (ownerId, BusinessName, BusinessEmail, BusinessBranch, BusinessEstablish, BusinessNumber, BusinessDescrip, BusinessOpenHour, BusinessCloseHour, BusinessAddress, BusinessBrgy, BusinessZone, BusinessCategory, BusinessSubCategory, BusinessLocation)
-            VALUES ('$ownerId', '$BusinessName', '$BusinessEmail','$BusinessBranch','$BusinessEstablish','$BusinessNumber', '$BusinessDescrip','$BusinessOpenHour','$BusinessCloseHour','$BusinessAddress','$BusinessBrgy','$BusinessZone','$BusinessCategory','$BusinessSubCategory','$location')";
-
-  //upload business logo
-  $targer_dir   = "img/logo/";
-  $filename     = $_FILES['BusinessLogo']['name'];      // original file name
-  $filetmpname  = $_FILES['BusinessLogo']['tmp_name']; // temporary file name
-  $filesize     = $_FILES['BusinessLogo']['size']; // file size
-  $targer_file  = $targer_dir . $filename;
-  $filetype     = strtolower(strtolower(pathinfo($targer_file, PATHINFO_EXTENSION)));
-
-  if ($filesize > 0) {
-    if ($filesize > 512000) {
-      // checking file size
-      echo "File size out of range";
-      return;
-    }
-    if ($filetype != "jpg" && $filetype != "png" && $filetype != "jpeg" && $filetype != "gif") {
-      //file type checking
-      echo "Invalid file type";
-      return;
-    }
-    //upload file
-    if (move_uploaded_file($filetmpname, $targer_file)) {
-
-      $sql = "INSERT INTO business_list (BusinessLogo, ownerId, BusinessName, BusinessEmail, BusinessBranch, BusinessEstablish, BusinessNumber, BusinessDescrip, BusinessOpenHour, BusinessCloseHour, BusinessAddress, BusinessBrgy, BusinessZone, BusinessCategory, BusinessSubCategory, BusinessLocation)
-      VALUES ('$targer_file','$ownerId', '$BusinessName', '$BusinessEmail','$BusinessBranch','$BusinessEstablish','$BusinessNumber', '$BusinessDescrip','$BusinessOpenHour','$BusinessCloseHour','$BusinessAddress','$BusinessBrgy','$BusinessZone','$BusinessCategory','$BusinessSubCategory','$location')";
-    }
-  }
-
-  //uploading image requirements
-  if ($conn->query($sql)) {
-
-    //upload barangay clearance 
-    $targer_dir1   = "img/requirements/";
-    $filename1     = $_FILES['uploadBrgyClearance']['name'];      // original file name
-    $filetmpname1  = $_FILES['uploadBrgyClearance']['tmp_name']; // temporary file name
-    $filesize1     = $_FILES['uploadBrgyClearance']['size']; // file size
-    $targer_file1  = $targer_dir1 . $filename1;
-    $filetype1     = strtolower(strtolower(pathinfo($targer_file1, PATHINFO_EXTENSION)));
-
-    //upload dti permit 
-    $targer_dir2   = "img/requirements/";
-    $filename2     = $_FILES['uploadDTIPermit']['name'];      // original file name
-    $filetmpname2  = $_FILES['uploadDTIPermit']['tmp_name']; // temporary file name
-    $filesize2     = $_FILES['uploadDTIPermit']['size']; // file size
-    $targer_file2  = $targer_dir2 . $filename2;
-    $filetype2     = strtolower(strtolower(pathinfo($targer_file2, PATHINFO_EXTENSION)));
-
-    //upload sanitary permit 
-    $targer_dir3   = "img/requirements/";
-    $filename3     = $_FILES['uploadSanitaryPermit']['name'];      // original file name
-    $filetmpname3  = $_FILES['uploadSanitaryPermit']['tmp_name']; // temporary file name
-    $filesize3     = $_FILES['uploadSanitaryPermit']['size']; // file size
-    $targer_file3  = $targer_dir3 . $filename3;
-    $filetype3     = strtolower(strtolower(pathinfo($targer_file3, PATHINFO_EXTENSION)));
-
-    //upload cedula
-    $targer_dir4   = "img/requirements/";
-    $filename4     = $_FILES['uploadCedula']['name'];      // original file name
-    $filetmpname4  = $_FILES['uploadCedula']['tmp_name']; // temporary file name
-    $filesize4     = $_FILES['uploadCedula']['size']; // file size
-    $targer_file4  = $targer_dir4 . $filename4;
-    $filetype4     = strtolower(strtolower(pathinfo($targer_file4, PATHINFO_EXTENSION)));
-
-    //upload business permit
-    $targer_dir5   = "img/requirements/";
-    $filename5     = $_FILES['uploadBusinessPermit']['name'];      // original file name
-    $filetmpname5  = $_FILES['uploadBusinessPermit']['tmp_name']; // temporary file name
-    $filesize5    = $_FILES['uploadBusinessPermit']['size']; // file size
-    $targer_file5  = $targer_dir5 . $filename5;
-    $filetype5     = strtolower(strtolower(pathinfo($targer_file5, PATHINFO_EXTENSION)));
-
-    if ($filesize1 > 0 && $filesize2 > 0 && $filesize3 > 0 && $filesize4 > 0 && $filesize5 > 0) {
-      if ($filesize1 > 512000 && $filesize2 > 512000 && $filesize3 > 512000 && $filesize4 > 512000 && $filesize5 > 512000) {
-        // checking file size
-        echo "File size out of range";
-        return;
-      }
-      if (
-        $filetype1 != "jpg" && $filetype1 != "png" && $filetype1 != "jpeg" && $filetype1 != "gif"
-        && $filetype2 != "jpg" && $filetype2 != "png" && $filetype2 != "jpeg" && $filetype2 != "gif"
-        && $filetype3 != "jpg" && $filetype3 != "png" && $filetype3 != "jpeg" && $filetype3 != "gif"
-        && $filetype4 != "jpg" && $filetype4 != "png" && $filetype4 != "jpeg" && $filetype4 != "gif"
-        && $filetype5 != "jpg" && $filetype5 != "png" && $filetype5 != "jpeg" && $filetype5 != "gif"
-      ) {
-        //file type checking
-        echo "Invalid file type";
-        return;
-      }
-      //upload file
-      if (
-        move_uploaded_file($filetmpname1, $targer_file1)
-        && move_uploaded_file($filetmpname2, $targer_file2)
-        && move_uploaded_file($filetmpname3, $targer_file3)
-        && move_uploaded_file($filetmpname4, $targer_file4)
-        && move_uploaded_file($filetmpname5, $targer_file5)
-      ) {
-
-        $sql1 = "INSERT INTO business_requirement (bus_id, bus_brgyclearance, bus_dtipermit, bus_sanitarypermit,bus_cedula,bus_mayorpermit) 
-        VALUES ('$ownerId','$targer_file1','$targer_file2','ssss$targer_file3','$targer_file4','$targer_file5')";
-      }
-
-      $sql2 = "INSERT INTO business_links (bus_id, bus_fb, bus_ig) 
-      VALUES ('$ownerId','$BusinessFb','$BusinessIg')";
-
-      $sql3 = "INSERT INTO business_location (`bus_id`, `bus_lat`, `bus_long`) 
-      VALUES ('$ownerId','$Latitude','$Longtitude')";
-    }
-    if ($conn->query($sql1) && $conn->query($sql2) && $conn->query($sql3)) {
-      echo "NICE";
-    }
-  } else {
-    die("Error:" . $conn->error);
-  }
-}
 
 //Category and sub-Category
 $Category = "";
@@ -163,17 +25,7 @@ if ($rs = $conn->query($sql)) {
   die("Error:" . $conn->error);
 }
 //Category and sub-Category
-$Barangay = "";
-$sql = "SELECT * FROM barangay_list";
-if ($rs = $conn->query($sql)) {
-  if ($rs->num_rows > 0) { // record checking
-    while ($row = $rs->fetch_assoc()) {
-      $Barangay .= '<option value =' . $row['ID'] . '>' . $row['Barangay'] . '</option>';
-    }
-  }
-} else {
-  die("Error:" . $conn->error);
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -309,7 +161,7 @@ if ($rs = $conn->query($sql)) {
           <br>
           <div class="property-submit-form">
 
-            <form action="listing-form.php" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
               <!-- <div class="pf-title">
                               <h4>Location</h4>
                                <select name="loc" class="form-select form-select-sm mt-3">
@@ -320,39 +172,40 @@ if ($rs = $conn->query($sql)) {
                             </div> -->
               <div class="pf-title">
                 <h4>Business Name</h4>
-                <input name="BusinessName" type="text" placeholder="Enter Business Name">
+                <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
               </div>
               <div class="pf-title">
                 <h4>Business Logo</h4>
-                <input name="BusinessLogo" type="file">
+                <!-- add this to form data -->
+                <input name="BusinessLogo" id="BusinessLogo" type="file">
               </div>
               <div class="pf-title">
                 <h4>Business Email</h4>
-                <input name="BusinessEmail" type="email" placeholder="Enter Business Email">
+                <input name="BusinessEmail" id="BusinessEmail" type="email" placeholder="Enter Business Email">
               </div>
               <div class="pf-title">
                 <h4>Business Branch</h4>
-                <input name="BusinessBranch" type="text" placeholder="Enter Business Branch">
+                <input name="BusinessBranch" id="BusinessBranch" type="text" placeholder="Enter Business Branch">
               </div>
               <div class="pf-title">
                 <h4>Business Year Established</h4>
-                <input name="BusinessEstablish" type="date" placeholder="Enter Business Year Establish">
+                <input name="BusinessEstablish" id="BusinessEstablish" type="date" placeholder="Enter Business Year Establish">
               </div>
               <div class="pf-summernote">
                 <h4>Business Description</h4>
-                <input name="BusinessDescrip" type="text" placeholder="Enter your Business Description">
+                <input name="BusinessDescrip" id="BusinessDescrip" type="text" placeholder="Enter your Business Description">
               </div>
               <div class="pf-title">
                 <h4>Business Contact Number</h4>
-                <input name="BusinessNumber" type="tell" placeholder="Enter Business Contact Number">
+                <input name="BusinessNumber" id="BusinessNumber" type="tell" placeholder="Enter Business Contact Number">
               </div>
               <div class="pf-location">
                 <h4>Business Office Hour</h4>
                 <div class="location-inputs">
                   <h6>Opening & Closing Time:</h6>
                   <br>
-                  <input name="BusinessOpenHour" placeholder="Opening Time" type="time">
-                  <input name="BusinessCloseHour" type="time" placeholder="Closing Time">
+                  <input name="BusinessOpenHour" id="BusinessOpenHour" placeholder="Opening Time" type="time">
+                  <input name="BusinessCloseHour" id="BusinessCloseHour" type="time" placeholder="Closing Time">
                 </div>
               </div>
               <div class="pf-location">
@@ -360,16 +213,19 @@ if ($rs = $conn->query($sql)) {
                 <div class="pf-title">
                   <h6>ADDRESS: </h6>
                   <br>
-                  <input name="BusinessAddress" type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."><br>
-
+                  <input name="BusinessAddress" id="BusinessAddress" type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."><br>
                   <br>
-                  <select id="filter" name="BusinessBrgy" onchange="get_barangay()">
+                  <select id="filter" name="BusinessBrgy">
                     <option value="" disabled selected>Select a Barangay</option>
                     <?php
-                    for ($i = 1; $i <= 188; $i++) {
-                      echo '<option value="Barangay ' . $i . '">Barangay ' . $i . '</option>';
-                    }
-                    ?>
+                    $populateBrgy = "SELECT * FROM brgyzone_list";
+                    $pdo = Database::connection();
+                    $stmt1 = $pdo->prepare($populateBrgy);
+                    $stmt1->execute();
+                    $datas1  = $stmt1->fetchAll();
+                    foreach ($datas1 as $data) { ?>
+                      <option value="<?php echo $data['ID'] ?>"><?php echo $data['barangay'] ?></option>';
+                    <?php } ?>
                   </select>
 
                 </div>
@@ -379,10 +235,10 @@ if ($rs = $conn->query($sql)) {
                 <div class="row">
                   <div class="col-lg-4">
                     <div class="map-inputs">
-                      <br><input id="Zone" name="BusinessZone" type="text" placeholder="Zone" readonly>
+                      <!-- <br><input id="Zone" name="BusinessZone" type="text" placeholder="Zone" readonly> -->
                       <input id="lat" type="text" name="Latitude" placeholder="Latitude" readonly>
                       <input id="long" type="text" name="Longtitude" placeholder="Longitude" readonly>
-                      <input id="location" type="text" name="location" placeholder="Location: North or South" readonly>
+                      <!-- <input id="location" type="text" name="location" placeholder="Location: North or South" readonly> -->
                     </div>
                   </div>
                   <div class="col-lg-8">
@@ -399,10 +255,10 @@ if ($rs = $conn->query($sql)) {
                 <div class="pf-title">
                   <!-- <input type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."> -->
                   <div class="location-inputs">
-                    <br><input name="BusinessFb" type="text" placeholder="Facebook">
+                    <br><input name="BusinessFb" id="BusinessFb" type="text" placeholder="Facebook">
 
-                    <input name="BusinessTwitter" type="text" placeholder="Twitter">
-                    <input name="BusinessIg" type="text" placeholder="Instagram">
+                    <!-- <input name="BusinessTwitter" type="text" placeholder="Twitter"> -->
+                    <input name="BusinessIg" id="BusinessIg" type="text" placeholder="Instagram">
                   </div>
                 </div>
               </div>
@@ -453,7 +309,7 @@ if ($rs = $conn->query($sql)) {
                     <input type="file" class="feature-image-content" name="uploadBusinessPermit">
                   </div>
                 </div>
-                <button name="SubmitProperty" type="submit" class="site-btn">Submit Property</button>
+                <button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
               </div>
             </form>
           </div>
@@ -511,32 +367,32 @@ if ($rs = $conn->query($sql)) {
       });
     }
 
-    function get_barangay() {
-      console.log('get_barangay() function called.');
-      var barangay = $('#filter').val();
-      $.ajax({
-        url: 'barangaylist.php',
-        method: 'POST',
-        data: {
-          barangay: barangay
-        },
-        success: function(response) {
-          console.log("AJAX success:", response);
-          var data = JSON.parse(response); // Parse the JSON response
+    // function get_barangay() {
+    //   console.log('get_barangay() function called.');
+    //   var barangay = $('#filter').val();
+    //   $.ajax({
+    //     url: 'barangaylist.php',
+    //     method: 'POST',
+    //     data: {
+    //       barangay: barangay
+    //     },
+    //     success: function(response) {
+    //       console.log("AJAX success:", response);
+    //       var data = JSON.parse(response); // Parse the JSON response
 
-          if (data.length > 0) {
-            var zone = data[0].zone; // Assuming there's only one zone per barangay
-            var location = data[0].location;
+    //       if (data.length > 0) {
+    //         var zone = data[0].zone; // Assuming there's only one zone per barangay
+    //         var location = data[0].location;
 
-            $("#Zone").val(zone);
-            $("#location").val(location); // Display the location
-          } else {
-            $("#Zone").val(''); // Clear the zone input if no data is found
-            $("#location").val(''); // Clear the location input if no data is found
-          }
-        }
-      });
-    }
+    //         $("#Zone").val(zone);
+    //         $("#location").val(location); // Display the location
+    //       } else {
+    //         $("#Zone").val(''); // Clear the zone input if no data is found
+    //         $("#location").val(''); // Clear the location input if no data is found
+    //       }
+    //     }
+    //   });
+    // }
   </script>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -552,7 +408,7 @@ if ($rs = $conn->query($sql)) {
     var caloocanBoundary = L.geoJSON().addTo(map);
 
     // Load the barangay GeoJSON or coordinates file
-    $.getJSON('boundary.geojson.json', function(data) {
+    $.getJSON('boundary.geojson1.json', function(data) {
       caloocanBoundary.addData(data);
 
       caloocanBoundary.setStyle(function(feature) {
@@ -566,7 +422,7 @@ if ($rs = $conn->query($sql)) {
       });
 
       caloocanBoundary.eachLayer(function(layer) {
-        layer.bindPopup(layer.feature.properties.NAME_3);
+        layer.bindPopup("Barangay " + layer.feature.properties.NAME_3);
       });
 
       var draggableMarker = L.marker([14.6577, 120.9842], {
@@ -575,12 +431,11 @@ if ($rs = $conn->query($sql)) {
       draggableMarker.on('dragend', function(event) {
         var marker = event.target;
         var position = marker.getLatLng();
-        $('#lat').text(position.lat.toFixed(6));
-        $('#long').text(position.lng.toFixed(6));
+        $('#lat').val(position.lat.toFixed(6));
+        $('#long').val(position.lng.toFixed(6));
       });
 
 
-      console.log()
 
       // $('#saveButton').click(function() {
       //   var savedLat = draggableMarker.getLatLng().lat.toFixed(6);
@@ -593,9 +448,11 @@ if ($rs = $conn->query($sql)) {
 
       $('#filter').change(function() {
         var selectedBarangay = $(this).val();
+
         if (selectedBarangay) {
           caloocanBoundary.eachLayer(function(layer) {
             if (layer.feature.properties.NAME_3 === selectedBarangay) {
+              console.log("match layer found"); // Add this line to log the layer
               var center = layer.getBounds().getCenter();
               draggableMarker.setLatLng(center);
               $('#lat').val(center.lat.toFixed(6));
@@ -614,6 +471,105 @@ if ($rs = $conn->query($sql)) {
       });
 
     });
+
+    function addBusiness() {
+      var businessName = $('#busName').val();
+      var businessEmail = $('#BusinessEmail').val();
+      var businessBranch = $('#BusinessBranch').val();
+      var businessEstablish = $('#BusinessEstablish').val();
+      var businessDescrip = $('#BusinessDescrip').val();
+      var businessNumber = $('#BusinessNumber').val();
+      var businessOpenHour = $('#BusinessOpenHour').val();
+      var businessCloseHour = $('#BusinessCloseHour').val();
+      var businessAddress = $('#BusinessAddress').val();
+      var businessBarangay = $('#filter').val();
+      var businessLat = $('#lat').val();
+      var businessLong = $('#long').val();
+      var businessFb = $('#BusinessFb').val();
+      var businessIg = $('#BusinessIg').val();
+      var businessCategory = $('#category').val();
+      var subCategory = $('#subcategory').val();
+
+      // Construct payload object
+      var payload = {
+        businessName: businessName,
+        businessEmail: businessEmail,
+        businessBranch: businessBranch,
+        businessEstablish: businessEstablish,
+        businessDescrip: businessDescrip,
+        businessNumber: businessNumber,
+        businessOpenHour: businessOpenHour,
+        businessCloseHour: businessCloseHour,
+        businessAddress: businessAddress,
+        businessBarangay: businessBarangay,
+        businessLat: businessLat,
+        businessLong: businessLong,
+        businessFb: businessFb,
+        businessIg: businessIg,
+        businessCategory: businessCategory,
+        subCategory: subCategory,
+      };
+
+      var formData = new FormData();
+
+      // Append payload data as JSON
+      formData.append('payload', JSON.stringify(payload));
+      formData.append('setFunction', 'addBusiness');
+
+      // Get the selected file (input element)
+      var businessLogoInput = $("input[name='BusinessLogo']")[0]; // Assuming it's the first input element
+      var businessLogoFile = businessLogoInput.files[0];
+
+      var uploadBrgyClearanceInput = $("input[name='uploadBrgyClearance']")[0];
+      var uploadBrgyClearanceFile = uploadBrgyClearanceInput.files[0];
+
+      var uploadDTIPermitInput = $("input[name='uploadDTIPermit']")[0];
+      var uploadDTIPermitFile = uploadDTIPermitInput.files[0];
+
+      var uploadSanitaryPermitInput = $("input[name='uploadSanitaryPermit']")[0];
+      var uploadSanitaryPermitFile = uploadSanitaryPermitInput.files[0];
+      
+      var uploadCedulaInput = $("input[name='uploadCedula']")[0];
+      var uploadCedulaFile = uploadCedulaInput.files[0];
+      
+      var uploadBusinessPermitInput = $("input[name='uploadBusinessPermit']")[0];
+      var uploadBusinessPermitFile = uploadBusinessPermitInput.files[0];
+
+      formData.append('businessLogo', businessLogoFile);
+      formData.append('brgyClearance', uploadBrgyClearanceFile);
+      formData.append('DTIPermit', uploadDTIPermitFile);
+      formData.append('sanitaryPermit', uploadSanitaryPermitFile);
+      formData.append('cedula', uploadCedulaFile);
+      formData.append('businessPermit', uploadBusinessPermitFile);
+
+      var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+      
+
+
+
+    };
   </script>
 </body>
 

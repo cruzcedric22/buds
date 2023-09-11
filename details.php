@@ -9,7 +9,7 @@ $id = $_GET['ID'];
 //old query
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
 $sql = "SELECT * FROM business_list AS bl 
-INNER JOIN business_links AS bll ON bl.ownerId = bll.bus_id
+INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
 WHERE 
 bl.bus_id = $id";
 $disp = "";
