@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2023 at 12:53 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.0.25
+-- Generation Time: Sep 12, 2023 at 07:22 AM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 7.4.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +31,7 @@ CREATE TABLE `application_list` (
   `ID` int(11) NOT NULL,
   `CompanyName` varchar(255) NOT NULL,
   `Status` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -42,7 +42,7 @@ CREATE TABLE `application_list` (
 CREATE TABLE `barangay_list` (
   `ID` int(11) NOT NULL,
   `Barangay` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `barangay_list`
@@ -249,7 +249,7 @@ CREATE TABLE `brgyzone_list` (
   `zone` int(11) NOT NULL,
   `barangay` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `brgyzone_list`
@@ -457,7 +457,7 @@ CREATE TABLE `business_applicant` (
   `pos_vacant` varchar(255) NOT NULL,
   `applicant_id` int(11) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -469,7 +469,7 @@ CREATE TABLE `business_carousel` (
   `bus_carou_id` int(11) NOT NULL,
   `bus_id` int(11) NOT NULL,
   `photos` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -482,7 +482,15 @@ CREATE TABLE `business_links` (
   `bus_id` int(11) NOT NULL,
   `bus_fb` varchar(255) NOT NULL,
   `bus_ig` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `business_links`
+--
+
+INSERT INTO `business_links` (`bus_link_id`, `bus_id`, `bus_fb`, `bus_ig`) VALUES
+(1, 1, 'https://www.facebook.com/cedric.cruz.22/', 'https://www.instagram.com/cruzcedric22/'),
+(4, 6, 'https://www.facebook.com/cedric.cruz.22/', 'https://www.instagram.com/cruzcedric22/');
 
 -- --------------------------------------------------------
 
@@ -504,12 +512,19 @@ CREATE TABLE `business_list` (
   `BusinessCloseHour` varchar(255) NOT NULL,
   `BusinessAddress` varchar(255) NOT NULL,
   `BusinessBrgy` varchar(255) NOT NULL,
-  `BusinessZone` varchar(255) NOT NULL,
   `BusinessCategory` varchar(255) DEFAULT NULL,
   `BusinessSubCategory` varchar(255) NOT NULL,
-  `BusinessLocation` varchar(255) NOT NULL,
-  `BusinessStatus` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `BusinessStatus` varchar(255) NOT NULL,
+  `remarks` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `business_list`
+--
+
+INSERT INTO `business_list` (`bus_id`, `ownerId`, `BusinessName`, `Businesslogo`, `BusinessEmail`, `BusinessBranch`, `BusinessEstablish`, `BusinessDescrip`, `BusinessNumber`, `BusinessOpenHour`, `BusinessCloseHour`, `BusinessAddress`, `BusinessBrgy`, `BusinessCategory`, `BusinessSubCategory`, `BusinessStatus`, `remarks`) VALUES
+(1, 8, 'Tapsilog', 'img/logo/logo_vot.png', 'cruzcedric66@gmail.com', 'Biglang awa branch', '2023-09-10', 'Tech solutions', '09219476808', '11:09', '03:09', '120 M.HIZON ST 10th avenue', '1', '1', '1', '', ''),
+(6, 7, 'Mangahan', '64ff49b9f3978.png', 'cruzcedric66@gmail.com', 'Biglang awa branch', '2023-09-12', 'Tech solutions', '09219476808', '00:12', '00:13', '120 M.HIZON ST 10th avenue', '2', '2', '14', '2', '');
 
 -- --------------------------------------------------------
 
@@ -522,7 +537,15 @@ CREATE TABLE `business_location` (
   `bus_id` int(11) NOT NULL,
   `bus_lat` varchar(255) NOT NULL,
   `bus_long` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `business_location`
+--
+
+INSERT INTO `business_location` (`bus_loc_id`, `bus_id`, `bus_lat`, `bus_long`) VALUES
+(1, 1, '14.652390', '120.975536'),
+(5, 6, '14.660805', '120.971784');
 
 -- --------------------------------------------------------
 
@@ -536,7 +559,7 @@ CREATE TABLE `business_post` (
   `post_title` int(11) NOT NULL,
   `post_desc` int(11) NOT NULL,
   `post_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -552,7 +575,15 @@ CREATE TABLE `business_requirement` (
   `bus_sanitarypermit` varchar(255) NOT NULL,
   `bus_cedula` varchar(255) NOT NULL,
   `bus_mayorpermit` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `business_requirement`
+--
+
+INSERT INTO `business_requirement` (`bus_req_id`, `bus_id`, `bus_brgyclearance`, `bus_dtipermit`, `bus_sanitarypermit`, `bus_cedula`, `bus_mayorpermit`) VALUES
+(1, 1, 'img/requirements/img_ucc.png', 'img/requirements/img_ucc.png', 'ssssimg/requirements/img_ucc.png', 'img/requirements/img_ucc.png', 'img/requirements/img_ucc.png'),
+(2, 6, '64ff49ba06165.png', '64ff49ba0616a.jpg', '64ff49ba0616b.png', '64ff49ba0616c.jpg', '64ff49ba0616d.png');
 
 -- --------------------------------------------------------
 
@@ -566,7 +597,7 @@ CREATE TABLE `business_reviews` (
   `user_id` int(11) NOT NULL,
   `rating` int(11) NOT NULL,
   `comment` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -577,7 +608,7 @@ CREATE TABLE `business_reviews` (
 CREATE TABLE `category_list` (
   `ID` bigint(20) NOT NULL,
   `category` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `category_list`
@@ -605,7 +636,7 @@ INSERT INTO `category_list` (`ID`, `category`) VALUES
 CREATE TABLE `district_list` (
   `ID` int(11) NOT NULL,
   `District` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `district_list`
@@ -627,14 +658,14 @@ CREATE TABLE `login` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `userType` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `login`
 --
 
 INSERT INTO `login` (`ID`, `email`, `password`, `userType`) VALUES
-(8, 'cruzcedric66@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '3'),
+(8, 'cruzcedric66@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '2'),
 (9, 'jalynguts01@gmail.com', '356a192b7913b04c54574d18c28d46e6395428ab', '2');
 
 -- --------------------------------------------------------
@@ -656,7 +687,7 @@ CREATE TABLE `owner_list` (
   `Age` int(11) NOT NULL,
   `owner_name` varchar(255) DEFAULT NULL,
   `photo` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `owner_list`
@@ -678,7 +709,7 @@ CREATE TABLE `post_event` (
   `ID` int(11) NOT NULL,
   `Events` varchar(255) NOT NULL,
   `type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -690,7 +721,7 @@ CREATE TABLE `subcategory_list` (
   `ID` int(11) NOT NULL,
   `catId` int(11) NOT NULL,
   `subCategory` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `subcategory_list`
@@ -808,7 +839,7 @@ INSERT INTO `subcategory_list` (`ID`, `catId`, `subCategory`) VALUES
 CREATE TABLE `user_category` (
   `iD` int(11) NOT NULL,
   `userDesccription` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user_category`
@@ -844,7 +875,7 @@ CREATE TABLE `user_resume` (
   `skills` varchar(500) NOT NULL,
   `cert_desc` varchar(500) NOT NULL,
   `cert_year` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user_resume`
@@ -863,7 +894,7 @@ INSERT INTO `user_resume` (`id`, `fullname`, `position`, `address`, `summary`, `
 CREATE TABLE `zone_list` (
   `ID` int(11) NOT NULL,
   `Zone` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `zone_list`
@@ -1007,25 +1038,25 @@ ALTER TABLE `brgyzone_list`
 -- AUTO_INCREMENT for table `business_links`
 --
 ALTER TABLE `business_links`
-  MODIFY `bus_link_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bus_link_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `business_list`
 --
 ALTER TABLE `business_list`
-  MODIFY `bus_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `bus_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `business_location`
 --
 ALTER TABLE `business_location`
-  MODIFY `bus_loc_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bus_loc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `business_requirement`
 --
 ALTER TABLE `business_requirement`
-  MODIFY `bus_req_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bus_req_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `business_reviews`

@@ -2,6 +2,7 @@
 require_once "includes/config.php";
 session_start();
 // echo $_SESSION['ownerId'];
+// require_once "ceipo/index.php"
 
 ?>
 <!DOCTYPE html>
@@ -110,7 +111,7 @@ session_start();
                             <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                           <?php } ?>
                           <?php if($_SESSION['role'] == 2) { ?>
-                          <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                          <li><a href="manage.php">MANAGE BUSINESS</a></li>
                           <li><a href="listing-form.php">ADD BUSINESS</a></li>
                           <?php } ?>
                           <li><a href="logout.php">LOGOUT</a></li>
@@ -868,11 +869,18 @@ session_start();
             },
             showCancelButton: false,
           });
-          //for normal UI AHAHAHHAHAHA
-          // swal.fire(data.title, data.message, data.icon);
-          setTimeout(function() {
+          if(data.role == 1){
+            setTimeout(function() {
+            window.location.href = "ceipo/index.php";
+          }, 2000);
+
+          }else{
+            setTimeout(function() {
             window.location.reload();
           }, 2000);
+          }
+          //for normal UI AHAHAHHAHAHA
+          // swal.fire(data.title, data.message, data.icon);
         }
       });
     };

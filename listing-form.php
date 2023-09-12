@@ -66,6 +66,10 @@ if ($rs = $conn->query($sql)) {
       width: 700px;
       height: 300px;
     }
+    .swal-confirm-button {
+      width: 100px;
+      /* Adjust the width as needed */
+    }
   </style>
 
 </head>
@@ -119,6 +123,7 @@ if ($rs = $conn->query($sql)) {
                         <li><a href="user.php">MY PROFILE</a></li>
                         <li><a href="manage.php">MANAGE BUSINESS</a></li>
                         <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                        <li><a href="logout.php">LOGOUT</a></li>
                       </ul>
                     </li>
                   </ul>
@@ -490,6 +495,36 @@ if ($rs = $conn->query($sql)) {
       var businessCategory = $('#category').val();
       var subCategory = $('#subcategory').val();
 
+      // Check if any of the required fields is empty
+      if (
+        !businessName ||
+        !businessEmail ||
+        !businessBranch ||
+        !businessEstablish ||
+        !businessDescrip ||
+        !businessNumber ||
+        !businessOpenHour ||
+        !businessCloseHour ||
+        !businessAddress ||
+        !businessBarangay ||
+        !businessLat ||
+        !businessLong ||
+        !businessCategory ||
+        !subCategory
+      ) {
+        // Display an error message or alert to the user
+        Swal.fire({
+          title: 'Warning',
+          text: 'Please fill out all required fields.',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+        return; // Exit the function if any required field is empty
+      }
+
       // Construct payload object
       var payload = {
         businessName: businessName,
@@ -528,10 +563,10 @@ if ($rs = $conn->query($sql)) {
 
       var uploadSanitaryPermitInput = $("input[name='uploadSanitaryPermit']")[0];
       var uploadSanitaryPermitFile = uploadSanitaryPermitInput.files[0];
-      
+
       var uploadCedulaInput = $("input[name='uploadCedula']")[0];
       var uploadCedulaFile = uploadCedulaInput.files[0];
-      
+
       var uploadBusinessPermitInput = $("input[name='uploadBusinessPermit']")[0];
       var uploadBusinessPermitFile = uploadBusinessPermitInput.files[0];
 
@@ -543,29 +578,29 @@ if ($rs = $conn->query($sql)) {
       formData.append('businessPermit', uploadBusinessPermitFile);
 
       var xhr = new XMLHttpRequest();
-            xhr.open("POST", "controllers/business.php", true);
+      xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    console.log("Server response:", xhr.responseText);
-                    if (xhr.status === 200) {
-                        // Handle success response
-                        var data = JSON.parse(xhr.responseText);
-                        // console.log("Data received:", data);
-                        swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 2000);
-                    } else {
-                        // Handle error
-                        console.log("Error:", xhr.statusText);
-                    }
-                }
-            };
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          console.log("Server response:", xhr.responseText);
+          if (xhr.status === 200) {
+            // Handle success response
+            var data = JSON.parse(xhr.responseText);
+            // console.log("Data received:", data);
+            swal.fire(data.title, data.message, data.icon);
+            setTimeout(function() {
+              window.location.reload();
+            }, 2000);
+          } else {
+            // Handle error
+            console.log("Error:", xhr.statusText);
+          }
+        }
+      };
 
-            // Send the FormData object
-            xhr.send(formData);
-      
+      // Send the FormData object
+      xhr.send(formData);
+
 
 
 

@@ -98,7 +98,7 @@ if ($rs = $conn->query($sql)) {
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/star.css" type="text/css">
     <link rel="stylesheet" href="css/style1.css" type="text/css">
-  <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+    <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
     <style>
         /* Add this CSS to your stylesheet */
         .swal-confirm-button {
@@ -836,9 +836,16 @@ if ($rs = $conn->query($sql)) {
                     });
                     //for normal UI AHAHAHHAHAHA
                     // swal.fire(data.title, data.message, data.icon);
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 2000);
+                    if (data.role == 1) {
+                        setTimeout(function() {
+                            window.location.href = "ceipo/index.php";
+                        }, 2000);
+
+                    } else {
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    }
                 }
             });
         };

@@ -184,9 +184,10 @@ function loginUser($request = null)
     $numRows1 = $stmt1->rowCount();
 
     if ($numRows1 == 0) {
-        $loginQuery = "SELECT login.*, owner_list.*
+        $loginQuery = "SELECT login.*, owner_list.*,user_category.*
         FROM login
         JOIN owner_list ON login.email = :username AND owner_list.Email = :username
+        JOIN user_category ON login.userType = user_category.ID
         WHERE login.email = :username AND login.password = :pass";
         $pdo = Database::connection();
         $stmt = $pdo->prepare($loginQuery);
@@ -215,11 +216,12 @@ function loginUser($request = null)
                 $_SESSION['Birthday'] = $data['Birthday'];
                 $_SESSION['Age'] = $data['Age'];
                 $_SESSION['photo'] = $data['photo'];
+                $_SESSION['userTypeDesc'] = $data ['userDesccription'];
             }
             $msg['title'] = "Successful";
             $msg['message'] = "Welcome";
             $msg['icon'] = "success";
-            $msg['role'] = $_SESSION['fname'];
+            $msg['role'] = $role;
 
             echo json_encode($msg);
         }

@@ -25,7 +25,7 @@ if (isset($_GET['a'])) {
           OR
           bl.BusinessName LIKE :search_query
   ");
-  
+
   $stmt->bindParam(':search_query', $search_query, PDO::PARAM_STR);
   $stmt->execute();
 
@@ -186,7 +186,7 @@ if (isset($_GET['a'])) {
                             <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
                           </li>
                           <li><a href="user.php">MY PROFILE</a></li>
-                          <?php if($_SESSION['role'] == 3){ ?>
+                          <?php if ($_SESSION['role'] == 3) { ?>
                             <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                           <?php } ?>
                           <?php if ($_SESSION['role'] == 2) { ?>
@@ -681,9 +681,16 @@ if (isset($_GET['a'])) {
           });
           //for normal UI AHAHAHHAHAHA
           // swal.fire(data.title, data.message, data.icon);
-          setTimeout(function() {
-            window.location.reload();
-          }, 2000);
+          if (data.role == 1) {
+            setTimeout(function() {
+              window.location.href = "ceipo/index.php";
+            }, 2000);
+
+          } else {
+            setTimeout(function() {
+              window.location.reload();
+            }, 2000);
+          }
         }
       });
 
