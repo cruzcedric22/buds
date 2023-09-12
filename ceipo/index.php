@@ -1,12 +1,12 @@
 <?php 
 session_start();
 if(empty( $_SESSION['ownerId'] )){
-  header('../index.php');
+header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+    exit; 
 }
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">

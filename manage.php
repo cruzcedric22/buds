@@ -2,6 +2,12 @@
 include('includes/config.php');
 session_start();
 
+if(empty( $_SESSION['ownerId'] )){
+    header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+        exit; 
+    }
+
+
 if (isset($_SESSION['email'])) {
    $email = $_SESSION['email'];
    $sql = "SELECT * FROM owner_list WHERE Email = '$email'";
@@ -9,8 +15,14 @@ if (isset($_SESSION['email'])) {
    $data = $row->fetch_assoc();
 }
 $ownerID = $_SESSION['ownerId'];
+
+
 $disp="";
-$sql = "SELECT * FROM business_list WHERE ownerID = $ownerID";
+$sql = "SELECT * FROM business_list AS bl 
+INNER JOIN owner_list AS ol ON bl.ownerid = $ownerID && ol.ID = $ownerID
+INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
+WHERE 
+bl.ownerid = $ownerID";
 $x = -1;
 if ($rs=$conn->query($sql)) {
   if($rs->num_rows > 0){
@@ -28,11 +40,11 @@ if ($rs=$conn->query($sql)) {
               </div>
               <div class="pi-text">
                   <h5><a href="#">'.$row['BusinessName'].' - '.$row['BusinessBranch'].'</a></h5>
-                  <p><span class="icon_pin_alt"></span>'.$row['BusinessAddress'].' '.$row['BusinessBrgy'].' Zone: '.$row['BusinessZone'].' Postal: '.$row['BusinessPostal'].'</p>
+                  <p><span class="icon_pin_alt"></span>'.$row['BusinessAddress'].' '.$row['barangay'].' Zone: '.$row['zone'].'</p>
                   <div class="pi-agent">
                       <div class="pa-item">
                           <div class="pa-text">
-                              <a class="btn btn-success" href="details.php?ID=' . $row['ID'] . '" role="button"><i class="fa fa-eye"></i> View</a>
+                              <a class="btn btn-success" href="details.php?ID=' . $row['bus_id'] . '" role="button"><i class="fa fa-eye"></i> View</a>
                               <a class="btn btn-success" href="BusinessPanel.html" role="button"><i class="fa fa-pencil"></i> Edit</a>
                           </div>
                       </div>
@@ -117,13 +129,14 @@ if ($rs=$conn->query($sql)) {
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <img src="img/testimonial-author/arceo.jpg" alt="User's Name">
+                                                <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                             </div>
                                             <ul class="dropdown dropleft">
                                               <li><h2><?php echo $data['Surname'] .' , '. $data['Firstname'] .' '. $data['MiddleName'] ?></h2>
                                                 <li><a href="user.php">MY PROFILE</a></li>
                                                 <li><a href="manage.php">MANAGE BUSINESS</a></li>
                                                 <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                                                <li><a href="logout.php">LOGOUT</a></li>
                                             </ul>
                                         </li>
                                     </ul>

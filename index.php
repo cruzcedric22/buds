@@ -4,6 +4,13 @@ session_start();
 // echo $_SESSION['ownerId'];
 // require_once "ceipo/index.php"
 
+if(isset($_SESSION['role'])){
+  if($_SESSION['role'] == 1){
+    header('Location: ceipo/index.php');
+  }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
