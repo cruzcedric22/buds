@@ -1,6 +1,10 @@
 <?php
 require_once './includes/config.php';
 session_start();
+if (empty($_SESSION['ownerId'])) {
+  header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+  exit;
+}
 
 if (isset($_SESSION['email'])) {
   $email = $_SESSION['email'];
@@ -66,6 +70,7 @@ if ($rs = $conn->query($sql)) {
       width: 700px;
       height: 300px;
     }
+
     .swal-confirm-button {
       width: 100px;
       /* Adjust the width as needed */

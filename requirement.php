@@ -28,9 +28,9 @@
         <div class="layout-container">
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="index.php" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="../BUSINESS CLIENT/plugins/assets/img/avatars/logo.png" alt="" class="brand-image" width="45" height="50">
+                            <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
                         </span>
                         <span
                             class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
@@ -47,14 +47,14 @@
                     </li>
 
                     <li class="menu-item">
-                        <a href="bulletin.html" class="menu-link">
+                        <a href="bulletin.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-pin"></i>
                             <div data-i18n="Analytics">Bulletin Board</div>
                         </a>
                     </li>
 
                     <li class="menu-item">
-                        <a href="BusinessPanel.html" class="menu-link">
+                        <a href="BusinessPanel.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-info-circle"></i>
                             <div data-i18n="Analytics">Details</div>
                         </a>
@@ -63,21 +63,21 @@
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Business Content</span>
                     </li>
-                    <li class="menu-item active">
-                        <a href="feature-post.html" class="menu-link">
+                    <li class="menu-item">
+                        <a href="feature-post.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-share"></i>
                             <div data-i18n="Analytics">Feature Post</div>
                         </a>
                     </li>
                     
                       <li class="menu-item">
-                        <a href="gallery.html" class="menu-link">
+                        <a href="gallery.php" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-photo-album"></i>
                           <div data-i18n="Analytics">Gallery</div>
                         </a>
                       </li>
                       <li class="menu-item">
-                        <a href="reply.html" class="menu-link">
+                        <a href="reply.php" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-message-rounded"></i>
                           <div data-i18n="Analytics">Comments & Rating</div>
                         </a>
@@ -85,8 +85,8 @@
                       <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Business Document</span>
                     </li>
-                    <li class="menu-item">
-                        <a href="requirement.html" class="menu-link">
+                    <li class="menu-item active">
+                        <a href="requirement.php" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-paperclip"></i>
                           <div data-i18n="Analytics">Requirements</div>
                         </a>
@@ -100,41 +100,28 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-4">
-                                    <h3 class="card-header"><strong>Featured Post</strong></h3>
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start align-items-sm-center gap-2">
-                                            <div class="button-wrapper">
-                                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                                    data-bs-target="#modalNew">
-                                                    Add New Post
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <h3 class="card-header"><strong>Requirements</strong></h3>
+                                    
                                     <hr class="my-0">
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table id="Ajax1" class="table table-bordered table-striped table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Title</th>
-                                                        <th>Caption</th>
+                                                        <th>Document</th>
                                                         <th>Image</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>NEW PROMO: Mix & Match</td>
-                                                        <td>You can make your own combination. Enjoy the New Promo Combo
-                                                            Mix
-                                                            & Match for the first time for only 89 pesos!</td>
-                                                        <td>
+                                                        <td style="text-align: center;">DTI Business Permit</td>
+                                                        <td align="center">
                                                             <img src="plugins/assets/img/avatars/1.png"
                                                                 alt="user-avatar" class="d-block" height="100"
                                                                 width="100" id="uploadedAvatar">
                                                         </td>
-                                                        <td>
+                                                        <td style="text-align: center;">
                                                             <a href="#" data-bs-toggle="modal"
                                                                 data-bs-target="#modal-default" title="View">
                                                                 <i class="bx bxs-show"></i>
@@ -145,9 +132,6 @@
                                                                 <i class="bx bxs-edit"></i>
                                                             </a>
 
-                                                            <a href="#" title="Delete">
-                                                                <i class="bx bxs-trash"></i>
-                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </tbody>

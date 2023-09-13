@@ -30,7 +30,7 @@
                 <div class="app-brand demo">
                     <a href="index.html" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="../BUSINESS CLIENT/plugins/assets/img/avatars/logo.png" alt="" class="brand-image" width="45" height="50">
+                            <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
                         </span>
                         <span
                             class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
@@ -46,15 +46,15 @@
                         <span class="menu-header-text">Business Profile</span>
                     </li>
 
-                    <li class="menu-item">
-                        <a href="bulletin.html" class="menu-link">
+                    <li class="menu-item active">
+                        <a href="bulletin.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-pin"></i>
                             <div data-i18n="Analytics">Bulletin Board</div>
                         </a>
                     </li>
 
                     <li class="menu-item">
-                        <a href="BusinessPanel.html" class="menu-link">
+                        <a href="BusinessPanel.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-info-circle"></i>
                             <div data-i18n="Analytics">Details</div>
                         </a>
@@ -64,20 +64,20 @@
                         <span class="menu-header-text">Business Content</span>
                     </li>
                     <li class="menu-item">
-                        <a href="feature-post.html" class="menu-link">
+                        <a href="feature-post.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-share"></i>
                             <div data-i18n="Analytics">Feature Post</div>
                         </a>
                     </li>
                     
                       <li class="menu-item">
-                        <a href="gallery.html" class="menu-link">
+                        <a href="gallery.php" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-photo-album"></i>
                           <div data-i18n="Analytics">Gallery</div>
                         </a>
                       </li>
                       <li class="menu-item">
-                        <a href="reply.html" class="menu-link">
+                        <a href="reply.php" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-message-rounded"></i>
                           <div data-i18n="Analytics">Comments & Rating</div>
                         </a>
@@ -85,8 +85,8 @@
                       <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Business Document</span>
                     </li>
-                    <li class="menu-item active">
-                        <a href="requirement.html" class="menu-link">
+                    <li class="menu-item">
+                        <a href="requirement.php" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-paperclip"></i>
                           <div data-i18n="Analytics">Requirements</div>
                         </a>
@@ -100,130 +100,32 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-4">
-                                    <h3 class="card-header"><strong>Requirements</strong></h3>
-                                    
+                                    <h3 class="card-header"><strong>Business Bulletin Board</strong></h3>
                                     <hr class="my-0">
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table id="Ajax1" class="table table-bordered table-striped table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Document</th>
-                                                        <th>Image</th>
-                                                        <th>Action</th>
+                                                        <th>Company</th>
+                                                        <!-- <th>Needs Action</th> -->
+                                                        <th>Status</th>
+                                                        <th>Remarks</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td style="text-align: center;">DTI Business Permit</td>
-                                                        <td align="center">
-                                                            <img src="plugins/assets/img/avatars/1.png"
-                                                                alt="user-avatar" class="d-block" height="100"
-                                                                width="100" id="uploadedAvatar">
-                                                        </td>
+                                                        <td style="text-align: center;">XYZ Company</td>
+                                                        <!-- <td style="text-align: center;">DTR Business Permit</td> -->
+                                                        <td style="text-align: center;"><span class="badge bg-warning text-dark"><strong>Invalid</strong></span></td>
                                                         <td style="text-align: center;">
-                                                            <a href="#" data-bs-toggle="modal"
-                                                                data-bs-target="#modal-default" title="View">
-                                                                <i class="bx bxs-show"></i>
-                                                            </a>
-
-                                                            <a href="#" data-bs-toggle="modal"
-                                                                data-bs-target="#modalEdit" title="Edit">
-                                                                <i class="bx bxs-edit"></i>
-                                                            </a>
-
+                                                            Expired Document 
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mt-3">
-                                            <div class="modal fade" id="modalNew" tabindex="-1" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-sm"
-                                                    role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="modalCenterTitles">Add New Post
-                                                            </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col mb-3">
-                                                                    <label for="title" class="form-label">Title</label>
-                                                                    <input type="text" id="titles" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row g-2">
-                                                                <div class="col mb-0">
-                                                                    <label id="caption"
-                                                                        class="form-label">Caption</label>
-                                                                    <textarea class="form-control"></textarea>
-                                                                </div>
-                                                                <div class="col-12">
-                                                                    <br> <label for="upload"
-                                                                        class="btn btn-primary me-2 mb-4" tabindex="0">
-                                                                        <span class="d-none d-sm-block">Upload new
-                                                                            photo</span>
-                                                                        <i
-                                                                            class="bx bx-upload d-block d-sm-none"></i></label>
-                                                                    <input type="file" id="upload" class="form-control"
-                                                                        accept="image/png, image/jpeg" hidden>
-                                                                    <img id="preview" src="#" alt="Preview"
-                                                                        style="max-height: 200px; display: none;">
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex modal-footer">
-                                                                <button type="button" class="btn btn-outline-secondary"
-                                                                    data-bs-dismiss="modal">
-                                                                    Cancel
-                                                                </button>
-                                                                <button type="button"
-                                                                    class="btn btn-primary">Upload</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal fade" id="modal-default" data-keyboard="false"
-                                                tabindex="-1">
-                                                <div class="modal-dialog modal-dialog-centered modal-md">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">
-                                                                View Post</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body p-4">
-                                                            <strong style="font-size: 15px;">Title</strong>
-
-                                                            <p class="text-muted"
-                                                                style="text-align: justify; padding: 5px; font-size: 13px;">
-                                                                NEW PROMO: Mix & Match
-                                                            </p>
-                                                            <strong style="font-size: 15px;">Caption</strong>
-
-                                                            <p class="text-muted"
-                                                                style="text-align: justify; padding: 5px; font-size: 13px;">
-                                                                You can make your own combination. Enjoy the New Promo
-                                                                Combo Mix & Match for the first time for only 89 pesos!
-                                                            </p>
-
-                                                            <div class="d-flex justify-content-center">
-                                                                <img src="plugins/assets/img/avatars/1.png"
-                                                                    alt="user-avatar" class="img-circle img-fluid"
-                                                                    width="150" height="150">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered modal-sm"

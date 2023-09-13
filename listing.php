@@ -1,8 +1,8 @@
 <?php
 require_once './includes/config.php';
 session_start();
-if(isset($_SESSION['role'])){
-  if($_SESSION['role'] == 1){
+if (isset($_SESSION['role'])) {
+  if ($_SESSION['role'] == 1) {
     header('Location: ceipo/index.php');
   }
 }
@@ -28,7 +28,7 @@ if (isset($_GET['a'])) {
           cl.category LIKE :search_query
           OR
           bl.BusinessName LIKE :search_query
-  ");
+         LIMIT 10");
 
   $stmt->bindParam(':search_query', $search_query, PDO::PARAM_STR);
   $stmt->execute();
@@ -52,7 +52,7 @@ if (isset($_GET['a'])) {
   }
 } else {
   // die("No search query provided.");
-  $sql = "SELECT * FROM business_list";
+  $sql = "SELECT * FROM business_list LIMIT 10";
   $disp = "";
   if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {
@@ -194,7 +194,7 @@ if (isset($_GET['a'])) {
                             <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                           <?php } ?>
                           <?php if ($_SESSION['role'] == 2) { ?>
-                            <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                            <li><a href="manage.php">MANAGE BUSINESS</a></li>
                             <li><a href="listing-form.php">ADD BUSINESS</a></li>
                           <?php } ?>
                           <li><a href="logout.php">LOGOUT</a></li>

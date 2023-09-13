@@ -28,7 +28,7 @@ if ($rs = $conn->query($sql)) {
                         <div class="col-lg-4">
                             <div class="profile-agent-info">
                                 <div class="pi-pic">
-                                    <img src=' . $row['Businesslogo'] . ' alt="">
+                                    <img src=" img/logo/' . $row['Businesslogo'] . '" alt="">
                                     <div class="rating-point">
                                         4.5
                                     </div>
@@ -182,7 +182,7 @@ if ($rs = $conn->query($sql)) {
                                                         <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                                                     <?php } ?>
                                                     <?php if ($_SESSION['role'] == 2) { ?>
-                                                        <li><a href="manage.html">MANAGE BUSINESS</a></li>
+                                                        <li><a href="manage.php">MANAGE BUSINESS</a></li>
                                                         <li><a href="listing-form.php">ADD BUSINESS</a></li>
                                                     <?php } ?>
                                                     <li><a href="logout.php">LOGOUT</a></li>

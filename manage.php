@@ -35,7 +35,7 @@ if ($rs=$conn->query($sql)) {
           }
       $disp.='<td class="col-md-4">
               <div class="property-item" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); padding: 20px;  border-radius: 15px;">
-                <div class="pi-pic set-bg rounded-circle text-center d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 2px solid #355E3B;" data-setbg="img/company/jollibee.jpg">
+                <div class="pi-pic set-bg rounded-circle text-center d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 2px solid #355E3B;" data-setbg="img/logo/'.$row['Businesslogo'].'">
                   <!-- Circular image with a border -->
               </div>
               <div class="pi-text">
@@ -45,7 +45,7 @@ if ($rs=$conn->query($sql)) {
                       <div class="pa-item">
                           <div class="pa-text">
                               <a class="btn btn-success" href="details.php?ID=' . $row['bus_id'] . '" role="button"><i class="fa fa-eye"></i> View</a>
-                              <a class="btn btn-success" href="BusinessPanel.html" role="button"><i class="fa fa-pencil"></i> Edit</a>
+                              <a class="btn btn-success" href="BusinessPanel.php" role="button"><i class="fa fa-pencil"></i> Edit</a>
                           </div>
                       </div>
                   </div>
@@ -118,7 +118,7 @@ if ($rs=$conn->query($sql)) {
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./homepage.php"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="index.php"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
