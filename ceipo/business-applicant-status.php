@@ -1,9 +1,9 @@
 <?php 
 session_start();
 if(empty( $_SESSION['ownerId'] )){
-  header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-      exit; 
-  }
+header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+    exit; 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
@@ -59,23 +59,30 @@ if(empty( $_SESSION['ownerId'] )){
               </li>
     
     
-              <li class="menu-item active open">
+              <li class="menu-item active open active">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bxs-buildings"></i>
                   <div data-i18n="Layouts">Business Application</div>
                 </a>
     
                 <ul class="menu-sub list-inline">
-                  <li class="list-inline-block menu-item">
-                    <a href="approval-registration.php" class="menu-link">
-                      <div data-i18n="Without navbar">Approval of Registration</div>
-                    </a>
-                  </li>
-                  <li class="list-inline-block menu-item active">
-                    <a href="business-applicant-status.php" class="menu-link">
-                      <div data-i18n="Without menu">Business Applicant Status</div>
-                    </a>
-                  </li>
+                <li class="list-inline-block menu-item">
+                <a href="approval-registration.php" class="menu-link">
+                  <div data-i18n="Without navbar">Approval of Registration</div>
+                </a>
+              </li>
+
+              <li class="list-inline-block menu-item">
+                <a href="re-evaluation.php" class="menu-link">
+                  <div data-i18n="Without navbar">Re-Evaluation</div>
+                </a>
+              </li>
+
+              <li class="list-inline-block menu-item active">
+                <a href="business-applicant-status.php" class="menu-link">
+                  <div data-i18n="Without menu">Approved Business</div>
+                </a>
+              </li>
                 </ul>
               </li>
     
@@ -140,7 +147,7 @@ if(empty( $_SESSION['ownerId'] )){
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="../img/testimonial-author/unknown.jpg" alt class="w-px-40 h-auto rounded-circle" />
+                    <img src="plugins/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -149,11 +156,11 @@ if(empty( $_SESSION['ownerId'] )){
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="../img/testimonial-author/unknown.jpg" alt class="w-px-40 h-auto rounded-circle" />
+                            <img src="plugins/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
+                        <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
                           <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
                         </div>
                       </div>
@@ -162,7 +169,7 @@ if(empty( $_SESSION['ownerId'] )){
                   <li>
                     <div class="dropdown-divider"></div>
                   </li>
-                 <li>
+                  <li>
                     <a class="dropdown-item" href="../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
@@ -192,7 +199,6 @@ if(empty( $_SESSION['ownerId'] )){
                           <th>Owner</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <th>Action</th>
                         </tr>
                       </thead>
                     
@@ -216,8 +222,25 @@ if(empty( $_SESSION['ownerId'] )){
   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script>
       $(document).ready(function () {
-        $('#Approved_tbl').DataTable();
+
+
+        
+        $('#Approved_tbl').DataTable({
+                'serverside': true,
+                'processing': true,
+                'paging': true,
+                "columnDefs": [
+                    { "className": "dt-center", "targets": "_all" },
+                ],
+                'ajax': {
+                    'url': 'Registration_approved_tbl.php',
+                    'type': 'post',
+
+                },
+            });
       });
+
+
     </script>
 
 </body>

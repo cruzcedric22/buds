@@ -1,11 +1,11 @@
 <?php
 require_once('./includes/config.php');
 session_start();
-if(isset($_SESSION['role'])){
-    if($_SESSION['role'] == 1){
-      header('Location: ceipo/index.php');
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] == 1) {
+        header('Location: ceipo/index.php');
     }
-  }
+}
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
@@ -15,6 +15,7 @@ $id = $_GET['ID'];
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
 $sql = "SELECT * FROM business_list AS bl 
 INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
+INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
 WHERE 
 bl.bus_id = $id";
 $disp = "";
@@ -71,7 +72,14 @@ if ($rs = $conn->query($sql)) {
                         <a href=' . $row['bus_fb'] . ' class="facebook"><i class="fa fa-facebook"></i></a>
                         <a href=' . $row['bus_ig'] . ' class="instagram"><i class="fa fa-instagram"></i></a>
                     </div>';
+            $lat = $row['bus_lat'];
+            $long = $row['bus_long'];
+            $bus_name = $row['BusinessName'];
+            $bus_add = $row['BusinessAddress'];
         }
+        // echo $lat;
+        // echo $long;
+
     }
 }
 
@@ -104,11 +112,19 @@ if ($rs = $conn->query($sql)) {
     <link rel="stylesheet" href="css/star.css" type="text/css">
     <link rel="stylesheet" href="css/style1.css" type="text/css">
     <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         /* Add this CSS to your stylesheet */
         .swal-confirm-button {
             width: 100px;
             /* Adjust the width as needed */
+        }
+
+        #map {
+            display: flex;
+            margin: auto;
+            width: 600px;
+            height: 450px;
         }
     </style>
 
@@ -445,7 +461,8 @@ if ($rs = $conn->query($sql)) {
                                 <div class="pd-widget">
                                     <h4>Map Location</h4>
                                     <div class="map">
-                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7720.486527481873!2d120.96689102135043!3d14.642127909103934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b54965fb6673%3A0x4c29f2c590dd763f!2sJollibee!5e0!3m2!1sen!2sph!4v1680867618471!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                        <div id="map"></div>
+                                        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7720.486527481873!2d120.96689102135043!3d14.642127909103934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b54965fb6673%3A0x4c29f2c590dd763f!2sJollibee!5e0!3m2!1sen!2sph!4v1680867618471!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
                                     </div>
                                 </div>
                                 <br>
@@ -645,7 +662,8 @@ if ($rs = $conn->query($sql)) {
 
     <!-- Js Plugins -->
 
-    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- <script src="js/jquery-3.3.1.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/mixitup.min.js"></script>
@@ -657,9 +675,57 @@ if ($rs = $conn->query($sql)) {
     <script src="js/image-uploader.min.js"></script>
     <script src="js/main.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-76614800-1"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
+            var map = L.map('map').setView([14.6577, 120.9842], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+            }).addTo(map);
+
+            var caloocanBoundary = L.geoJSON().addTo(map);
+
+            $.getJSON('boundary.geojson1.json', function(data) {
+                caloocanBoundary.addData(data);
+
+                caloocanBoundary.setStyle(function(feature) {
+                    return {
+                        fillColor: 'transparent', // Set the fill color to transparent
+                        fillOpacity: 0, // Set the fill opacity to 0 for full transparency
+                        color: 'black',
+                        weight: 0.7
+                    };
+                });
+
+
+                caloocanBoundary.eachLayer(function(layer) {
+                    layer.bindPopup("Barangay " + layer.feature.properties.NAME_3); // para sa pangalan
+                    // console.log(layer)
+                });
+
+                map.fitBounds(caloocanBoundary.getBounds()); // fit bounds para izoom
+
+
+            });
+
+            var lat = <?php echo $lat ?>;
+            var long = <?php echo $long ?>;
+            var name = "<?php echo $bus_name ?>";
+            var address = "<?php echo $bus_add ?>";
+
+            var marker = L.marker([lat, long]).addTo(map);
+
+            // Customize the popup for each business
+            var popupContent = "<b>" + name + "</b><br>Address: " + address;
+            marker.bindPopup(popupContent);
+
+            // Zoom the map to the marker's location
+           map.setView([lat, long], 23); // Zoomed in further to level 18
+
+
+
             // Get a reference to the checkbox element
             var checkbox = $("#checkTerms");
             var signUpButton = $("#signUp");

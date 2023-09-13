@@ -59,7 +59,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               </li>
     
     
-              <li class="menu-item">
+              <li class="menu-item active open active">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bxs-buildings"></i>
                   <div data-i18n="Layouts">Business Application</div>
@@ -72,13 +72,13 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                 </a>
               </li>
 
-              <li class="list-inline-block menu-item">
+              <li class="list-inline-block menu-item active">
                 <a href="re-evaluation.php" class="menu-link">
                   <div data-i18n="Without navbar">Re-Evaluation</div>
                 </a>
               </li>
 
-              <li class="list-inline-block menu-item">
+              <li class="list-inline-block menu-item ">
                 <a href="business-applicant-status.php" class="menu-link">
                   <div data-i18n="Without menu">Approved Business</div>
                 </a>
@@ -87,14 +87,14 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               </li>
     
     
-              <li class="menu-item open active">
+              <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bxs-category"></i>
                   <div data-i18n="Layouts">Business Categories</div>
                 </a>
     
                 <ul class="menu-sub">
-                  <li class="menu-item active">
+                  <li class="menu-item">
                     <a href="top-business.php" class="menu-link">
                       <div data-i18n="Without menu">Top 10 Business Category</div>
                     </a>
@@ -161,7 +161,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                         </div>
                         <div class="flex-grow-1">
                         <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
-                        <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
+                          <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
                         </div>
                       </div>
                     </a>
@@ -182,76 +182,37 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
         </nav>
     <hr>
 
-    <section class="content">
-      <div class="container-fluid mx-auto" style="text-align: center;">
-        <div class="row">
-          <div class="col-12">
-            <div class="card card-primary">
-              <div class="card-body">
-                <h1 style="font-weight: bolder;">Top 10 Business Categories</h1>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-home" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Home and Parenting</h4>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-car" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Automotive</h4>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-wrench" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Construction</h4>
-                    </div>
-                  </div>
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Approval of Registration</h3>
                 </div>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bx-plus-medical" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Medical Care</h4>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-shopping-bags" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Shopping & Retails</h4>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-credit-card" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Financial Institution</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="position-relative p-2" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-bus" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Transportation</h4>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="position-relative p-2" style="background-color:#e6e5e5; height:180px;">
-                      <br><i class="bx bxs-building" style="font-size: 80px;"></i><br>
-                      <h4 style="font-weight: bolder;">Manufacturing, Industrial Supplies and Services</h4>
-                    </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table id="re_evaluate_tbl" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Business Company</th>
+                          <th>Owner</th>
+                          <th>Category</th>
+                          <th>Remarks</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                    
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-    </section>
+      </section>
+    </div>
+    
 
   <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
   <script src="plugins/assets/vendor/js/bootstrap.js"></script>
@@ -262,8 +223,25 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script>
       $(document).ready(function () {
-        $('#Ajax1').DataTable();
+
+
+        
+        $('#re_evaluate_tbl').DataTable({
+                'serverside': true,
+                'processing': true,
+                'paging': true,
+                "columnDefs": [
+                    { "className": "dt-center", "targets": "_all" },
+                ],
+                'ajax': {
+                    'url': 're_evaluate_tbl.php',
+                    'type': 'post',
+
+                },
+            });
       });
+
+
     </script>
 
 </body>

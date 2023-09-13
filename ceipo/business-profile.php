@@ -1,9 +1,9 @@
 <?php 
 session_start();
 if(empty( $_SESSION['ownerId'] )){
-  header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-      exit; 
-  }
+header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+    exit; 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -54,7 +54,6 @@ if(empty( $_SESSION['ownerId'] )){
             </a>
           </li>
 
-
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bxs-buildings"></i>
@@ -62,19 +61,25 @@ if(empty( $_SESSION['ownerId'] )){
             </a>
 
             <ul class="menu-sub list-inline">
-              <li class="list-inline-block menu-item">
+            <li class="list-inline-block menu-item">
                 <a href="approval-registration.php" class="menu-link">
                   <div data-i18n="Without navbar">Approval of Registration</div>
                 </a>
               </li>
+
+              <li class="list-inline-block menu-item">
+                <a href="re-evaluation.php" class="menu-link">
+                  <div data-i18n="Without navbar">Re-Evaluation</div>
+                </a>
+              </li>
+
               <li class="list-inline-block menu-item">
                 <a href="business-applicant-status.php" class="menu-link">
-                  <div data-i18n="Without menu">Business Applicant Status</div>
+                  <div data-i18n="Without menu">Approved Business</div>
                 </a>
               </li>
             </ul>
           </li>
-
 
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -90,7 +95,7 @@ if(empty( $_SESSION['ownerId'] )){
               </li>
               <li class="menu-item">
                 <a href="business-category.php" class="menu-link">
-                  <div data-i18n="Without navbar">Buisness Category </div>
+                  <div data-i18n="Without navbar">Business Category</div>
                 </a>
               </li>
             </ul>
@@ -147,8 +152,8 @@ if(empty( $_SESSION['ownerId'] )){
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
-                          <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
+                          <span class="fw-semibold d-block"><?= $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
+                          <small class="text-muted"><?= $_SESSION['userTypeDesc'] ?></small>
                         </div>
                       </div>
                     </a>
@@ -171,38 +176,73 @@ if(empty( $_SESSION['ownerId'] )){
 
         <div class="container">
           <div class="row">
-            <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-              <div class="card bg-light d-flex flex-fill">
-                <div class="card-header text-muted border-bottom-0">
-                  Fast Food Restaurant
-                </div>
-                <div class="card-body pt-0">
-                  <div class="row">
-                    <div class="col-7">
-                      <h2 class="lead" style="font-size: 40px;"><b>Jollibee</b></h2><br>
-                      <ul class="list-inline ml-4 mb-0 fa-ul text-muted">
-                        <li class="list-inline-block">
-                          <span class="fa-li"><i class="bx bx-map"></i>689 Rizal Ave Ext, Grace Park West, Caloocan, Metro Manila</span>
-                        </li>
-                        <li class="list-inline-block">
-                          <span class="fa-li"><i class="bx bx-phone"></i> (02) 8367 9575</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-4 text-center">
-                      <img src="plugins/assets/img/avatars/logo.png" alt="user-avatar" class="img-circle img-fluid">
+            <?php
+            // Include your config.php to establish the database connection
+            include '../includes../config.php';
+            $pdo = DATABASE::connection();
+
+            $query = "SELECT *
+              FROM business_list AS bl
+              INNER JOIN business_requirement AS br ON bl.bus_id = br.bus_id
+              INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
+              INNER JOIN brgyzone_list AS bz ON bl.BusinessBrgy = bz.ID
+              INNER JOIN category_list as c ON bl.BusinessCategory = c.ID
+              INNER JOIN subcategory_list as sc ON bl.BusinessSubCategory = sc.ID
+              WHERE bl.BusinessStatus = '4'
+            ";
+
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+
+            while ($businessData = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              // Extract business details
+              $businessName = $businessData['BusinessName'];
+              $businessAddress = $businessData['BusinessAddress'];
+              $businessPhone = $businessData['BusinessNumber'];
+              $businessCategory = $businessData['category'];
+              $businessImage = $businessData['Businesslogo'];
+            ?>
+
+              <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                <div class="card bg-light d-flex flex-fill">
+                  <div class="card-header text-muted border-bottom-0">
+                    <?= $businessCategory; ?>
+                  </div>
+                  <div class="card-body pt-0">
+                    <div class="row">
+                      <div class="col-7">
+                        <h2 class="lead" style="font-size: 40px;"><b><?= $businessName; ?></b></h2><br>
+                        <ul class="list-inline ml-4 mb-0 fa-ul text-muted">
+                          <li class="list-inline-block">
+                            <span class="fa-li"><i class="bx bx-map"></i><?= $businessAddress; ?></span>
+                          </li>
+                          <li class="list-inline-block">
+                            <span class="fa-li"><i class="bx bx-phone"></i><?= $businessPhone; ?></span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-4 text-center">
+                        <img src="../img/logo/<?= $businessImage; ?>" alt="user-avatar" class="img-circle img-fluid">
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="card-footer">
-                  <div class="text-rigth">
-                    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter" style="background-color: #355E3B; border: none;">
-                      <i class="bx bx-search"></i> View Business
-                    </a>
-                  </div>
+                  <div class="card-footer">
+                        <div class="text-rigth">
+                            <button type="button" class="btn btn-sm btn-primary view-business-button"
+                              data-bs-toggle="modal"
+                              data-bs-target="#modalCenter"
+                              data-business-id="<?= $businessData['bus_id'] ?>"
+                              style="background-color: #355E3B; border: none;">
+                              <i class="bx bx-search"></i> View Business
+                            </button>
+                        </div>
+                    </div>
                 </div>
               </div>
-            </div>
+
+            <?php
+            }
+            ?>
           </div>
         </div>
 
@@ -215,71 +255,40 @@ if(empty( $_SESSION['ownerId'] )){
               </div>
               <hr>
               <div class="modal-body">
-                <div class="d-flex justify-content-center">
-                  <img src="plugins/assets/img/avatars/logo.png" alt="user-avatar" class="img-circle img-fluid" width="150" height="150">
-                </div>
-                <div class="row">
-                  <strong style="font-size: 20px;">Overview</strong>
-
-                  <p class="text-muted" style="text-align: justify; padding: 5px; font-size: 16px;">
-                    Jollibee is the largest fast food chain brand in the Philippines,
-                    operating a network of more than 1,500 stores in 17 countries. A
-                    dominant market leader in the Philippines, Jollibee enjoys the lion’s
-                    share of the local market that is more than all the other multinational
-                    fast food brands in PH combined. With a strict adherence to the highest
-                    standards of food quality, service and cleanliness, Jollibee serves great-tasting,
-                    high-quality and affordable food products to include its superior-tasting Chickenjoy,
-                    mouth-watering Yumburger, and deliciously satisfying Jolly Spaghetti among other delicious products.
-                  </p>
-
-                  <hr>
-                </div>
-                <div class="row">
-                  <div class="col-6" style="text-align: left;">
-                    <strong><i class="bx bx-map"></i> Address</strong>
-                    <p class="text-muted" style="padding: 5px;">
-                      <span class="tag tag-danger">689 Rizal Ave Ext, Grace Park West, Caloocan, Metro Manila</span>
-                    </p>
-                  </div>
-
-                  <div class="col-6" style="text-align: left;">
-                    <strong><i class="fas fa-link mr-1"></i> Social Media</strong>
-                    <br>
-                    <div class="col d-inline">
-                      <i class="bx bxl-facebook" style="font-size: 20px; color: #0C8AEF;"></i><a href="#" class="d-inline"> www.facebook.com</a><br>
-                      <i class="bx bxl-twitter" style="font-size: 20px; color: #1C9BF0;"></i><a href="#" class="d-inline"> www.twitter.com</a><br>
-                      <i class="bx bxl-instagram" style="font-size: 20px; color: #E13530;"></i><a href="#" class="d-inline"> www.instagram.com</a>
-                    </div>
-                  </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                  <div class="col-6" style="text-align: left;">
-                    <strong><i class="bx bx-phone"></i> Contact Number</strong>
-                    <p class="text-muted">
-                      <span class="tag tag-danger" style="padding: 5px;">(02) 8367 9575</span>
-                    </p>
-                  </div>
-
-                  <div class="col-6" style="text-align: left;">
-                    <strong><i class="bx bxs-star-half"></i> Overall Ratings</strong>
-                    <p class="text-muted">
-                      <span class="tag tag-danger" style="padding: 5px;">123,456,789</span>
-                    </p>
-                  </div>
-                </div>
+               
               </div>
             </div>
           </div>
+        </div>
 
 
-          <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
-          <script src="plugins/assets/vendor/js/bootstrap.js"></script>
-          <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-          <script src="plugins/assets/vendor/js/menu.js"></script>
-          <script src="plugins/assets/js/main.js"></script>
-
-</body>
-
-</html>
+        <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
+        <script src="plugins/assets/vendor/js/bootstrap.js"></script>
+        <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+        <script src="plugins/assets/vendor/js/menu.js"></script>
+        <script src="plugins/assets/js/main.js"></script>
+        <script>
+          // JavaScript code to handle the modal and business data loading
+          $(document).ready(function() {
+            $('.view-business-button').click(function() {
+              var businessId = $(this).data('business-id');
+              $.ajax({
+                  type: 'POST', // Change to 'GET' if your backend supports GET requests
+                  url: 'fetch_business_data.php', // Replace with the correct URL
+                  data: { businessId: businessId },
+                  dataType: 'json', // Change to 'html' or 'text' if your backend returns HTML or plain text
+                  success: function(response) {
+                    // Update the modal content with the fetched data
+                    $('#modalCenterTitle').html(response.businessName);
+                    $('#modalCenter .modal-body').html(response.businessData);
+                  },
+                  error: function() {
+                    // Handle errors here, e.g., show an error message
+                    console.error('Failed to fetch business data.');
+                  }
+                });
+            });
+          });
+        </script>
+      </body>
+    </html>
