@@ -542,6 +542,26 @@ if (isset($_GET['a'])) {
       var pass = $('#pass').val();
       var conpass = $('#con_pass').val();
 
+      if (
+        !fname ||
+        !mname ||
+        !lname ||
+        !email ||
+        !pass ||
+        !conpass
+      ) {
+        Swal.fire({
+          title: 'Warning',
+          text: 'Please fill out all required fields.',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+        return;
+      }
+
       var payload = {
         fname: fname,
         mname: mname,
@@ -602,6 +622,31 @@ if (isset($_GET['a'])) {
       var ownerAddress = $('#ownerAddress').val();
       var ownerPass = $('#ownerPass').val();
       var ownerConPass = $('#ownerConPass').val();
+
+      if (
+        !ownerEmail ||
+        !ownerFname ||
+        !ownerMname ||
+        !ownerLname ||
+        !ownerBirthday ||
+        !ownerAge ||
+        !ownerSex ||
+        !ownerNumber ||
+        !ownerAddress ||
+        !ownerPass ||
+        !ownerConPass
+      ) {
+        Swal.fire({
+          title: 'Warning',
+          text: 'Please fill out all required fields.',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+        return;
+      }
 
       var payload = {
         ownerEmail: ownerEmail,

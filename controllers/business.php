@@ -1,6 +1,8 @@
 <?php
 require_once("../includes/config.php");
-// session_start();
+session_start();
+
+$_SESSION['bus_id'];
 
 
 
@@ -306,4 +308,61 @@ function addBusiness($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
+};
+
+function edtBusinessDetails($request = null)
+{
+    $bus_name = $request->bus_name;
+    $number = $request->number;
+    $address = $request->address;
+    $email = $request->email;
+    $establish = $request->establish;
+    $opening = $request->opening;
+    $closing = $request->closing;
+    $branch = $request->branch;
+    $fb = $request->fb;
+    $ig = $request->ig;
+    $id = $_SESSION['bus_id'];
+
+    $sql = "UPDATE business_list SET BusinessName = :name,BusinessNumber = :number,BusinessAddress = :address,BusinessEmail = :email,BusinessEstablish = :establish,BusinessOpenHour = :open,
+    BusinessCloseHour = :close, BusinessBranch = :branch WHERE bus_id = :id";
+    $sql2 = "UPDATE business_links SET bus_fb = :fb, bus_ig = :ig WHERE bus_id = :id";
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(
+        array(
+            ':name' => $bus_name,
+            ':number' => $number,
+            ':address' => $address,
+            ':email' => $email,
+            ':establish' => $establish,
+            ':open' => $opening,
+            ':close' => $closing,
+            ':branch' => $branch,
+            ':id' => $id
+        )
+    );
+    $stmt1 = $pdo->prepare($sql2);
+    $stmt1->execute(
+        array(
+            ':fb' => $fb,
+            ':ig' => $ig,
+            ':id' => $id
+        )
+    );
+    if ($stmt->errorCode() !== '00000' && $stmt1->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql . "And" .$sql2;
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    }else{
+        $msg['title'] = "Successful";
+        $msg['message'] = "Sucessfully Updated";
+        $msg['icon'] = "success";
+        $msg['status'] = "success";
+        echo json_encode($msg);
+    }
+};

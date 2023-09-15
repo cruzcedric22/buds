@@ -4,8 +4,8 @@ session_start();
 // echo $_SESSION['ownerId'];
 // require_once "ceipo/index.php"
 
-if(isset($_SESSION['role'])){
-  if($_SESSION['role'] == 1){
+if (isset($_SESSION['role'])) {
+  if ($_SESSION['role'] == 1) {
     header('Location: ceipo/index.php');
   }
 }
@@ -46,7 +46,7 @@ if(isset($_SESSION['role'])){
       /* Adjust the width as needed */
     }
   </style>
-  
+
 
 </head>
 
@@ -95,7 +95,7 @@ if(isset($_SESSION['role'])){
                 <button onclick="document.getElementById('id01').style.display='block'">Login</a>
               </div>
             </div>
-            <?php } else { ?>
+          <?php } else { ?>
             <div class="col-lg-9">
               <div class="ht-widget">
                 <div class="hs-nav">
@@ -114,12 +114,12 @@ if(isset($_SESSION['role'])){
                             <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
                           </li>
                           <li><a href="user.php">MY PROFILE</a></li>
-                          <?php if($_SESSION['role'] == 3){ ?>
+                          <?php if ($_SESSION['role'] == 3) { ?>
                             <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                           <?php } ?>
-                          <?php if($_SESSION['role'] == 2) { ?>
-                          <li><a href="manage.php">MANAGE BUSINESS</a></li>
-                          <li><a href="listing-form.php">ADD BUSINESS</a></li>
+                          <?php if ($_SESSION['role'] == 2) { ?>
+                            <li><a href="manage.php">MANAGE BUSINESS</a></li>
+                            <li><a href="listing-form.php">ADD BUSINESS</a></li>
                           <?php } ?>
                           <li><a href="logout.php">LOGOUT</a></li>
                         </ul>
@@ -129,11 +129,11 @@ if(isset($_SESSION['role'])){
                 </div>
               </div>
             </div>
-            <?php } ?>         
+          <?php } ?>
         </div>
-      <div class="canvas-open">
-        <span class="icon_menu"></span>
-      </div>
+        <div class="canvas-open">
+          <span class="icon_menu"></span>
+        </div>
       </div>
     </div>
     <div class="hs-nav">
@@ -330,14 +330,14 @@ if(isset($_SESSION['role'])){
           </form>
         </div>
         <div class="col-lg-12 mt-3">
-        <fieldset>
-          <button class="oblong-button">Automotive</button>
-          <button class="oblong-button">Restaurant</button>
-          <button class="oblong-button">Salon</button>
-          <button class="oblong-button">Hotel</button>
-          <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a>
-        </fieldset>
-      </div>
+          <fieldset>
+            <button class="oblong-button">Automotive</button>
+            <button class="oblong-button">Restaurant</button>
+            <button class="oblong-button">Salon</button>
+            <button class="oblong-button">Hotel</button>
+            <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a>
+          </fieldset>
+        </div>
       </div>
     </div>
   </div>
@@ -735,6 +735,26 @@ if(isset($_SESSION['role'])){
       var pass = $('#pass').val();
       var conpass = $('#con_pass').val();
 
+      if (
+        !fname ||
+        !mname ||
+        !lname ||
+        !email ||
+        !pass ||
+        !conpass
+      ) {
+        Swal.fire({
+          title: 'Warning',
+          text: 'Please fill out all required fields.',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+        return;
+      }
+
       var payload = {
         fname: fname,
         mname: mname,
@@ -795,6 +815,31 @@ if(isset($_SESSION['role'])){
       var ownerAddress = $('#ownerAddress').val();
       var ownerPass = $('#ownerPass').val();
       var ownerConPass = $('#ownerConPass').val();
+
+      if (
+        !ownerEmail ||
+        !ownerFname ||
+        !ownerMname ||
+        !ownerLname ||
+        !ownerBirthday ||
+        !ownerAge ||
+        !ownerSex ||
+        !ownerNumber ||
+        !ownerAddress ||
+        !ownerPass ||
+        !ownerConPass
+      ) {
+        Swal.fire({
+          title: 'Warning',
+          text: 'Please fill out all required fields.',
+          icon: 'warning',
+          customClass: {
+            confirmButton: 'swal-confirm-button',
+          },
+          showCancelButton: false,
+        });
+        return;
+      }
 
       var payload = {
         ownerEmail: ownerEmail,
@@ -876,15 +921,15 @@ if(isset($_SESSION['role'])){
             },
             showCancelButton: false,
           });
-          if(data.role == 1){
+          if (data.role == 1) {
             setTimeout(function() {
-            window.location.href = "ceipo/index.php";
-          }, 2000);
+              window.location.href = "ceipo/index.php";
+            }, 2000);
 
-          }else{
+          } else {
             setTimeout(function() {
-            window.location.reload();
-          }, 2000);
+              window.location.reload();
+            }, 2000);
           }
           //for normal UI AHAHAHHAHAHA
           // swal.fire(data.title, data.message, data.icon);

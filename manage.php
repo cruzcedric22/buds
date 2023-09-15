@@ -45,7 +45,7 @@ if ($rs=$conn->query($sql)) {
                       <div class="pa-item">
                           <div class="pa-text">
                               <a class="btn btn-success" href="details.php?ID=' . $row['bus_id'] . '" role="button"><i class="fa fa-eye"></i> View</a>
-                              <a class="btn btn-success" href="BusinessPanel.php" role="button"><i class="fa fa-pencil"></i> Edit</a>
+                              <a class="btn btn-success" href="BusinessPanel.php?a='.$row['bus_id'].'" role="button"><i class="fa fa-pencil"></i> Edit</a>
                           </div>
                       </div>
                   </div>
@@ -53,7 +53,6 @@ if ($rs=$conn->query($sql)) {
               </div>
 
       </td>';
-
     }
   }
 }
