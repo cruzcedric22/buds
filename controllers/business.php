@@ -324,45 +324,116 @@ function edtBusinessDetails($request = null)
     $ig = $request->ig;
     $id = $_SESSION['bus_id'];
 
-    $sql = "UPDATE business_list SET BusinessName = :name,BusinessNumber = :number,BusinessAddress = :address,BusinessEmail = :email,BusinessEstablish = :establish,BusinessOpenHour = :open,
-    BusinessCloseHour = :close, BusinessBranch = :branch WHERE bus_id = :id";
-    $sql2 = "UPDATE business_links SET bus_fb = :fb, bus_ig = :ig WHERE bus_id = :id";
-    $pdo = Database::connection();
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(
-        array(
-            ':name' => $bus_name,
-            ':number' => $number,
-            ':address' => $address,
-            ':email' => $email,
-            ':establish' => $establish,
-            ':open' => $opening,
-            ':close' => $closing,
-            ':branch' => $branch,
-            ':id' => $id
-        )
-    );
-    $stmt1 = $pdo->prepare($sql2);
-    $stmt1->execute(
-        array(
-            ':fb' => $fb,
-            ':ig' => $ig,
-            ':id' => $id
-        )
-    );
-    if ($stmt->errorCode() !== '00000' && $stmt1->errorCode() !== '00000') {
-        $errorInfo = $stmt->errorInfo();
-        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql . "And" .$sql2;
-        // Handle the error as needed (e.g., logging, displaying an error message)
-        $msg['title'] = "Error";
-        $msg['message'] = $errorMsg;
-        $msg['icon'] = "error";
-        echo json_encode($msg);
-    }else{
-        $msg['title'] = "Successful";
-        $msg['message'] = "Sucessfully Updated";
-        $msg['icon'] = "success";
-        $msg['status'] = "success";
-        echo json_encode($msg);
+    if (!empty($_FILES['businessLogo']['name'])) {
+        $filename = $_FILES['businessLogo']['name'];
+        $size = $_FILES['businessLogo']['size'];
+        $tmp_name = $_FILES['businessLogo']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/logo/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_list SET BusinessName = :name, Businesslogo = :logo, BusinessNumber = :number, BusinessAddress = :address, BusinessEmail = :email, BusinessEstablish = :establish, BusinessOpenHour = :open,
+            BusinessCloseHour = :close, BusinessBranch = :branch WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':name' => $bus_name,
+                    ':logo' => $newImageName,
+                    ':number' => $number,
+                    ':address' => $address,
+                    ':email' => $email,
+                    ':establish' => $establish,
+                    ':open' => $opening,
+                    ':close' => $closing,
+                    ':branch' => $branch,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $sql = "UPDATE business_list SET BusinessName = :name,BusinessNumber = :number,BusinessAddress = :address,BusinessEmail = :email,BusinessEstablish = :establish,BusinessOpenHour = :open,
+        BusinessCloseHour = :close, BusinessBranch = :branch WHERE bus_id = :id";
+        $sql2 = "UPDATE business_links SET bus_fb = :fb, bus_ig = :ig WHERE bus_id = :id";
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(
+            array(
+                ':name' => $bus_name,
+                ':number' => $number,
+                ':address' => $address,
+                ':email' => $email,
+                ':establish' => $establish,
+                ':open' => $opening,
+                ':close' => $closing,
+                ':branch' => $branch,
+                ':id' => $id
+            )
+        );
+        $stmt1 = $pdo->prepare($sql2);
+        $stmt1->execute(
+            array(
+                ':fb' => $fb,
+                ':ig' => $ig,
+                ':id' => $id
+            )
+        );
+        if ($stmt->errorCode() !== '00000' && $stmt1->errorCode() !== '00000') {
+            $errorInfo = $stmt->errorInfo();
+            $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql . "And" . $sql2;
+            // Handle the error as needed (e.g., logging, displaying an error message)
+            $msg['title'] = "Error";
+            $msg['message'] = $errorMsg;
+            $msg['icon'] = "error";
+            echo json_encode($msg);
+        } else {
+            $msg['title'] = "Successful";
+            $msg['message'] = "Sucessfully Updated";
+            $msg['icon'] = "success";
+            $msg['status'] = "success";
+            echo json_encode($msg);
+        }
     }
 };

@@ -178,7 +178,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
           <div class="row">
             <?php
             // Include your config.php to establish the database connection
-            include '../includes../config.php';
+            include '../includes/config.php';
             $pdo = DATABASE::connection();
 
             $query = "SELECT *

@@ -28,7 +28,7 @@ if (isset($_GET['a'])) {
           cl.category LIKE :search_query
           OR
           bl.BusinessName LIKE :search_query
-         LIMIT 10");
+         LIMIT 5");
 
   $stmt->bindParam(':search_query', $search_query, PDO::PARAM_STR);
   $stmt->execute();
@@ -52,7 +52,7 @@ if (isset($_GET['a'])) {
   }
 } else {
   // die("No search query provided.");
-  $sql = "SELECT * FROM business_list LIMIT 10";
+  $sql = "SELECT * FROM business_list LIMIT 5";
   $disp = "";
   if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {
