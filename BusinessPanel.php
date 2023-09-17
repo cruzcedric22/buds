@@ -6,7 +6,7 @@ if (empty($_SESSION['ownerId'])) {
 }
 
 $bus_id = $_GET['a'];
-$_SESSION['bus_id'] = $_GET['a'];
+$_SESSION['bus_id'] = $bus_id;
 
 
 $sql = "SELECT * FROM business_list AS bl 
@@ -81,14 +81,14 @@ foreach ($datas as $data) {
           </li>
 
           <li class="menu-item">
-            <a href="bulletin.php" class="menu-link">
+            <a href="<?php echo "bulletin.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-pin"></i>
               <div data-i18n="Analytics">Bulletin Board</div>
             </a>
           </li>
 
           <li class="menu-item active">
-            <a href="BusinessPanel.php" class="menu-link">
+            <a href="<?php echo "BusinessPanel.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-info-circle"></i>
               <div data-i18n="Analytics">Details</div>
             </a>
@@ -98,20 +98,20 @@ foreach ($datas as $data) {
             <span class="menu-header-text">Business Content</span>
           </li>
           <li class="menu-item">
-            <a href="feature-post.php" class="menu-link">
+            <a href="<?php echo "feature-post.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-share"></i>
               <div data-i18n="Analytics">Feature Post</div>
             </a>
           </li>
 
           <li class="menu-item">
-            <a href="gallery.php" class="menu-link">
+            <a href="<?php echo "gallery.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-photo-album"></i>
               <div data-i18n="Analytics">Gallery</div>
             </a>
           </li>
           <li class="menu-item">
-            <a href="reply.php" class="menu-link">
+            <a href="<?php echo "reply.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-message-rounded"></i>
               <div data-i18n="Analytics">Comments & Rating</div>
             </a>
@@ -120,7 +120,7 @@ foreach ($datas as $data) {
             <span class="menu-header-text">Business Document</span>
           </li>
           <li class="menu-item">
-            <a href="requirement.php" class="menu-link">
+            <a href="<?php echo "requirement.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-paperclip"></i>
               <div data-i18n="Analytics">Requirements</div>
             </a>

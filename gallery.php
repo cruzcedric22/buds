@@ -1,3 +1,11 @@
+<?php
+session_start();
+// echo $_SESSION['ownerId'];
+if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
+    header('Location: manage.php');
+}
+$bus_id = $_GET['a'];
+?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
     data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -89,14 +97,14 @@
                     </li>
 
                     <li class="menu-item">
-                        <a href="bulletin.php" class="menu-link">
+                        <a href="<?php echo "bulletin.php?a=".$bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-pin"></i>
                             <div data-i18n="Analytics">Bulletin Board</div>
                         </a>
                     </li>
 
                     <li class="menu-item">
-                        <a href="BusinessPanel.php" class="menu-link">
+                        <a href="<?php echo "BusinessPanel.php?a=".$bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-info-circle"></i>
                             <div data-i18n="Analytics">Details</div>
                         </a>
@@ -106,20 +114,20 @@
                         <span class="menu-header-text">Business Content</span>
                     </li>
                     <li class="menu-item">
-                        <a href="feature-post.php" class="menu-link">
+                        <a href="<?php echo "feature-post.php?a=".$bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-share"></i>
                             <div data-i18n="Analytics">Feature Post</div>
                         </a>
                     </li>
                     
                       <li class="menu-item active">
-                        <a href="gallery.php" class="menu-link">
+                        <a href="<?php echo "gallery.php?a=".$bus_id ?>" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-photo-album"></i>
                           <div data-i18n="Analytics">Gallery</div>
                         </a>
                       </li>
                       <li class="menu-item">
-                        <a href="reply.php" class="menu-link">
+                        <a href="<?php echo "reply.php?a=".$bus_id ?>" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-message-rounded"></i>
                           <div data-i18n="Analytics">Comments & Rating</div>
                         </a>
@@ -128,7 +136,7 @@
                         <span class="menu-header-text">Business Document</span>
                     </li>
                     <li class="menu-item">
-                        <a href="requirement.php" class="menu-link">
+                        <a href="<?php echo "requirement.php?a=".$bus_id ?>" class="menu-link">
                           <i class="menu-icon tf-icons bx bx-paperclip"></i>
                           <div data-i18n="Analytics">Requirements</div>
                         </a>

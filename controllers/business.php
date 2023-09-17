@@ -37,6 +37,7 @@ function addBusiness($request = null)
     $businessCategory = $request->businessCategory;
     $subCategory = $request->subCategory;
 
+    $msg = array();
     session_start();
     if (isset($_SESSION['ownerId'])) {
         $ownerId = $_SESSION['ownerId'];
@@ -48,7 +49,6 @@ function addBusiness($request = null)
         echo json_encode($msg);
     }
 
-    $msg = array();
 
     if (!empty($_FILES['businessLogo']['name'])) {
         $filename = $_FILES['businessLogo']['name'];
@@ -322,6 +322,7 @@ function edtBusinessDetails($request = null)
     $branch = $request->branch;
     $fb = $request->fb;
     $ig = $request->ig;
+    $msg = array();
     $id = $_SESSION['bus_id'];
 
     if (!empty($_FILES['businessLogo']['name'])) {
@@ -435,5 +436,227 @@ function edtBusinessDetails($request = null)
             $msg['status'] = "success";
             echo json_encode($msg);
         }
+    }
+};
+
+function edtBusinessBrgyClear($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['businessBrgyClearance']['name'])) {
+        $filename = $_FILES['businessBrgyClearance']['name'];
+        $size = $_FILES['businessBrgyClearance']['size'];
+        $tmp_name = $_FILES['businessBrgyClearance']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/requirements/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_requirement SET bus_brgyclearance = :clearance WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':clearance' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded (Barangay Clearance)";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};
+
+function edtDTIPermit($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['businessDTIPermit']['name'])) {
+        $filename = $_FILES['businessDTIPermit']['name'];
+        $size = $_FILES['businessDTIPermit']['size'];
+        $tmp_name = $_FILES['businessDTIPermit']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/requirements/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_requirement SET bus_dtipermit = :clearance WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':clearance' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded (DTI Permit)";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};
+
+function edtSanitaryPermit($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['businessSanitaryPermit']['name'])) {
+        $filename = $_FILES['businessSanitaryPermit']['name'];
+        $size = $_FILES['businessSanitaryPermit']['size'];
+        $tmp_name = $_FILES['businessSanitaryPermit']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/requirements/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_requirement SET bus_sanitarypermit = :clearance WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':clearance' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded(Sanitary Permit)";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
     }
 };
