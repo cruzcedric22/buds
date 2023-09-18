@@ -1,10 +1,31 @@
 <?php
 session_start();
+require_once './includes/config.php';
 // echo $_SESSION['ownerId'];
 if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
     header('Location: manage.php');
 }
 $bus_id = $_GET['a'];
+
+$sql = "SELECT * FROM business_list AS bl 
+INNER JOIN business_requirement AS br ON bl.bus_id = br.bus_id
+WHERE 
+bl.bus_id = :id";
+$pdo = Database::connection();
+$stmt1 = $pdo->prepare($sql);
+$stmt1->bindParam(':id', $bus_id, PDO::PARAM_STR);
+$stmt1->execute();
+$datas = $stmt1->fetchAll();
+
+foreach ($datas as $data) {
+    $status =  $data['BusinessStatus'];
+    $brgyClearance = $data['bus_brgyclearance'];
+    $dtiPermit = $data['bus_dtipermit'];
+    $sanitaryPermit = $data['bus_sanitarypermit'];
+    $cedula = $data['bus_cedula'];
+    $mayorPermit = $data['bus_mayorpermit'];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -105,17 +126,20 @@ $bus_id = $_GET['a'];
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Barangay Clearance</b></h3>
-                                                    <img class="img-fluid d-flex mx-auto" src="plugins/assets/img/elements/4.jpg" alt="Card image cap" />
-                                                    <br>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="barangayClearance" class="form-control" id="fileUpload">
+                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $brgyClearance ?>" alt="Card image cap" />
+                                                        <br>
+                                                    <?php } else { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="barangayClearance" class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editBrgyClearance()" class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="button" onclick="editBrgyClearance()" class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -123,17 +147,20 @@ $bus_id = $_GET['a'];
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>DTI Permit</b></h3>
-                                                    <img class="img-fluid d-flex mx-auto" src="plugins/assets/img/elements/4.jpg" alt="Card image cap" />
-                                                    <br>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="DTIPermit" class="form-control" id="fileUpload">
+                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $dtiPermit ?>" alt="Card image cap" />
+                                                        <br>
+                                                    <?php } else { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="DTIPermit" class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="butoon" onclick="editDTIPermit()" class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="butoon" onclick="editDTIPermit()" class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -141,17 +168,20 @@ $bus_id = $_GET['a'];
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Sanitary Permit</b></h3>
-                                                    <img class="img-fluid d-flex mx-auto" src="plugins/assets/img/elements/4.jpg" alt="Card image cap" />
-                                                    <br>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="sanitaryPermit" class="form-control" id="fileUpload">
+                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/",$sanitaryPermit ?>" alt="Card image cap" />
+                                                        <br>
+                                                    <?php } else { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="sanitaryPermit" class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editSanitaryPermit()" class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="button" onclick="editSanitaryPermit()" class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -159,17 +189,20 @@ $bus_id = $_GET['a'];
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Cedula</b></h3>
-                                                    <img class="img-fluid d-flex mx-auto" src="plugins/assets/img/elements/4.jpg" alt="Card image cap" />
-                                                    <br>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" class="form-control" id="fileUpload">
+                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/".$cedula ?>" alt="Card image cap" />
+                                                        <br>
+                                                    <?php } else { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="edtCedula" class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editCedula()" class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="submit" class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,17 +210,20 @@ $bus_id = $_GET['a'];
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Mayor's Permit</b></h3>
-                                                    <img class="img-fluid d-flex mx-auto" src="plugins/assets/img/elements/4.jpg" alt="Card image cap" />
-                                                    <br>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" class="form-control" id="fileUpload">
+                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/".$mayorPermit ?>" alt="Card image cap" />
+                                                        <br>
+                                                    <?php } else { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="mayorPermit" class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editMayorPermit()" class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="submit" class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -303,6 +339,86 @@ $bus_id = $_GET['a'];
             var businessSanitaryFile = businessSanitaryInput.files[0];
 
             formData.append('businessSanitaryPermit', businessSanitaryFile);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        // setTimeout(function() {
+                        //     window.location.reload();
+                        // }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+        };
+
+        function editCedula() {
+            var payload = {};
+
+            var formData = new FormData();
+
+            // Append payload data as JSON
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'edtCedulaPermit');
+
+            // Get the selected file (input element)
+            var businessCedulaInput = $("input[name='edtCedula']")[0]; // Assuming it's the first input element
+            var businessCedulaFile = businessCedulaInput.files[0];
+
+            formData.append('businessCedulaPermit', businessCedulaFile);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        // setTimeout(function() {
+                        //     window.location.reload();
+                        // }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+        };
+
+        function editMayorPermit() {
+            var payload = {};
+
+            var formData = new FormData();
+
+            // Append payload data as JSON
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'edtMayorPermit');
+
+            // Get the selected file (input element)
+            var businessMayorInput = $("input[name='mayorPermit']")[0]; // Assuming it's the first input element
+            var businessMayorFile = businessMayorInput.files[0];
+
+            formData.append('businessMayorPermit', businessMayorFile);
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
