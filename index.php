@@ -10,7 +10,7 @@ if (isset($_SESSION['role'])) {
   }
 }
 
-$sql = "SELECT * FROM category_list";
+$sql = "SELECT * FROM category_list LIMIT 5";
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
