@@ -1,7 +1,6 @@
 <?php
 include('includes/config.php');
 session_start();
-
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -31,6 +30,12 @@ session_start();
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style1.css" type="text/css">
     <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+    <style>
+        .swal-confirm-button {
+            width: 100px;
+            /* Adjust the width as needed */
+        }
+    </style>
 
 </head>
 
@@ -135,11 +140,11 @@ session_start();
                             <div class="container">
                                 <div class="bg-white shadow rounded-lg d-block d-sm-flex">
                                     <div class="profile-tab-nav border-right">
-                                        <form class="" action="user.php" method="post">
+                                        <form class="" method="post">
                                             <div class="p-4">
                                                 <div class="img-circle text-center mb-3" style="position: relative;">
                                                     <?php if (isset($_SESSION['photo'])) { ?>
-                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                        <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
                                                     <?php } else { ?>
                                                         <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                                     <?php } ?>
@@ -296,7 +301,65 @@ session_start();
     <script src="js/jquery.richtext.min.js"></script>
     <script src="js/image-uploader.min.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/myprofile.js"></script>
+    <script src="js/myprofile1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function UpdateInfo() {
+            var form_data = new FormData();
+
+            var token = $('#token').val();
+            var surname = $('#inputSurname').val();
+            var firstname = $('#inputFirstname').val();
+            var middlename = $('#inputMiddlename').val();
+            var age = $('#inputAge').val();
+            var address = $('#inputAddress').val();
+            var contactnumber = $('#inputContactnumber').val();
+
+
+            form_data.append('token', token);
+            form_data.append('surname', surname);
+            form_data.append('firstname', firstname);
+            form_data.append('middlename', middlename);
+            form_data.append('age', age);
+            form_data.append('address', address);
+            form_data.append('contactnumber', contactnumber);
+            var abstractPicInput = $("input[name='uploadProfilePic']")[0]; // Assuming it's the first input element
+            var abstractPicFile = abstractPicInput.files[0];
+            form_data.append('abstractPic', abstractPicFile);
+
+            var PhpFile = 'updatemyprofile.php';
+            $.ajax({
+                url: PhpFile, //php file
+                method: "POST",
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function(rs) {
+                    $("#err_msg").html(
+                        '<center><img src="asset/images/loading.gif"/><br/><small>Loading Information...</small></center>'
+                    );
+                },
+                success: function(rs) {
+                    var res = JSON.parse(rs);
+                    Swal.fire({
+                        title: res.title,
+                        text: res.message,
+                        icon: res.icon,
+                        customClass: {
+                            confirmButton: 'swal-confirm-button',
+                        },
+                        showCancelButton: false,
+                    });
+                    // window.location.reload();    
+                },
+                async: true,
+                error: function(e) {
+                    console.log(e);
+                },
+            });
+        }
+    </script>
 </body>
 
 </html>
