@@ -10,6 +10,12 @@ if (isset($_SESSION['role'])) {
   }
 }
 
+$sql = "SELECT * FROM category_list LIMIT 5";
+$pdo = Database::connection();
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$datas = $stmt->fetchAll();
+
 
 ?>
 <!DOCTYPE html>
@@ -331,10 +337,9 @@ if (isset($_SESSION['role'])) {
         </div>
         <div class="col-lg-12 mt-3">
           <fieldset>
-            <button class="oblong-button">Automotive</button>
-            <button class="oblong-button">Restaurant</button>
-            <button class="oblong-button">Salon</button>
-            <button class="oblong-button">Hotel</button>
+            <?php foreach ($datas as $data) { ?>
+              <a href="<?php echo "listing.php?b=".$data['ID'] ?>" class="oblong-button"><?php echo $data['category'] ?></a>
+            <?php  } ?>
             <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a>
           </fieldset>
         </div>

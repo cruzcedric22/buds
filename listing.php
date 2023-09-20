@@ -44,11 +44,29 @@ if (isset($_GET['a'])) {
 
     if (empty($datas)) {
       echo "No results found.";
-    } else {
-      // var_dump($datas);
-
-    }
+    } 
     // echo "Number of rows returned: " . $stmt->rowCount();
+  }
+} elseif (isset($_GET['b'])) {
+  $cat = $_GET['b'];
+  $sql = "SELECT * FROM business_list AS bl
+  INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+  INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+  WHERE bl.BusinessCategory = :cat AND cl.ID = :cat LIMIT 4";
+
+  // Assuming you have previously created a PDO object named $pdo
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindParam(':cat', $cat, PDO::PARAM_STR);
+
+  if (!$stmt->execute()) {
+    $errorInfo = $stmt->errorInfo();
+    echo "SQL Error: " . $errorInfo[2];
+  } else {
+    $datas = $stmt->fetchAll();
+
+    if (empty($datas)) {
+      echo "No results found.";
+    } 
   }
 } else {
   // die("No search query provided.");
@@ -432,7 +450,7 @@ if (isset($_GET['a'])) {
               </div>
               <div class="col-lg-8 bg-white p-2 border">
                 <div class="py-3 px-2 pb-1 border-bottom">
-                  <?php if (isset($_GET['a'])) { ?>
+                  <?php if (isset($_GET['a']) || isset($_GET['b'])) { ?>
                     <?php foreach ($datas as $data) {
                     ?>
                       <div class="row">
