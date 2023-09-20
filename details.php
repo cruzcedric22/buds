@@ -15,6 +15,7 @@ $id = $_GET['ID'];
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
 $sql = "SELECT * FROM business_list AS bl 
 INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
+INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
 INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
 WHERE 
 bl.bus_id = $id";
@@ -44,7 +45,7 @@ if ($rs = $conn->query($sql)) {
                         <div class="col-lg-4">
                             <div class="profile-agent-widget">
                                 <ul>
-                                    <li>Address <span>' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . ' Zone: ' . $row['BusinessZone'] . '</span></li>
+                                    <li>Address <span>' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . ' Zone: ' . $row['zone'] . '</span></li>
                                     <li>Contact Us <span>123-456-789</span><br><span>123-456-789</span></li>
                                 </ul>
                             </div>
@@ -687,42 +688,39 @@ if ($rs = $conn->query($sql)) {
 
             var caloocanBoundary = L.geoJSON().addTo(map);
 
+            // Load the boundary data and add it to the map
             $.getJSON('boundary.geojson1.json', function(data) {
                 caloocanBoundary.addData(data);
 
                 caloocanBoundary.setStyle(function(feature) {
                     return {
-                        fillColor: 'transparent', // Set the fill color to transparent
-                        fillOpacity: 0, // Set the fill opacity to 0 for full transparency
+                        fillColor: 'transparent',
+                        fillOpacity: 0,
                         color: 'black',
                         weight: 0.7
                     };
                 });
 
-
                 caloocanBoundary.eachLayer(function(layer) {
-                    layer.bindPopup("Barangay " + layer.feature.properties.NAME_3); // para sa pangalan
-                    // console.log(layer)
+                    layer.bindPopup("Barangay " + layer.feature.properties.NAME_3);
                 });
 
-                map.fitBounds(caloocanBoundary.getBounds()); // fit bounds para izoom
+                // Add the marker to the map
+                var lat = <?php echo $lat ?>;
+                var long = <?php echo $long ?>;
+                var name = "<?php echo $bus_name ?>";
+                var address = "<?php echo $bus_add ?>";
 
+                var marker = L.marker([lat, long]).addTo(map);
 
+                // Customize the popup for the business marker
+                var popupContent = "<b>" + name + "</b><br>Address: " + address;
+                marker.bindPopup(popupContent);
+
+                // Set the map view to the marker's coordinates with the desired zoom level (e.g., 15)
+                map.setView([lat, long], 15);
             });
 
-            var lat = <?php echo $lat ?>;
-            var long = <?php echo $long ?>;
-            var name = "<?php echo $bus_name ?>";
-            var address = "<?php echo $bus_add ?>";
-
-            var marker = L.marker([lat, long]).addTo(map);
-
-            // Customize the popup for each business
-            var popupContent = "<b>" + name + "</b><br>Address: " + address;
-            marker.bindPopup(popupContent);
-
-            // Zoom the map to the marker's location
-            map.setView([lat, long], 23); // Zoomed in further to level 18
 
 
 

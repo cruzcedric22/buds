@@ -10,11 +10,29 @@ if (isset($_SESSION['role'])) {
   }
 }
 
-$sql = "SELECT * FROM category_list LIMIT 5";
+$sql = "SELECT * FROM category_list";
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $datas = $stmt->fetchAll();
+
+$sql = "SELECT * FROM business_list AS bl
+INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID";
+
+// Assuming you have previously created a PDO object named $pdo
+$stmt1 = $pdo->prepare($sql);
+
+if (!$stmt1->execute()) {
+  $errorInfo = $stmt1->errorInfo();
+  echo "SQL Error: " . $errorInfo[2];
+} else {
+  $datas1 = $stmt1->fetchAll();
+
+  if (empty($datas1)) {
+    echo "No results found.";
+  }
+}
 
 
 ?>
@@ -338,7 +356,7 @@ $datas = $stmt->fetchAll();
         <div class="col-lg-12 mt-3">
           <fieldset>
             <?php foreach ($datas as $data) { ?>
-              <a href="<?php echo "listing.php?b=".$data['ID'] ?>" class="oblong-button"><?php echo $data['category'] ?></a>
+              <a href="<?php echo "listing.php?b=" . $data['ID'] ?>" class="oblong-button"><?php echo $data['category'] ?></a>
             <?php  } ?>
             <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a>
           </fieldset>
@@ -347,7 +365,6 @@ $datas = $stmt->fetchAll();
     </div>
   </div>
 
-  <!-- Property Section Begin -->
   <section class="property-section latest-property-section spad">
     <div class="container">
       <div class="row">
@@ -357,41 +374,51 @@ $datas = $stmt->fetchAll();
           </div>
         </div>
         <div class="col-lg-7">
-          <!-- dito siya nag search -->
+          <!-- Filter controls -->
           <div class="property-controls">
             <ul>
               <li data-filter="all">All</li>
-              <?php foreach ($datas as $data){ ?>
-              <li data-filter="<?php echo ".".$data['ID'] ?>"><?php echo $data['category'] ?></li>
+              <?php foreach ($datas as $data) {
+                $sanitizedCategory = "cat" . str_replace([' ', '&'], ['_', ''], $data['ID']);
+              ?>
+                <li data-filter=".<?php echo $sanitizedCategory; ?>"><?php echo $data['category']; ?></li>
               <?php } ?>
             </ul>
           </div>
         </div>
       </div>
       <div class="row property-filter">
-        <!-- dito sa class siya nag sesearch -->
-        <div class="col-lg-4 col-md-6 mix all hotel">
-          <div class="property-item">
-            <div class="pi-pic set-bg" data-setbg="img/property/listing-01.jpg">
-            </div>
-            <div class="pi-text">
-              <h5><a href="./details.html">Sogo</a></h5>
-              <p><span class="icon_pin_alt"></span> Monumento, Caloocan City</p>
-              <ul>
-                <li><i class="fa fa-info"></i> Desciption about Business</li>
-              </ul>
-              <div class="pi-agent">
-                <div class="pa-item">
-                  <div class="pa-text">
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-search"></i> View More</a>
+        <?php
+        foreach ($datas1 as $data1) {
+          $class = "cat" . str_replace([' ', '&'], ['_', ''], $data1['BusinessCategory']);
+        ?>
+          <div class="col-lg-4 col-md-6 mix all <?php echo $class; ?>">
+            <div class="property-item">
+              <div class="pi-pic set-bg" data-setbg="img/property/listing-01.jpg">
+              </div>
+              <div class="pi-text">
+                <h5><a href="details.php?ID=<?php echo $data1['bus_id']; ?>"><?php echo $data1['BusinessName']; ?></a></h5>
+                <p><span class="icon_pin_alt"></span><?php echo $data1['BusinessAddress'] . ' Brgy ' . $data1['BusinessBrgy']; ?></p>
+                <ul>
+                  <li><i class="fa fa-info"></i><?php echo $data1['BusinessDescrip']; ?></li>
+                </ul>
+                <div class="pi-agent">
+                  <div class="pa-item">
+                    <div class="pa-text">
+                      <a class="btn btn-success" href="details.php?ID=<?php echo $data1['bus_id']; ?>" role="button"><i class="fa fa-search"></i> View More</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        <?php } ?>
       </div>
     </div>
+  </section>
+
+  </div>
+  </div>
   </section>
 
   <section class="team-section spad">
@@ -578,6 +605,7 @@ $datas = $stmt->fetchAll();
 
   <!-- Js Plugins -->
   <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="path-to-mixitup/mixitup.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.magnific-popup.min.js"></script>
   <script src="js/mixitup.min.js"></script>
@@ -593,6 +621,12 @@ $datas = $stmt->fetchAll();
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     $(document).ready(function() {
+      var mixer = mixitup('.property-filter', {
+        selectors: {
+          target: '.mix',
+          control: '[data-filter]'
+        }
+      });
       // Get a reference to the checkbox element
       var checkbox = $("#checkTerms");
       var signUpButton = $("#signUp");
