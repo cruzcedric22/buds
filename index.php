@@ -361,16 +361,15 @@ $datas = $stmt->fetchAll();
           <div class="property-controls">
             <ul>
               <li data-filter="all">All</li>
-              <li data-filter=".automotive">Automotive</li>
-              <li data-filter=".food">Food & Dining </li>
-              <li data-filter=".hotel">Hotel</li>
-              <li data-filter=".estate">Real Estate</li>
-              <li data-filter=".travel">Travel</li>
+              <?php foreach ($datas as $data){ ?>
+              <li data-filter="<?php echo ".".$data['ID'] ?>"><?php echo $data['category'] ?></li>
+              <?php } ?>
             </ul>
           </div>
         </div>
       </div>
       <div class="row property-filter">
+        <!-- dito sa class siya nag sesearch -->
         <div class="col-lg-4 col-md-6 mix all hotel">
           <div class="property-item">
             <div class="pi-pic set-bg" data-setbg="img/property/listing-01.jpg">
@@ -378,107 +377,6 @@ $datas = $stmt->fetchAll();
             <div class="pi-text">
               <h5><a href="./details.html">Sogo</a></h5>
               <p><span class="icon_pin_alt"></span> Monumento, Caloocan City</p>
-              <ul>
-                <li><i class="fa fa-info"></i> Desciption about Business</li>
-              </ul>
-              <div class="pi-agent">
-                <div class="pa-item">
-                  <div class="pa-text">
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-search"></i> View More</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mix all food">
-          <div class="property-item">
-            <div class="pi-pic set-bg" data-setbg="img/property/listing-04.jpg">
-            </div>
-            <div class="pi-text">
-              <h5><a href="./details.html">Silver Crown</a></h5>
-              <p><span class="icon_pin_alt"></span> Sangandaan, Caloocan City</p>
-              <ul>
-                <li><i class="fa fa-info"></i> Desciption about Business</li>
-              </ul>
-              <div class="pi-agent">
-                <div class="pa-item">
-                  <div class="pa-text">
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-search"></i> View More</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mix all estate">
-          <div class="property-item">
-            <div class="pi-pic set-bg" data-setbg="img/property/listing-03.jpg">
-            </div>
-            <div class="pi-text">
-              <h5><a href="./details.html">Emiart</a></h5>
-              <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-              <ul>
-                <li><i class="fa fa-info"></i> Desciption about Business</li>
-              </ul>
-              <div class="pi-agent">
-                <div class="pa-item">
-                  <div class="pa-text">
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-search"></i> View More</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- ito sinesearch niya -->
-        <div class="col-lg-4 col-md-6 mix all food">
-          <div class="property-item">
-            <div class="pi-pic set-bg" data-setbg="img/property/listing-07.jpg">
-            </div>
-            <div class="pi-text">
-              <h5><a href="./details.html">Jollibee</a></h5>
-              <p><span class="icon_pin_alt"></span> 10th Avenue, Caloocan City</p>
-              <ul>
-                <li><i class="fa fa-info"></i> Desciption about Business</li>
-              </ul>
-              <div class="pi-agent">
-                <div class="pa-item">
-                  <div class="pa-text">
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-search"></i> View More</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mix all food">
-          <div class="property-item">
-            <div class="pi-pic set-bg" data-setbg="img/property/listing-08.jpg">
-            </div>
-            <div class="pi-text">
-              <h5><a href="./details.html">Mc Donalds</a></h5>
-              <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-              <ul>
-                <li><i class="fa fa-info"></i> Desciption about Business</li>
-              </ul>
-              <div class="pi-agent">
-                <div class="pa-item">
-                  <div class="pa-text">
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-search"></i> View More</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mix all food">
-          <div class="property-item">
-            <div class="pi-pic set-bg" data-setbg="img/property/listing-09.jpg">
-            </div>
-            <div class="pi-text">
-              <h5><a href="./details.html">KFC</a></h5>
-              <p><span class="icon_pin_alt"></span> 10th Avenue, Caloocan City</p>
               <ul>
                 <li><i class="fa fa-info"></i> Desciption about Business</li>
               </ul>
