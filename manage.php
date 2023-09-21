@@ -21,6 +21,8 @@ $disp="";
 $sql = "SELECT * FROM business_list AS bl 
 INNER JOIN owner_list AS ol ON bl.ownerid = $ownerID && ol.ID = $ownerID
 INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
+INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
+INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
 WHERE 
 bl.ownerid = $ownerID";
 $x = -1;
