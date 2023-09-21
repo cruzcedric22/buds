@@ -18,7 +18,11 @@ $datas = $stmt->fetchAll();
 
 $sql = "SELECT * FROM business_list AS bl
 INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
-INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID";
+INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
+WHERE 
+bl.BusinessStatus = 4 OR 
+bl.BusinessStatus = 1";
 
 // Assuming you have previously created a PDO object named $pdo
 $stmt1 = $pdo->prepare($sql);
