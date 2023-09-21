@@ -200,72 +200,49 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                   <div class="col-lg-12">
                     <div class="row justify-content-center">
                       <h3>Searching and Viewing Business</h3>
+                     
+                      <div class="col-sm-2">
+    <div class="form-floating">
+        <select class="form-select" id="Category" name="category" aria-label="Floating label select example">
+            <option selected disabled>Select</option>
+            <?php
+            include '../includes/config.php'; // Include your database connection code
+            $pdo = DATABASE::connection();
+
+            try {
+                // Define the SQL query to fetch categories
+                $categoryQuery = "SELECT `ID`, `category` FROM `category_list`";
+
+                // Prepare and execute the query
+                $categoryStatement = $pdo->query($categoryQuery);
+
+                // Fetch categories and populate the dropdown
+                while ($row = $categoryStatement->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<option value='" . $row['ID'] . "'>" . $row['category'] . "</option>";
+                }
+            } catch (PDOException $e) {
+                // Handle database errors
+                echo "Database error: " . $e->getMessage();
+            }
+            ?>
+        </select>
+        <label for="Category">Select a Category</label>
+    </div>
+</div>
+
+
+
                       <div class="col-sm-2">
                         <div class="form-floating">
-                          <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected>Open this select menu</option>
+                          <select class="form-select" id="SubCategory" aria-label="Floating label select example">
+                            <option selected>Select</option>
                             <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
                           </select>
                           <label for="floatingSelect">Works with selects</label>
                         </div>
                       </div>
-                      <div class="col-sm-2">
-                        <div class="form-floating">
-                          <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                          <label for="floatingSelect">Works with selects</label>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="form-floating">
-                          <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                          <label for="floatingSelect">Works with selects</label>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="form-floating">
-                          <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                          <label for="floatingSelect">Works with selects</label>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="form-floating">
-                          <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                          <label for="floatingSelect">Works with selects</label>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="form-floating">
-                          <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                          <label for="floatingSelect">Works with selects</label>
-                        </div>
-                      </div>
+                     
+                  
                       
                     </div>
                   </div>
@@ -287,43 +264,153 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
     </div>
 
 
-   
+
     <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="plugins/assets/vendor/js/bootstrap.js"></script>
-    <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="plugins/assets/vendor/js/menu.js"></script>
-    <script src="plugins/assets/js/main.js"></script>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    var map = L.map('map').setView([14.6577, 120.9842], 13);
+<script src="plugins/assets/vendor/js/bootstrap.js"></script>
+<script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="plugins/assets/vendor/js/menu.js"></script>
+<script src="plugins/assets/js/main.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  var map = L.map('map').setView([14.6577, 120.9842], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-    }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+  }).addTo(map);
 
-    var caloocanBoundary = L.geoJSON().addTo(map);
-    $.getJSON('boundary.geojson.json', function (data) {
-      caloocanBoundary.addData(data);
+  var caloocanBoundary = L.geoJSON().addTo(map);
+  $.getJSON('boundary.geojson.json', function (data) {
+    caloocanBoundary.addData(data);
 
-      caloocanBoundary.setStyle(function (feature) {
-        var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-        return {
-          fillColor: randomColor,
-          fillOpacity: 0.7,
-          color: 'black',
-          weight: 1
-        };
-      });
-
-      caloocanBoundary.eachLayer(function (layer) {
-        layer.bindPopup(layer.feature.properties.NAME_3);
-      });
-
-      map.fitBounds(caloocanBoundary.getBounds());
+    caloocanBoundary.setStyle(function (feature) {
+      var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      return {
+        fillColor: randomColor,
+        fillOpacity: 0.7,
+        color: 'black',
+        weight: 1
+      };
     });
-  </script>
+
+    caloocanBoundary.eachLayer(function (layer) {
+      layer.bindPopup(layer.feature.properties.NAME_3);
+    });
+
+    map.fitBounds(caloocanBoundary.getBounds());
+  });
+
+  $('#Category').change(function() {
+    var selectedCategory = $(this).val();
+
+    // Clear the options in the SubCategory dropdown
+    $('#SubCategory').empty();
+    $('#SubCategory').append('<option selected>Select</option>');
+
+    if (selectedCategory !== 'Select') {
+      // Fetch subcategories for the selected category using a POST request
+      $.ajax({
+        url: 'get_subcategories.php',
+        type: 'POST', // Use POST request
+        data: { catId: selectedCategory }, // Use 'catId' as the parameter name
+        dataType: 'json',
+        success: function(data) {
+          if (data.error) {
+            // Handle errors
+            alert(data.error);
+          } else {
+            // Populate the SubCategory dropdown with fetched subcategories
+            $.each(data, function(index, subcategory) {
+              $('#SubCategory').append('<option value="' + subcategory.ID + '">' + subcategory.subCategory + '</option>');
+            });
+          }
+        },
+        error: function() {
+          // Handle AJAX errors
+          alert('Error fetching subcategories.');
+        }
+      });
+    }
+  });
+
+  // Function to update the map based on selected category and subcategory
+  function updateMap(selectedCategory, selectedSubCategory) {
+    // Clear existing markers on the map
+    map.eachLayer(function (layer) {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
+    });
+
+    // Make an AJAX request to your PHP script
+    $.ajax({
+      type: "POST",
+      url: "Fetch_category.php",
+      data: {
+        category: selectedCategory,
+        subcategory: selectedSubCategory,
+      },
+      dataType: "json",
+      success: function (data) {
+        
+        // Loop through the data and add markers to the map
+        for (let i = 0; i < data.length; i++) {
+          const business = data[i];
+          const lat = parseFloat(business.bus_lat);
+          const lng = parseFloat(business.bus_long);
+
+          // Create a marker and add it to the map
+          const marker = L.marker([lat, lng]).addTo(map);
+
+          // Add a popup to the marker with the BusinessName
+          marker.bindPopup(business.BusinessName);
+
+          // Make the marker show the popup on hover
+          marker.on("mouseover", function () {
+            marker.openPopup();
+          });
+
+          // Close the popup on mouseout (optional)
+          marker.on("mouseout", function () {
+            marker.closePopup();
+          });
+        }
+      },
+    });
+  }
+
+  // Event listener for category dropdown change
+  $("#Category").change(function () {
+    const selectedCategory = $(this).val();
+    const selectedSubCategory = $("#SubCategory").val(); // Get the selected subcategory
+
+    if (selectedCategory) {
+      if (selectedSubCategory === 'Select') {
+        // If only the category is selected, update the map with category only
+        updateMap(selectedCategory, null);
+      } else {
+        // If both category and subcategory are selected, update the map
+        updateMap(selectedCategory, selectedSubCategory);
+      }
+    }
+  });
+
+  // Event listener for subcategory dropdown change
+  $("#SubCategory").change(function () {
+    const selectedCategory = $("#Category").val(); // Get the selected category
+    const selectedSubCategory = $(this).val();
+
+    if (selectedCategory && selectedSubCategory !== 'Select') {
+      // If both category and subcategory are selected (and subcategory is not 'Select'), update the map
+      updateMap(selectedCategory, selectedSubCategory);
+    }else{
+      updateMap(selectedCategory, null);
+    }
+  });
+
+</script>
+
  
 </body>
 </html>
