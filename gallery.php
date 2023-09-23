@@ -141,6 +141,15 @@ $bus_id = $_GET['a'];
                           <div data-i18n="Analytics">Requirements</div>
                         </a>
                       </li>
+                      <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Job Applicants</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "job-applicants.php?a=".$bus_id ?>" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-user-detail"></i>
+                        <div data-i18n="Analytics">Jobs</div>
+                        </a>
+                    </li>
                 </ul>
             </aside>
             <div class="layout-page">

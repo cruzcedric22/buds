@@ -6189,6 +6189,7 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
   color: #435971;
 }
 
+
 .table-success {
   --bs-table-bg: #e3f8d7;
   --bs-table-striped-bg: #def3d4;
@@ -6310,9 +6311,11 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 1px;
+  
 }
 .table:not(.table-dark) th {
-  color: #355E3B;
+  color: #ffffff;
+  background-color: #355E3B;
 }
 
 .table-border-bottom-0 tr:last-child td,
@@ -8042,7 +8045,7 @@ form select.selectpicker.is-invalid ~ .btn {
 }
 
 .modal-footer {
-  //padding: 0.25rem 1.5rem 1.5rem;
+  padding: 0.25rem 1.5rem 1.5rem;
 }
 
 .modal-dialog-scrollable .btn-close,
@@ -15761,7 +15764,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
 
 .menu-vertical .app-brand {
   padding-right: 2rem;
-  padding-left: 2rem;
+  padding-left: 1rem;
 }
 
 .menu-horizontal .app-brand,
