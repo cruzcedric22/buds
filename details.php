@@ -410,6 +410,7 @@ if ($rs = $conn->query($sql)) {
                         <?php echo $disp ?>
                     </div>
                 </div>
+
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-8">
@@ -435,6 +436,8 @@ if ($rs = $conn->query($sql)) {
                                         </div>
                                     </div>
                                 </div>
+
+
 
                                 <div class="pd-widget">
                                     <h4>GALLERYS</h4>
@@ -604,6 +607,20 @@ if ($rs = $conn->query($sql)) {
                                 </div>
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
+                                        <h5>We're Hiring!</h5>
+                                    </div>
+                                    <div class="top-agent">
+                                        <div class="ta-item">
+                                            <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
+                                            <div class="ta-text">
+                                                <h6><a href="#">Mc Donalds</a></h6>
+                                                <button onclick="document.getElementById('id05').style.display='block'" class="btn btn-success">Apply</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="single-sidebar">
+                                    <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
                                     </div>
                                     <div class="top-agent">
@@ -629,6 +646,68 @@ if ($rs = $conn->query($sql)) {
                                                 <h6><a href="#">Silver Crown</a></h6>
                                                 <span>Sangandaan, Caloocan City</span>
                                                 <div class="ta-num">123-456-789</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="id05" class="modal">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content w-100">
+                                            <div class="modal-header">
+                                                <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
+                                                <h3 class="text-center mb-6 font-weight-bold" style="margin-top:7px;">We're Hiring!</h3>
+                                                <span onclick="document.getElementById('id05').style.display='none'" class="close" title="Close Modal">&times;</span>
+                                            </div>
+                                            <div class="container mt-4">
+                                                <div class="card px-2" id="jobBoardForm">
+                                                    <div class="job-board">
+                                                        <!-- Job Listings -->
+                                                        <div class="job-listing">
+                                                            <h4><strong>Manager</strong></h4>
+                                                            <p>The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and
+                                                                Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s
+                                                                adherence to operating systems and standards and compliance to all government requirements.</p>
+                                                            <h6><strong>Job Specification</strong></h6>
+                                                            <ul class="bullet-list">
+                                                                <li>Bachelor’s Degree preferably of Food, Hotel and Restaurant Management or Administration and/or any Business-Related course</li>
+                                                                <li>Three to four (3-4) years of leadership function in a service-oriented industry such as retail, hotel, restaurant, or quick service restaurant, among others</li>
+                                                                <li>Demonstrates high customer management orientation, with ability to make decisions and take actions to ensure customer needs are met.</li>
+                                                                <li>People management capability in coaching, developing, and supervising a team.</li>
+                                                                <li>Knowledge on basic store operations, with capability to assess operational improvements, compliance to defined standards, sales, and profitability.</li>
+                                                                <li>Candidate must be willing to work in Caloocan City</li>
+
+                                                                <!-- Add more items as needed -->
+                                                            </ul>
+                                                        </div>
+
+                                                        <br>
+                                                    </div>
+
+                                                    <div class="col-lg-12">
+                                                        <h6><strong>Additional Information</strong></h6>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p><strong>Degree: </strong>Bachelor's Degree</p>
+                                                            </div>
+                                                            <div class="col">
+                                                                <p><strong>Years of Experience: </strong>3 years</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="upload-button">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <br>
+                                                                <h4 style="margin-top:7px;"><strong>Submit Application</strong></h4>
+                                                            </div>
+                                                            <div class="col text-right">
+                                                                <br><button class="btn btn-success" style="margin-bottom:20px;">Submit Resume</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
