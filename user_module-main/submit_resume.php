@@ -1,4 +1,5 @@
 <?php
+// dagdagan ng user id para pang connect
 
 include 'includes/config.php';
 $pdo = Database::connection();
