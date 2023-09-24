@@ -84,6 +84,19 @@ if ($rs = $conn->query($sql)) {
     }
 }
 
+$sql1 = "SELECT *
+FROM business_applicant AS bl
+LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
+LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
+WHERE bl.bus_id = :id
+AND (ap.app_id IS NULL OR ap.app_id != :app_id);";
+$pdo = Database::connection();
+$stmt1 = $pdo->prepare($sql1);
+$stmt1->bindParam(':id', $id, PDO::PARAM_STR);
+$stmt1->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
+$stmt1->execute();
+$datas = $stmt1->fetchAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -605,20 +618,38 @@ if ($rs = $conn->query($sql)) {
                                         <?php echo $socialMedia; ?>
                                     </div>
                                 </div>
-                                <div class="single-sidebar">
-                                    <div class="section-title sidebar-title">
-                                        <h5>We're Hiring!</h5>
-                                    </div>
-                                    <div class="top-agent">
-                                        <div class="ta-item">
-                                            <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
-                                            <div class="ta-text">
-                                                <h6><a href="#">Mc Donalds</a></h6>
-                                                <button onclick="document.getElementById('id05').style.display='block'" class="btn btn-success">Apply</a>
+                                <?php
+                                foreach ($datas as $index => $data) {
+                                    $businessLogo = $data['Businesslogo'];
+                                    $pos = $data['pos_vacant'];
+                                    $jobDes = $data['job_desc'];
+                                    $modalId = 'modal_' . $index; // Generate a unique modal ID
+                                    $jobSpec = $data['job_spec'];
+                                    $degree = $data['degree'];
+                                    $yearExp = $data['year_exp'];
+                                ?>
+                                    <div class="single-sidebar">
+                                        <div class="section-title sidebar-title">
+                                            <h5>We're Hiring!</h5>
+                                        </div>
+
+                                        <div class="top-agent">
+                                            <div class="ta-item">
+                                                <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
+                                                <div class="ta-text">
+                                                    <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
+                                                    <!-- Pass the JavaScript variables as separate parameters to openModal -->
+                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>')" class="btn btn-success">Apply</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php } ?>
+
+
+
+
+
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
@@ -650,68 +681,56 @@ if ($rs = $conn->query($sql)) {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="id05" class="modal">
+                                <div id="<?php echo $modalId ?>" class="modal">
                                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                         <div class="modal-content w-100">
                                             <div class="modal-header">
                                                 <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                <h3 class="text-center mb-6 font-weight-bold" style="margin-top:7px;">We're Hiring!</h3>
-                                                <span onclick="document.getElementById('id05').style.display='none'" class="close" title="Close Modal">&times;</span>
+                                                <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
+                                                <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
                                             </div>
                                             <div class="container mt-4">
                                                 <div class="card px-2" id="jobBoardForm">
                                                     <div class="job-board">
                                                         <!-- Job Listings -->
                                                         <div class="job-listing">
-                                                            <h4><strong>Manager</strong></h4>
-                                                            <p>The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and
-                                                                Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s
-                                                                adherence to operating systems and standards and compliance to all government requirements.</p>
+                                                            <h4 class="jobTitle"><strong>Manager</strong></h4>
+                                                            <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
                                                             <h6><strong>Job Specification</strong></h6>
                                                             <ul class="bullet-list">
-                                                                <li>Bachelor’s Degree preferably of Food, Hotel and Restaurant Management or Administration and/or any Business-Related course</li>
-                                                                <li>Three to four (3-4) years of leadership function in a service-oriented industry such as retail, hotel, restaurant, or quick service restaurant, among others</li>
-                                                                <li>Demonstrates high customer management orientation, with ability to make decisions and take actions to ensure customer needs are met.</li>
-                                                                <li>People management capability in coaching, developing, and supervising a team.</li>
-                                                                <li>Knowledge on basic store operations, with capability to assess operational improvements, compliance to defined standards, sales, and profitability.</li>
-                                                                <li>Candidate must be willing to work in Caloocan City</li>
 
-                                                                <!-- Add more items as needed -->
                                                             </ul>
                                                         </div>
-
                                                         <br>
                                                     </div>
-
                                                     <div class="col-lg-12">
                                                         <h6><strong>Additional Information</strong></h6>
                                                         <div class="row">
                                                             <div class="col">
-                                                                <p><strong>Degree: </strong>Bachelor's Degree</p>
+                                                                <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
                                                             </div>
                                                             <div class="col">
-                                                                <p><strong>Years of Experience: </strong>3 years</p>
+                                                                <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="upload-button">
                                                         <div class="row">
                                                             <div class="col">
                                                                 <br>
-                                                                <h4 style="margin-top:7px;"><strong>Submit Application</strong></h4>
+                                                                <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
                                                             </div>
                                                             <div class="col text-right">
-                                                                <br><button class="btn btn-success" style="margin-bottom:20px;">Submit Resume</button>
+                                                                <br><button class="btn btn-success" style="margin-bottom: 20px;">Submit Resume</button>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -798,7 +817,10 @@ if ($rs = $conn->query($sql)) {
 
                 // Set the map view to the marker's coordinates with the desired zoom level (e.g., 15)
                 map.setView([lat, long], 15);
+
             });
+
+
 
 
 
@@ -823,6 +845,60 @@ if ($rs = $conn->query($sql)) {
                 }
             });
         });
+
+        // Function to open the modal
+        function openModal(logo, pos, des, modalId, jobspec, degree, exp) {
+            console.log(logo);
+            console.log(pos);
+
+            var companyLogo = $("#" + modalId).find(".circle-image");
+            companyLogo.attr("src", "img/logo/" + logo);
+
+            var p = $("#" + modalId).find("#des");
+            p.text(des);
+
+            // Set the job title in the modal header
+            var jobTitle = $("#" + modalId).find(".jobTitle");
+            jobTitle.text(pos);
+
+            // Clear existing list items in the ul
+            var ul = $("#" + modalId).find(".bullet-list");
+            ul.empty();
+
+            // Split the jobspec string into an array of items using commas as the delimiter
+            var jobspecItems = jobspec.split(",");
+
+            // Loop through the items and create list items
+            $.each(jobspecItems, function(index, item) {
+                // Remove any leading/trailing whitespace
+                item = item.trim();
+
+                // Skip empty items
+                if (item !== "") {
+                    // Create a new list item and append it to the ul
+                    var li = $("<li>").text(item);
+                    ul.append(li);
+                }
+            });
+
+            //note bawal parehas ng parameter yung sa var name
+            var degreeElement = $("#" + modalId).find(".degree");
+            degreeElement.html('<strong>Degree:</strong> ' + degree);
+
+            var expElement = $("#" + modalId).find(".experience");
+            expElement.html('<strong>Experience:</strong> ' + exp);
+
+
+
+            // Show the modal using jQuery
+            $("#" + modalId).modal("show");
+        };
+
+        function closeModal(modalId) {
+            $("#" + modalId).modal("hide");
+        }
+
+
 
         window.dataLayer = window.dataLayer || [];
 

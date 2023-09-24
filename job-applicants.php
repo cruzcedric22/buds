@@ -28,6 +28,12 @@ $bus_id = $_GET['a'];
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
   <script src="plugins/assets/vendor/js/helpers.js"></script>
   <script src="plugins/assets/js/config.js"></script>
+  <style>
+     .swal-confirm-button {
+      width: 100px;
+      /* Adjust the width as needed */
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -256,6 +262,7 @@ $bus_id = $_GET['a'];
                                   <label for="exampleFormControlTextarea1" class="form-label">Job Specification</label>
                                   <div id="uiJobDesc1">
                                     <div class="input-group">
+                                      <script></script>
                                       <input class="form-control addJobSpec1" id="exampleFormControlTextarea1" onkeydown="handleJobSpec1Input(event)">
                                       <button type="button" class="btn btn-icon btn-success" onclick="addJobSpec1()"><i class="bx bx-plus"></i></button>
                                     </div>
@@ -296,13 +303,13 @@ $bus_id = $_GET['a'];
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Position</label>
-                                  <input type="text" id="nameWithTitle" class="form-control" placeholder="Position" />
+                                  <input type="text" id="jobTitle" class="form-control" placeholder="Position" />
                                 </div>
                               </div>
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Description</label>
-                                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                  <textarea class="form-control" id="jobDescription" rows="3"></textarea>
                                 </div>
                               </div>
                               <div class="row">
@@ -322,15 +329,15 @@ $bus_id = $_GET['a'];
                               <div class="row">
                                 <div class="col-md-5 mb-2">
                                   <label for="degree" class="form-label">Degree</label>
-                                  <input type="text" id="degree" class="form-control" placeholder="Degree" />
+                                  <input type="text" id="degreeVal" class="form-control" placeholder="Degree" />
                                 </div>
                                 <div class="col-md-5 mb-2">
                                   <label for="experience" class="form-label">Years of Experience</label>
-                                  <input type="text" id="experience" class="form-control" placeholder="Years of Experience" />
+                                  <input type="text" id="experienceVal" class="form-control" placeholder="Years of Experience" />
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                  <button type="button" class="btn btn-primary" onclick="addJob()">Save changes</button>
                                 </div>
                               </div>
                             </div>
@@ -354,6 +361,7 @@ $bus_id = $_GET['a'];
       <script src="plugins/assets/js/main.js"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
         $(document).ready(function() {
           $('#Ajax1').DataTable();
@@ -388,6 +396,7 @@ $bus_id = $_GET['a'];
             jobSpecs: JSON.stringify(allVal)
           }
           // console.log(payload);
+
 
 
           $.ajax({
@@ -425,7 +434,7 @@ $bus_id = $_GET['a'];
           let payload = {
             jobSpecs: JSON.stringify(allVal)
           }
-          console.log(payload);
+          // console.log(payload);
 
 
           $.ajax({
@@ -443,6 +452,37 @@ $bus_id = $_GET['a'];
             }
           });
 
+          //note to fetch key on your response
+          // $.ajax({
+          //   type: "POST",
+          //   url: 'controllers/business.php',
+          //   data: {
+          //     payload: JSON.stringify(payload),
+          //     setFunction: 'addJobSpec2'
+          //   },
+          //   success: function(response) {
+          //     response = JSON.parse(response);
+
+          //     // Access the 'boom' key in the response
+          //     var boomValues = response.boom;
+
+          //     // Get the element where you want to set the HTML content
+          //     var uiJobDesc2 = $('#uiJobDesc2');
+
+          //     // Clear any existing content in the element
+          //     uiJobDesc2.html('');
+
+          //     // Iterate through the 'boom' values and append them to the element
+          //     for (var i = 0; i < boomValues.length; i++) {
+          //       // Access each value individually
+          //       var value = boomValues[i];
+
+          //       // Append the value to the element's HTML
+          //       uiJobDesc2.append(value);
+          //     }
+          //   }
+          // });
+
         };
 
 
@@ -454,6 +494,51 @@ $bus_id = $_GET['a'];
             var divToRemove = $(button).closest(".input-group");
             divToRemove.remove();
           }
+        };
+
+        function addJob() {
+          var jobTitle = $("#jobTitle").val();
+          var jobDesc = $('#jobDescription').val();
+          var jobSpecificationsValue = [];
+          $(".addJobSpec2").each(function() {
+            var jobSpecificationValue = $(this).val().trim();
+            if (jobSpecificationValue !== "") {
+              jobSpecificationsValue.push({
+                val: jobSpecificationValue
+              });
+            }
+          });
+          var degree = $('#degreeVal').val();
+          var experience = $('#experienceVal').val();
+
+          var payload = {
+            jobTitle: jobTitle,
+            jobDesc: jobDesc,
+            jobSpecifications: jobSpecificationsValue,
+            degree: degree,
+            experience: experience,
+          }
+
+          $.ajax({
+            type: "POST",
+            url: 'controllers/business.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'addJob'
+            },
+            success: function(response) {
+              Swal.fire({
+              title: data.title,
+              text: data.message,
+              icon: data.icon,
+              customClass: {
+                confirmButton: 'swal-confirm-button',
+              },
+              showCancelButton: false,
+            });
+            // window.location.reload();
+            }
+          });
         };
       </script>
 

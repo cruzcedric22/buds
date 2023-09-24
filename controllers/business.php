@@ -830,6 +830,7 @@ function addJobSpec1($request = null)
 function addJobSpec2($request = null)
 {
     $jobSpecs = json_decode($request->jobSpecs);
+    $response = []; // Initialize an empty array
 
     foreach ($jobSpecs as $jobSpec) {
         $response[] = "<div class='input-group'>
@@ -843,4 +844,62 @@ function addJobSpec2($request = null)
     <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec2()'><i class='bx bx-plus'></i></button>
     </div>";
     echo json_encode($response);
+};
+
+function addJob($request = null)
+{
+    $jobTitle = $request->jobTitle;
+    $jobDesc = $request->jobDesc;
+    $degree = $request->degree;
+    $experience = $request->experience;
+    $id = $_SESSION['bus_id'];
+    $msg = array();
+
+    $jobSpecifications = $request->jobSpecifications;
+    $commaSeparatedArray = [];
+
+    foreach ($jobSpecifications as $jobSpecification) {
+        $jobSpecificationValue = $jobSpecification->val;
+        if (is_array($jobSpecificationValue)) {
+            $commaSeparated = implode(', ', $jobSpecificationValue);
+        } else {
+            $commaSeparated = $jobSpecificationValue;
+        }
+        $commaSeparatedArray[] = $commaSeparated;
+    }
+    $commaSeparatedStringJobSpeci = implode(',  ', $commaSeparatedArray);
+    //status 
+    //0-open
+    //1-closed
+    $sql = "INSERT INTO business_applicant(bus_id,pos_vacant,job_desc,job_spec,degree,year_exp,status)
+    VALUES (:id, :jobTile, :jobDesc, :jobSpec, :degree, :year_exp, :status)";
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(
+        array(
+            ':id' => $id,
+            ':jobTile' => $jobTitle,
+            ':jobDesc' => $jobDesc,
+            ':jobSpec' => $commaSeparatedStringJobSpeci,
+            ':degree' => $degree,
+            ':year_exp' => $experience,
+            ':status' => 0 // Assuming 0 represents a certain status
+        )
+    );
+
+    if ($stmt->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    }else{
+        $msg['title'] = "Successful";
+        $msg['message'] = "Sucessfully Added";
+        $msg['icon'] = "success";
+        $msg['status'] = "success";
+        echo json_encode($msg);
+    }
 };
