@@ -808,3 +808,39 @@ function edtMayorPermit($request = null)
         echo json_encode($msg);
     }
 };
+
+function addJobSpec1($request = null)
+{
+    $jobSpecs = json_decode($request->jobSpecs);
+
+    foreach ($jobSpecs as $jobSpec) {
+        $response[] = "<div class='input-group'>
+        <input class='form-control addJobSpec1' id='exampleFormControlTextarea1' value = '" . htmlspecialchars($jobSpec->value) . "' onkeydown='handleJobSpec1Input(event)'>
+        <button type='button' class='btn btn-icon btn-success minus-button-jobSpec1' data-key='" . htmlspecialchars($jobSpec->value) . "'><i class='bx bx-minus'></i></button>
+        </div>";
+    }
+
+    $response[] = "<div class='input-group'>
+    <input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'>
+    <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button>
+    </div>";
+    echo json_encode($response);
+};
+
+function addJobSpec2($request = null)
+{
+    $jobSpecs = json_decode($request->jobSpecs);
+
+    foreach ($jobSpecs as $jobSpec) {
+        $response[] = "<div class='input-group'>
+        <input class='form-control addJobSpec2' id='exampleFormControlTextarea2' value = '" . htmlspecialchars($jobSpec->value) . "' onkeydown='handleJobSpec2Input(event)'>
+        <button type='button' class='btn btn-icon btn-success minus-button-jobSpec2' data-key='" . htmlspecialchars($jobSpec->value) . "'><i class='bx bx-minus'></i></button>
+        </div>";
+    }
+
+    $response[] = "<div class='input-group'>
+    <input class='form-control addJobSpec2' id='exampleFormControlTextarea2' onkeydown='handleJobSpec1Input(event)'>
+    <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec2()'><i class='bx bx-plus'></i></button>
+    </div>";
+    echo json_encode($response);
+};
