@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once './includes/config.php';
+
 if (empty($_SESSION['ownerId'])) {
   header('Location: index.php');
 }

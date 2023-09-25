@@ -167,6 +167,8 @@ function createOwner($request = null)
 
 function loginUser($request = null)
 {
+    // session_start();
+    session_regenerate_id(true); // Regenerate the session ID
     $username = $request->username;
     $pass = $request->pass;
     $hashedPassword = sha1($pass);
@@ -204,7 +206,6 @@ function loginUser($request = null)
         } else {
             foreach ($datas as $data) {
                 $role = $data['userType'];
-                $_SESSION['role'] = $data['userType'];
                 $_SESSION['ownerId'] = $data['ID'];
                 $_SESSION['email'] = $data['email'];
                 $_SESSION['lname'] = $data['Surname'];
@@ -217,6 +218,9 @@ function loginUser($request = null)
                 $_SESSION['Age'] = $data['Age'];
                 $_SESSION['photo'] = $data['photo'];
                 $_SESSION['userTypeDesc'] = $data['userDesccription'];
+                $_SESSION['role'] = $data['userType'];
+          
+
             }
             $msg['title'] = "Successful";
             $msg['message'] = "Welcome";
@@ -235,8 +239,6 @@ function loginUser($request = null)
         $msg['message'] = "Welcome";
         $msg['icon'] = "success";
         $msg['role'] = $role;
-        session_start();
-
         echo json_encode($msg);
     }
 };

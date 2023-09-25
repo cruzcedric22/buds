@@ -1,6 +1,7 @@
 <?php
 require_once './includes/config.php';
 session_start();
+
 if (isset($_SESSION['role'])) {
   if ($_SESSION['role'] == 1) {
     header('Location: ceipo/index.php');

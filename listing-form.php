@@ -1,6 +1,7 @@
 <?php
 require_once './includes/config.php';
 session_start();
+
 if (empty($_SESSION['ownerId'])) {
   header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
   exit;

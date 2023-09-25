@@ -1,6 +1,7 @@
 <?php
 session_start();
 // echo $_SESSION['ownerId'];
+
 if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
   header('Location: manage.php');
 }

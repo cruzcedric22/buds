@@ -1,12 +1,16 @@
 <?php
-require_once('./includes/config.php');
 session_start();
+require_once('./includes/config.php');
 
 // echo $_SESSION['ownerId'];
-
 if (isset($_SESSION['ownerId']) && !empty($_SESSION['ownerId'])) {
     // Your code that uses $_SESSION['ownerId']
-    echo $_SESSION['ownerId'];
+    // echo $_SESSION['ownerId'];
+
+    $ownerId = $_SESSION['ownerId'];
+}elseif(isset($_SESSION['ownerId2'])){
+    $ownerId = $_SESSION['ownerId2'];
+    $_SESSION['ownerId'] = $ownerId;
 } else {
     header('Location: index.php'); // Redirect to the login page if ownerId is not set
     exit;
@@ -22,17 +26,15 @@ if (isset($_SESSION['email'])) {
     $row = $conn->query($sql);
     $data = $row->fetch_assoc();
 }
-$ownerID = $_SESSION['ownerId'];
-
 
 $disp = "";
 $sql = "SELECT * FROM business_list AS bl 
-INNER JOIN owner_list AS ol ON bl.ownerid = $ownerID && ol.ID = $ownerID
+INNER JOIN owner_list AS ol ON bl.ownerId = $ownerId && ol.ID = $ownerId
 INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
 INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
 INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
 WHERE 
-bl.ownerid = $ownerID AND
+bl.ownerId = $ownerId AND
 (bl.BusinessStatus = 4 OR 
 bl.BusinessStatus = 1 )";
 $x = -1;
