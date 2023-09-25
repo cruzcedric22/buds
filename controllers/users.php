@@ -222,6 +222,7 @@ function loginUser($request = null)
             $msg['message'] = "Welcome";
             $msg['icon'] = "success";
             $msg['role'] = $role;
+            $msg['id'] = $_SESSION['ownerId'];
 
             echo json_encode($msg);
         }
@@ -234,6 +235,7 @@ function loginUser($request = null)
         $msg['message'] = "Welcome";
         $msg['icon'] = "success";
         $msg['role'] = $role;
+        session_start();
 
         echo json_encode($msg);
     }

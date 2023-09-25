@@ -1,7 +1,7 @@
 <?php
 require_once "includes/config.php";
 session_start();
-// echo $_SESSION['ownerId'];
+echo $_SESSION['ownerId'];
 // require_once "ceipo/index.php"
 
 if (isset($_SESSION['role'])) {

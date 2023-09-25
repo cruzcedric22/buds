@@ -1,14 +1,15 @@
 <?php
 require_once('./includes/config.php');
 session_start();
+echo $_SESSION['ownerId'];
 if (isset($_SESSION['role'])) {
     if ($_SESSION['role'] == 1) {
         header('Location: ceipo/index.php');
     }
 }
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
+// ini_set('display_errors', 0);
+// ini_set('display_startup_errors', 0);
+// error_reporting(0);
 
 $id = $_GET['ID'];
 //old query
@@ -85,39 +86,38 @@ if ($rs = $conn->query($sql)) {
 }
 
 if (isset($_SESSION['ownerId'])) {
-    $sql1 = "SELECT *
-FROM business_applicant AS bl
-LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
-LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-WHERE bl.bus_id = :id
-AND (ap.app_id IS NULL OR ap.app_id != :app_id);";
-    $pdo = Database::connection();
-    $stmt1 = $pdo->prepare($sql1);
-    $stmt1->bindParam(':id', $id, PDO::PARAM_STR);
-    $stmt1->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
-    $stmt1->execute();
-    if ($stmt1->errorCode() !== '00000') {
-        $errorInfo = $stmt1->errorInfo();
-        echo $errorMsg = "SQL Error: " . $errorInfo[2];
-    } else {
-        $datas = $stmt1->fetchAll();
-    }
+    // Execute this block when 'ownerId' is set in the session.
+    $sql = "SELECT *
+            FROM business_applicant AS bl
+            LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
+            LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
+            WHERE bl.bus_id = :id
+            AND (ap.app_id IS NULL OR ap.app_id != :app_id);";
 } else {
-    $sql1 = "SELECT *
-FROM business_applicant AS bl
-LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
-LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-WHERE bl.bus_id = :id;";
-    $pdo = Database::connection();
-    $stmt1 = $pdo->prepare($sql1);
-    $stmt1->bindParam(':id', $id, PDO::PARAM_STR);
-    $stmt1->execute();
-    if ($stmt1->errorCode() !== '00000') {
-        $errorInfo = $stmt1->errorInfo();
-        echo $errorMsg = "SQL Error: " . $errorInfo[2];
-    } else {
-        $datas = $stmt1->fetchAll();
-    }
+    // Execute this block when 'ownerId' is not set in the session.
+    $sql = "SELECT *
+            FROM business_applicant AS bl
+            LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
+            LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
+            WHERE bl.bus_id = :id;";
+}
+
+$pdo = Database::connection();
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+
+if (isset($_SESSION['ownerId'])) {
+    $stmt->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
+}
+
+$stmt->execute();
+
+if ($stmt->errorCode() !== '00000') {
+    $errorInfo = $stmt->errorInfo();
+    // Log or handle the error appropriately.
+    // Example: error_log("SQL Error: " . $errorInfo[2]);
+} else {
+    $datas = $stmt->fetchAll();
 }
 
 ?>

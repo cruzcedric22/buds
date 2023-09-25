@@ -1,23 +1,31 @@
 <?php
-include('includes/config.php');
+require_once('./includes/config.php');
 session_start();
 
-if(empty( $_SESSION['ownerId'] )){
-    header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-        exit; 
-    }
+// echo $_SESSION['ownerId'];
+
+if (isset($_SESSION['ownerId']) && !empty($_SESSION['ownerId'])) {
+    // Your code that uses $_SESSION['ownerId']
+    echo $_SESSION['ownerId'];
+} else {
+    header('Location: index.php'); // Redirect to the login page if ownerId is not set
+    exit;
+}
+
+
+// echo $_SESSION['ownerId'];
 
 
 if (isset($_SESSION['email'])) {
-   $email = $_SESSION['email'];
-   $sql = "SELECT * FROM owner_list WHERE Email = '$email'";
-   $row = $conn->query($sql);
-   $data = $row->fetch_assoc();
+    $email = $_SESSION['email'];
+    $sql = "SELECT * FROM owner_list WHERE Email = '$email'";
+    $row = $conn->query($sql);
+    $data = $row->fetch_assoc();
 }
 $ownerID = $_SESSION['ownerId'];
 
 
-$disp="";
+$disp = "";
 $sql = "SELECT * FROM business_list AS bl 
 INNER JOIN owner_list AS ol ON bl.ownerid = $ownerID && ol.ID = $ownerID
 INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
@@ -28,28 +36,28 @@ bl.ownerid = $ownerID AND
 (bl.BusinessStatus = 4 OR 
 bl.BusinessStatus = 1 )";
 $x = -1;
-if ($rs=$conn->query($sql)) {
-  if($rs->num_rows > 0){
-    while ($row = $rs->fetch_assoc()) {
-      $x++;
-        if ($x % 3 == 0){
-          $disp .= '</tr><tr id="' . $x . '">';
-          } else {
-            // echo "asd"
-          }
-      $disp.='<td class="col-md-4">
+if ($rs = $conn->query($sql)) {
+    if ($rs->num_rows > 0) {
+        while ($row = $rs->fetch_assoc()) {
+            $x++;
+            if ($x % 3 == 0) {
+                $disp .= '</tr><tr id="' . $x . '">';
+            } else {
+                // echo "asd"
+            }
+            $disp .= '<td class="col-md-4">
               <div class="property-item" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); padding: 20px;  border-radius: 15px;">
-                <div class="pi-pic set-bg rounded-circle text-center d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 2px solid #355E3B;" data-setbg="img/logo/'.$row['Businesslogo'].'">
+                <div class="pi-pic set-bg rounded-circle text-center d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 2px solid #355E3B;" data-setbg="img/logo/' . $row['Businesslogo'] . '">
                   <!-- Circular image with a border -->
               </div>
               <div class="pi-text">
-                  <h5><a href="#">'.$row['BusinessName'].' - '.$row['BusinessBranch'].'</a></h5>
-                  <p><span class="icon_pin_alt"></span>'.$row['BusinessAddress'].' '.$row['barangay'].' Zone: '.$row['zone'].'</p>
+                  <h5><a href="#">' . $row['BusinessName'] . ' - ' . $row['BusinessBranch'] . '</a></h5>
+                  <p><span class="icon_pin_alt"></span>' . $row['BusinessAddress'] . ' ' . $row['barangay'] . ' Zone: ' . $row['zone'] . '</p>
                   <div class="pi-agent">
                       <div class="pa-item">
                           <div class="pa-text">
                               <a class="btn btn-success" href="details.php?ID=' . $row['bus_id'] . '" role="button"><i class="fa fa-eye"></i> View</a>
-                              <a class="btn btn-success" href="BusinessPanel.php?a='.$row['bus_id'].'" role="button"><i class="fa fa-pencil"></i> Edit</a>
+                              <a class="btn btn-success" href="BusinessPanel.php?a=' . $row['bus_id'] . '" role="button"><i class="fa fa-pencil"></i> Edit</a>
                           </div>
                       </div>
                   </div>
@@ -57,8 +65,8 @@ if ($rs=$conn->query($sql)) {
               </div>
 
       </td>';
+        }
     }
-  }
 }
 
 ?>
@@ -75,8 +83,7 @@ if ($rs=$conn->query($sql)) {
     <title>BuDS</title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
@@ -135,7 +142,8 @@ if ($rs=$conn->query($sql)) {
                                                 <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                             </div>
                                             <ul class="dropdown dropleft">
-                                              <li><h2><?php echo $data['Surname'] .' , '. $data['Firstname'] .' '. $data['MiddleName'] ?></h2>
+                                                <li>
+                                                    <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] . ' ' . $data['MiddleName'] ?></h2>
                                                 <li><a href="user.php">MY PROFILE</a></li>
                                                 <li><a href="manage.php">MANAGE BUSINESS</a></li>
                                                 <li><a href="listing-form.php">ADD BUSINESS</a></li>
@@ -159,8 +167,8 @@ if ($rs=$conn->query($sql)) {
                     <div class="col-lg-9">
                         <nav class="nav-menu">
                             <ul>
-                              <li><a href="./homepage.php">Home</a></li>
-                              <!-- <li><a href="./listing.html">Business Listing</a></li> -->
+                                <li><a href="./homepage.php">Home</a></li>
+                                <!-- <li><a href="./listing.html">Business Listing</a></li> -->
                             </ul>
                         </nav>
                     </div>
@@ -181,15 +189,16 @@ if ($rs=$conn->query($sql)) {
                             <div class="row">
                                 <div class="col-lg-5">
                                     <div class="section-title">
-                                        <br><h4>MANAGE BUSINESS</h4>
+                                        <br>
+                                        <h4>MANAGE BUSINESS</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <table id="result" class="d-flex justify-content-start">
-                          <tbody>
-                            <?php echo $disp ?>
-                          </tbody>
+                            <tbody>
+                                <?php echo $disp ?>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -215,7 +224,7 @@ if ($rs=$conn->query($sql)) {
         </div>
     </footer>
     <!-- Footer
-    <!-- Footer Section End -->
+     Footer Section End -->
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
