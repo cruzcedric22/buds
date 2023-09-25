@@ -84,18 +84,41 @@ if ($rs = $conn->query($sql)) {
     }
 }
 
-$sql1 = "SELECT *
+if (isset($_SESSION['ownerId'])) {
+    $sql1 = "SELECT *
 FROM business_applicant AS bl
 LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
 LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
 WHERE bl.bus_id = :id
 AND (ap.app_id IS NULL OR ap.app_id != :app_id);";
-$pdo = Database::connection();
-$stmt1 = $pdo->prepare($sql1);
-$stmt1->bindParam(':id', $id, PDO::PARAM_STR);
-$stmt1->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
-$stmt1->execute();
-$datas = $stmt1->fetchAll();
+    $pdo = Database::connection();
+    $stmt1 = $pdo->prepare($sql1);
+    $stmt1->bindParam(':id', $id, PDO::PARAM_STR);
+    $stmt1->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
+    $stmt1->execute();
+    if ($stmt1->errorCode() !== '00000') {
+        $errorInfo = $stmt1->errorInfo();
+        echo $errorMsg = "SQL Error: " . $errorInfo[2];
+    } else {
+        $datas = $stmt1->fetchAll();
+    }
+} else {
+    $sql1 = "SELECT *
+FROM business_applicant AS bl
+LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
+LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
+WHERE bl.bus_id = :id;";
+    $pdo = Database::connection();
+    $stmt1 = $pdo->prepare($sql1);
+    $stmt1->bindParam(':id', $id, PDO::PARAM_STR);
+    $stmt1->execute();
+    if ($stmt1->errorCode() !== '00000') {
+        $errorInfo = $stmt1->errorInfo();
+        echo $errorMsg = "SQL Error: " . $errorInfo[2];
+    } else {
+        $datas = $stmt1->fetchAll();
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -246,7 +269,7 @@ $datas = $stmt1->fetchAll();
         </div>
     </header>
 
-    <div id="id01" class="modal">
+    <div id="id01" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
@@ -288,7 +311,7 @@ $datas = $stmt1->fetchAll();
     </div>
 
     <!-- modal for user create -->
-    <div id="id02" class="modal">
+    <div id="id02" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
@@ -342,7 +365,7 @@ $datas = $stmt1->fetchAll();
     </div>
 
     <!-- modal for business create -->
-    <div id="id03" class="modal">
+    <div id="id03" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
@@ -622,7 +645,9 @@ $datas = $stmt1->fetchAll();
                                     <h5>We're Hiring!</h5>
                                 </div>
                                 <?php
-                                // if ($_SESSION['ownerId'] == 3) {
+                                if (($_SESSION['role'] == 3 || $_SESSION['ownerId'] = null)
+                                    || $_SESSION['role'] == null
+                                ) {
                                     foreach ($datas as $index => $data) {
                                         $businessLogo = $data['Businesslogo'];
                                         $pos = $data['pos_vacant'];
@@ -686,7 +711,7 @@ $datas = $stmt1->fetchAll();
                                                                     <div class="col text-right">
                                                                         <input type="hidden" id="app_id">
                                                                         <input type="hidden" id="user_id" value="<?php echo $_SESSION['ownerId'] ?>">
-                                                                        <br><button class="btn btn-success" onclick="applyUser()" style="margin-bottom: 20px;">Submit Resume</button>
+                                                                        <br><button class="btn btn-success" onclick="applyUser('<?php echo $modalId ?>')" style="margin-bottom: 20px;">Submit Resume</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -696,7 +721,7 @@ $datas = $stmt1->fetchAll();
                                             </div>
                                         </div>
                                 <?php }
-                               // } ?>
+                                } ?>
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
@@ -897,39 +922,44 @@ $datas = $stmt1->fetchAll();
             $("#" + modalId).modal("hide");
         };
 
-        function applyUser() {
+        function applyUser(modalId) {
             var app_id = $('#app_id').val();
             var user_id = $('#user_id').val();
             // alert(user_id) 
 
-            var payload = {
-                app_id: app_id,
-                user_id: user_id
-            };
+            if (user_id == 0) {
+                $('#id01').modal('show');
+                $("#" + modalId).modal("hide");
+            } else {
+                var payload = {
+                    app_id: app_id,
+                    user_id: user_id
+                };
 
-            $.ajax({
-                type: "POST",
-                url: 'controllers/users.php',
-                data: {
-                    payload: JSON.stringify(payload),
-                    setFunction: 'applyJobUser'
-                },
-                success: function(response) {
-                    data = JSON.parse(response);
-                    Swal.fire({
-                        title: data.title,
-                        text: data.message,
-                        icon: data.icon,
-                        customClass: {
-                            confirmButton: 'swal-confirm-button',
-                        },
-                        showCancelButton: false,
-                    });
-                    //for normal UI AHAHAHHAHAHA
-                    // swal.fire(data.title, data.message, data.icon);
-                    window.location.reload();
-                }
-            });
+                $.ajax({
+                    type: "POST",
+                    url: 'controllers/users.php',
+                    data: {
+                        payload: JSON.stringify(payload),
+                        setFunction: 'applyJobUser'
+                    },
+                    success: function(response) {
+                        data = JSON.parse(response);
+                        Swal.fire({
+                            title: data.title,
+                            text: data.message,
+                            icon: data.icon,
+                            customClass: {
+                                confirmButton: 'swal-confirm-button',
+                            },
+                            showCancelButton: false,
+                        });
+                        //for normal UI AHAHAHHAHAHA
+                        // swal.fire(data.title, data.message, data.icon);
+                        window.location.reload();
+                    }
+                });
+            }
 
         };
 
