@@ -85,7 +85,7 @@ if ($rs = $conn->query($sql)) {
     }
 }
 
-if (isset($_SESSION['ownerId'])) {
+if (isset($_SESSION['ownerId']) && $_SESSION['role'] == 3) {
     // Execute this block when 'ownerId' is set in the session.
     $sql = "SELECT *
             FROM business_applicant AS bl
@@ -106,9 +106,9 @@ $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':id', $id, PDO::PARAM_STR);
 
-if (isset($_SESSION['ownerId'])) {
-    $stmt->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
-}
+// if (isset($_SESSION['ownerId'])) {
+//     $stmt->bindParam(':app_id', $_SESSION['ownerId'], PDO::PARAM_STR);
+// }
 
 $stmt->execute();
 
