@@ -1,7 +1,6 @@
 <?php
 session_start();
 // echo $_SESSION['ownerId'];
-
 if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
   header('Location: manage.php');
 }
@@ -30,7 +29,7 @@ $bus_id = $_GET['a'];
   <script src="plugins/assets/vendor/js/helpers.js"></script>
   <script src="plugins/assets/js/config.js"></script>
   <style>
-     .swal-confirm-button {
+    .swal-confirm-button {
       width: 100px;
       /* Adjust the width as needed */
     }
@@ -173,53 +172,11 @@ $bus_id = $_GET['a'];
                       <table id="Ajax1" class="table table-bordered table-hover">
                         <thead>
                           <tr>
-                            <th>ID</th>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
-                            <th>CSS grade</th>
+                            <th>Position</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>#</td>
-                            <td>Trident</td>
-                            <td>Internet
-                              Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td>
-                              <div class="text-center" role="group">
-                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalPos">
-                                  <i class="bx bx-show-alt"></i>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cancel">
-                                  <i class="bx bx-x-circle"></i>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>#</td>
-                            <td>Trident</td>
-                            <td>Internet
-                              Explorer 5.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td>5</td>
-                            <td>
-                              <div class="text-center" role="group">
-                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalPos">
-                                  <i class="bx bx-show-alt"></i>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cancel">
-                                  <i class="bx bx-x-circle"></i>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
                         </tbody>
                       </table>
 
@@ -238,7 +195,7 @@ $bus_id = $_GET['a'];
                       </script>
 
                       <!-- for edit position -->
-                      <div class="modal fade" id="modalPos" tabindex="-1" aria-hidden="true">
+                      <div class="modal fade" id="modalPos" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -255,7 +212,7 @@ $bus_id = $_GET['a'];
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Description</label>
-                                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                  <textarea class="form-control" id="jobDescArea" rows="3"></textarea>
                                 </div>
                               </div>
                               <div class="row">
@@ -263,9 +220,8 @@ $bus_id = $_GET['a'];
                                   <label for="exampleFormControlTextarea1" class="form-label">Job Specification</label>
                                   <div id="uiJobDesc1">
                                     <div class="input-group">
-                                      <script></script>
-                                      <input class="form-control addJobSpec1" id="exampleFormControlTextarea1" onkeydown="handleJobSpec1Input(event)">
-                                      <button type="button" class="btn btn-icon btn-success" onclick="addJobSpec1()"><i class="bx bx-plus"></i></button>
+                                      <!-- <input class="form-control addJobSpec1" id="exampleFormControlTextarea1" onkeydown="handleJobSpec1Input(event)">
+                                      <button type="button" class="btn btn-icon btn-success" onclick="addJobSpec1()"><i class="bx bx-plus"></i></button> -->
                                     </div>
                                   </div>
                                 </div>
@@ -365,7 +321,21 @@ $bus_id = $_GET['a'];
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
         $(document).ready(function() {
-          $('#Ajax1').DataTable();
+          // $('#Ajax1').DataTable();
+          $('#Ajax1').DataTable({
+            'serverside': true,
+            'processing': true,
+            'paging': true,
+            "columnDefs": [{
+              "className": "dt-center",
+              "targets": "_all"
+            }, ],
+            'ajax': {
+              'url': 'job_tbl.php',
+              'type': 'post',
+
+            },
+          });
 
           $(document).on("click", ".minus-button-jobSpec1", function() {
             var key = $(this).data("key");
@@ -377,6 +347,47 @@ $bus_id = $_GET['a'];
             removeAuthorDiv(this, key);
           });
         });
+
+        function editJob(pos, jobdesc, jobspec) {
+          $('#modalPos').modal('show');
+          // alert(jobspec)
+          $('#nameWithTitle').val(pos.replaceAll('_', ' '))
+          $('#jobDescArea').val(jobdesc.replaceAll('_', ' '));
+          var jobsec = jobspec.replaceAll('_', " ");
+
+          var jobspecItems = jobsec.split(",");
+          $.each(jobspecItems, function(index, item) {
+            // Remove any leading/trailing whitespace
+            item = item.trim();
+
+            // Skip empty items
+            if (item !== "") {
+              // Create a new div element with the specified structure
+              var newDiv = $("<div class='input-group'></div>");
+
+              // Create an input element and set its value
+              var input = $("<input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'>");
+              input.val(item);
+
+              // Create a button element with the specified attributes
+              var button = $("<button type='button' class='btn btn-icon btn-success minus-button-jobSpec1'><i class='bx bx-minus'></i></button>");
+              button.attr("data-key", item);
+
+              // Append the input and button elements to the new div
+              newDiv.append(input, button);
+
+              // Append the new div to #uiJobDesc1
+              $("#uiJobDesc1").append(newDiv);
+            }
+          });
+
+          // Create the plus variable outside the loop
+          var plus = $("<div class='input-group'><input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'><button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button></div>");
+
+          // Append the plus variable outside the loop
+          $("#uiJobDesc1").append(plus);
+
+        };
 
         function addJobSpec1() {
           let allVal = [];
@@ -530,15 +541,15 @@ $bus_id = $_GET['a'];
             success: function(response) {
               var data = json.parse(response);
               Swal.fire({
-              title: data.title,
-              text: data.message,
-              icon: data.icon,
-              customClass: {
-                confirmButton: 'swal-confirm-button',
-              },
-              showCancelButton: false,
-            });
-            window.location.reload();
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                customClass: {
+                  confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+              });
+              window.location.reload();
             }
           });
         };

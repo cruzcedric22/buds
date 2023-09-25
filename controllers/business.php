@@ -868,7 +868,7 @@ function addJob($request = null)
         }
         $commaSeparatedArray[] = $commaSeparated;
     }
-    $commaSeparatedStringJobSpeci = implode(',  ', $commaSeparatedArray);
+    $commaSeparatedStringJobSpeci = implode(',', $commaSeparatedArray);
     //status 
     //0-open
     //1-closed
