@@ -627,6 +627,7 @@ $datas = $stmt1->fetchAll();
                                     $jobSpec = $data['job_spec'];
                                     $degree = $data['degree'];
                                     $yearExp = $data['year_exp'];
+                                    $bus_applicant_id = $data['bus_applicant'];
                                 ?>
                                     <div class="single-sidebar">
                                         <div class="section-title sidebar-title">
@@ -639,17 +640,60 @@ $datas = $stmt1->fetchAll();
                                                 <div class="ta-text">
                                                     <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
                                                     <!-- Pass the JavaScript variables as separate parameters to openModal -->
-                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>')" class="btn btn-success">Apply</button>
+                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', <?php echo $bus_applicant_id ?>)" class="btn btn-success">Apply</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content w-100">
+                                                <div class="modal-header">
+                                                    <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
+                                                    <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
+                                                    <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
+                                                </div>
+                                                <div class="container mt-4">
+                                                    <div class="card px-2" id="jobBoardForm">
+                                                        <div class="job-board">
+                                                            <!-- Job Listings -->
+                                                            <div class="job-listing">
+                                                                <h4 class="jobTitle"><strong>Manager</strong></h4>
+                                                                <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
+                                                                <h6><strong>Job Specification</strong></h6>
+                                                                <ul class="bullet-list">
+                                                                </ul>
+                                                            </div>
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <h6><strong>Additional Information</strong></h6>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="upload-button">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <br>
+                                                                    <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
+                                                                </div>
+                                                                <div class="col text-right">
+                                                                    <br><button class="btn btn-success" style="margin-bottom: 20px;">Submit Resume</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 <?php } ?>
-
-
-
-
-
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
@@ -681,56 +725,6 @@ $datas = $stmt1->fetchAll();
                                         </div>
                                     </div>
                                 </div>
-                                <div id="<?php echo $modalId ?>" class="modal">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content w-100">
-                                            <div class="modal-header">
-                                                <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
-                                                <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
-                                            </div>
-                                            <div class="container mt-4">
-                                                <div class="card px-2" id="jobBoardForm">
-                                                    <div class="job-board">
-                                                        <!-- Job Listings -->
-                                                        <div class="job-listing">
-                                                            <h4 class="jobTitle"><strong>Manager</strong></h4>
-                                                            <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
-                                                            <h6><strong>Job Specification</strong></h6>
-                                                            <ul class="bullet-list">
-
-                                                            </ul>
-                                                        </div>
-                                                        <br>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <h6><strong>Additional Information</strong></h6>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
-                                                            </div>
-                                                            <div class="col">
-                                                                <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="upload-button">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <br>
-                                                                <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
-                                                            </div>
-                                                            <div class="col text-right">
-                                                                <br><button class="btn btn-success" style="margin-bottom: 20px;">Submit Resume</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -847,9 +841,10 @@ $datas = $stmt1->fetchAll();
         });
 
         // Function to open the modal
-        function openModal(logo, pos, des, modalId, jobspec, degree, exp) {
-            console.log(logo);
-            console.log(pos);
+        function openModal(logo, pos, des, modalId, jobspec, degree, exp, id) {
+            // console.log(logo);
+            // console.log(pos);
+            console.log(id);
 
             var companyLogo = $("#" + modalId).find(".circle-image");
             companyLogo.attr("src", "img/logo/" + logo);

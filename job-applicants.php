@@ -527,6 +527,7 @@ $bus_id = $_GET['a'];
               setFunction: 'addJob'
             },
             success: function(response) {
+              var data = json.parse(response);
               Swal.fire({
               title: data.title,
               text: data.message,
