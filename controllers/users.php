@@ -216,7 +216,7 @@ function loginUser($request = null)
                 $_SESSION['Birthday'] = $data['Birthday'];
                 $_SESSION['Age'] = $data['Age'];
                 $_SESSION['photo'] = $data['photo'];
-                $_SESSION['userTypeDesc'] = $data ['userDesccription'];
+                $_SESSION['userTypeDesc'] = $data['userDesccription'];
             }
             $msg['title'] = "Successful";
             $msg['message'] = "Welcome";
@@ -235,6 +235,40 @@ function loginUser($request = null)
         $msg['icon'] = "success";
         $msg['role'] = $role;
 
+        echo json_encode($msg);
+    }
+};
+
+function applyJobUser($request = null)
+{
+    //status
+    //0 - for waiting
+    //1 - for interview
+    $app_id = $request->app_id;
+    $user_id = $request->user_id;
+
+    $sql = "INSERT INTO application_list(bus_app,app_id,Status) VALUES (:app_id, :user_id, :status)";
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(
+        array(
+            ':app_id' => $app_id,
+            ':user_id' => $user_id,
+            ':status' => 0,
+        )
+    );
+    if ($stmt->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2];
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    }else{
+        $msg['title'] = "Successful";
+        $msg['message'] = "Welcome";
+        $msg['icon'] = "success";
         echo json_encode($msg);
     }
 };

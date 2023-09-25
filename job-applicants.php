@@ -537,7 +537,7 @@ $bus_id = $_GET['a'];
               },
               showCancelButton: false,
             });
-            // window.location.reload();
+            window.location.reload();
             }
           });
         };

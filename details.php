@@ -618,73 +618,76 @@ $datas = $stmt1->fetchAll();
                                         <?php echo $socialMedia; ?>
                                     </div>
                                 </div>
+                                <div class="section-title sidebar-title">
+                                    <h5>We're Hiring!</h5>
+                                </div>
                                 <?php
-                                foreach ($datas as $index => $data) {
-                                    $businessLogo = $data['Businesslogo'];
-                                    $pos = $data['pos_vacant'];
-                                    $jobDes = $data['job_desc'];
-                                    $modalId = 'modal_' . $index; // Generate a unique modal ID
-                                    $jobSpec = $data['job_spec'];
-                                    $degree = $data['degree'];
-                                    $yearExp = $data['year_exp'];
-                                    $bus_applicant_id = $data['bus_applicant'];
+                                // if ($_SESSION['ownerId'] == 3) {
+                                    foreach ($datas as $index => $data) {
+                                        $businessLogo = $data['Businesslogo'];
+                                        $pos = $data['pos_vacant'];
+                                        $jobDes = $data['job_desc'];
+                                        $modalId = 'modal_' . $index; // Generate a unique modal ID
+                                        $jobSpec = $data['job_spec'];
+                                        $degree = $data['degree'];
+                                        $yearExp = $data['year_exp'];
+                                        $bus_applicant_id = $data['bus_applicant'];
                                 ?>
-                                    <div class="single-sidebar">
-                                        <div class="section-title sidebar-title">
-                                            <h5>We're Hiring!</h5>
-                                        </div>
-
-                                        <div class="top-agent">
-                                            <div class="ta-item">
-                                                <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
-                                                <div class="ta-text">
-                                                    <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
-                                                    <!-- Pass the JavaScript variables as separate parameters to openModal -->
-                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', <?php echo $bus_applicant_id ?>)" class="btn btn-success">Apply</button>
+                                        <div class="single-sidebar m-0 p-0">
+                                            <div class="top-agent">
+                                                <div class="ta-item">
+                                                    <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
+                                                    <div class="ta-text">
+                                                        <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
+                                                        <!-- Pass the JavaScript variables as separate parameters to openModal -->
+                                                        <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                            <div class="modal-content w-100">
-                                                <div class="modal-header">
-                                                    <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                    <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
-                                                    <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
-                                                </div>
-                                                <div class="container mt-4">
-                                                    <div class="card px-2" id="jobBoardForm">
-                                                        <div class="job-board">
-                                                            <!-- Job Listings -->
-                                                            <div class="job-listing">
-                                                                <h4 class="jobTitle"><strong>Manager</strong></h4>
-                                                                <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
-                                                                <h6><strong>Job Specification</strong></h6>
-                                                                <ul class="bullet-list">
-                                                                </ul>
+                                        <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                <div class="modal-content w-100">
+                                                    <div class="modal-header">
+                                                        <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
+                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
+                                                        <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
+                                                    </div>
+                                                    <div class="container mt-4">
+                                                        <div class="card px-2" id="jobBoardForm">
+                                                            <div class="job-board">
+                                                                <!-- Job Listings -->
+                                                                <div class="job-listing">
+                                                                    <h4 class="jobTitle"><strong>Manager</strong></h4>
+                                                                    <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
+                                                                    <h6><strong>Job Specification</strong></h6>
+                                                                    <ul class="bullet-list">
+                                                                    </ul>
+                                                                </div>
+                                                                <br>
                                                             </div>
-                                                            <br>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <h6><strong>Additional Information</strong></h6>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
+                                                            <div class="col-lg-12">
+                                                                <h6><strong>Additional Information</strong></h6>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="upload-button">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <br>
-                                                                    <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
-                                                                </div>
-                                                                <div class="col text-right">
-                                                                    <br><button class="btn btn-success" style="margin-bottom: 20px;">Submit Resume</button>
+                                                            <div class="upload-button">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <br>
+                                                                        <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
+                                                                    </div>
+                                                                    <div class="col text-right">
+                                                                        <input type="hidden" id="app_id">
+                                                                        <input type="hidden" id="user_id" value="<?php echo $_SESSION['ownerId'] ?>">
+                                                                        <br><button class="btn btn-success" onclick="applyUser()" style="margin-bottom: 20px;">Submit Resume</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -692,8 +695,8 @@ $datas = $stmt1->fetchAll();
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php } ?>
+                                <?php }
+                               // } ?>
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
@@ -751,10 +754,9 @@ $datas = $stmt1->fetchAll();
             </div>
         </div>
     </footer>
+
     <!-- Footer Section End -->
-
     <!-- Js Plugins -->
-
     <!-- <script src="js/jquery-3.3.1.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -844,7 +846,8 @@ $datas = $stmt1->fetchAll();
         function openModal(logo, pos, des, modalId, jobspec, degree, exp, id) {
             // console.log(logo);
             // console.log(pos);
-            console.log(id);
+            // console.log(id);
+            $('#app_id').val(id);
 
             var companyLogo = $("#" + modalId).find(".circle-image");
             companyLogo.attr("src", "img/logo/" + logo);
@@ -885,13 +888,50 @@ $datas = $stmt1->fetchAll();
 
 
 
+
             // Show the modal using jQuery
             $("#" + modalId).modal("show");
         };
 
         function closeModal(modalId) {
             $("#" + modalId).modal("hide");
-        }
+        };
+
+        function applyUser() {
+            var app_id = $('#app_id').val();
+            var user_id = $('#user_id').val();
+            // alert(user_id) 
+
+            var payload = {
+                app_id: app_id,
+                user_id: user_id
+            };
+
+            $.ajax({
+                type: "POST",
+                url: 'controllers/users.php',
+                data: {
+                    payload: JSON.stringify(payload),
+                    setFunction: 'applyJobUser'
+                },
+                success: function(response) {
+                    data = JSON.parse(response);
+                    Swal.fire({
+                        title: data.title,
+                        text: data.message,
+                        icon: data.icon,
+                        customClass: {
+                            confirmButton: 'swal-confirm-button',
+                        },
+                        showCancelButton: false,
+                    });
+                    //for normal UI AHAHAHHAHAHA
+                    // swal.fire(data.title, data.message, data.icon);
+                    window.location.reload();
+                }
+            });
+
+        };
 
 
 
@@ -941,7 +981,7 @@ $datas = $stmt1->fetchAll();
             };
 
             if (pass == conpass) {
-                console.log(payload)
+                // console.log(payload)
                 $.ajax({
                     type: "POST",
                     url: 'controllers/users.php',
