@@ -477,38 +477,6 @@ $bus_id = $_GET['a'];
               $('#uiJobDesc2').html(response);
             }
           });
-
-          //note to fetch key on your response
-          // $.ajax({
-          //   type: "POST",
-          //   url: 'controllers/business.php',
-          //   data: {
-          //     payload: JSON.stringify(payload),
-          //     setFunction: 'addJobSpec2'
-          //   },
-          //   success: function(response) {
-          //     response = JSON.parse(response);
-
-          //     // Access the 'boom' key in the response
-          //     var boomValues = response.boom;
-
-          //     // Get the element where you want to set the HTML content
-          //     var uiJobDesc2 = $('#uiJobDesc2');
-
-          //     // Clear any existing content in the element
-          //     uiJobDesc2.html('');
-
-          //     // Iterate through the 'boom' values and append them to the element
-          //     for (var i = 0; i < boomValues.length; i++) {
-          //       // Access each value individually
-          //       var value = boomValues[i];
-
-          //       // Append the value to the element's HTML
-          //       uiJobDesc2.append(value);
-          //     }
-          //   }
-          // });
-
         };
 
 
