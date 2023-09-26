@@ -5,6 +5,7 @@ $sql = "SELECT * FROM business_applicant";
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
 
+
 $data = [];
 
 if ($stmt->execute()) {

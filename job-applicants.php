@@ -350,18 +350,24 @@ $bus_id = $_GET['a'];
 
         function editJob(pos, jobdesc, jobspec) {
           $('#modalPos').modal('show');
-          // alert(jobspec)
-          $('#nameWithTitle').val(pos.replaceAll('_', ' '))
+          $('#nameWithTitle').val(pos.replaceAll('_', ' '));
           $('#jobDescArea').val(jobdesc.replaceAll('_', ' '));
-          var jobsec = jobspec.replaceAll('_', " ");
 
-          var jobspecItems = jobsec.split(",");
+          // Clear the previous content of #uiJobDesc1
+          $("#uiJobDesc1").empty();
+
+          // Declare the jobspecItems array as an empty array
+          var jobspecItems = [];
+
+          var jobsec = jobspec.replaceAll('_', ' ');
+
+          jobspecItems = jobsec.split(',');
           $.each(jobspecItems, function(index, item) {
             // Remove any leading/trailing whitespace
             item = item.trim();
 
             // Skip empty items
-            if (item !== "") {
+            if (item !== '') {
               // Create a new div element with the specified structure
               var newDiv = $("<div class='input-group'></div>");
 
@@ -371,7 +377,7 @@ $bus_id = $_GET['a'];
 
               // Create a button element with the specified attributes
               var button = $("<button type='button' class='btn btn-icon btn-success minus-button-jobSpec1'><i class='bx bx-minus'></i></button>");
-              button.attr("data-key", item);
+              button.attr('data-key', item);
 
               // Append the input and button elements to the new div
               newDiv.append(input, button);
@@ -382,12 +388,17 @@ $bus_id = $_GET['a'];
           });
 
           // Create the plus variable outside the loop
-          var plus = $("<div class='input-group'><input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'><button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button></div>");
+          var plus = $(
+            "<div class='input-group'><input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'><button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button></div>"
+          );
 
           // Append the plus variable outside the loop
           $("#uiJobDesc1").append(plus);
+          // console.log(jobspecItems);
+        }
 
-        };
+
+
 
         function addJobSpec1() {
           let allVal = [];
