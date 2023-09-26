@@ -239,6 +239,7 @@ $bus_id = $_GET['a'];
                                   <input type="text" id="experience" class="form-control" placeholder="Years of Experience" />
                                 </div>
                                 <div class="modal-footer">
+                                  <input type="hidden" id="hidden_id">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                   <button type="button" class="btn btn-primary">Save changes</button>
                                 </div>
@@ -348,11 +349,14 @@ $bus_id = $_GET['a'];
           });
         });
 
-        function editJob(pos, jobdesc, jobspec) {
+        function editJob(id, pos, jobdesc, jobspec, degree, exp) {
           $('#modalPos').modal('show');
           $('#nameWithTitle').val(pos.replaceAll('_', ' '));
           $('#jobDescArea').val(jobdesc.replaceAll('_', ' '));
-
+          $('#degree').val(degree.replaceAll('_', ' '));
+          $('#experience').val(exp.replaceAll('_', ' '));
+          $('#hidden_id').val(id);
+          
           // Clear the previous content of #uiJobDesc1
           $("#uiJobDesc1").empty();
 
@@ -394,8 +398,7 @@ $bus_id = $_GET['a'];
 
           // Append the plus variable outside the loop
           $("#uiJobDesc1").append(plus);
-          // console.log(jobspecItems);
-        }
+        };
 
 
 
