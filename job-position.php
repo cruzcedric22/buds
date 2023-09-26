@@ -98,13 +98,13 @@ $bus_id = $_GET['a'];
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Job Applicants</span>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a href="<?php echo "job-position.php?a=".$bus_id ?>" class="menu-link">
                         <i class="menu-icon tf-icons bx bxs-user"></i>
                         <div data-i18n="Analytics">Job Positions</div>
                         </a>
                     </li>
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a href="<?php echo "job-applicants.php?a=".$bus_id ?>" class="menu-link">
                         <i class="menu-icon tf-icons bx bxs-user-detail"></i>
                         <div data-i18n="Analytics">Job Applicants</div>
@@ -168,6 +168,10 @@ $bus_id = $_GET['a'];
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Job Applicants</h3>
+                  <div class="d-grid gap- d-sm-flex justify-content-md-start">
+                    <button class="btn btn-success me-sm-2" type="button" data-bs-toggle="modal"
+                          data-bs-target="#modalCenter"><i class="bx bx-user-pin"></i> Add Position</button>
+                  </div>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">

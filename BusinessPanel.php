@@ -129,9 +129,15 @@ foreach ($datas as $data) {
             <span class="menu-header-text">Job Applicants</span>
           </li>
           <li class="menu-item">
+            <a href="<?php echo "job-position.php?a=".$bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-user"></i>
+              <div data-i18n="Analytics">Job Positions</div>
+            </a>
+          </li>
+          <li class="menu-item">
             <a href="<?php echo "job-applicants.php?a=".$bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-user-detail"></i>
-              <div data-i18n="Analytics">Jobs</div>
+              <div data-i18n="Analytics">Job Applicants</div>
             </a>
           </li>
         </ul>
