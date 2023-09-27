@@ -87,14 +87,15 @@ if ($rs = $conn->query($sql)) {
     }
 }
 
-if (isset($_SESSION['ownerId'])) {
+if (isset($_SESSION['ownerId']) || $_SESSION['ownerId'] != "") {
     // Execute this block when 'ownerId' is set in the session.
     $sql = "SELECT *
-            FROM business_applicant AS bl
-            LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
-            LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-            WHERE bl.bus_id = :id
-            AND (ap.app_id IS NULL OR ap.app_id != :app_id);";
+    FROM business_applicant AS bl
+    LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
+    LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
+    WHERE bl.bus_id = :id
+    AND (ap.app_id IS NULL OR ap.app_id <> :app_id);    
+    ";
 } else {
     // Execute this block when 'ownerId' is not set in the session.
     $sql = "SELECT *
@@ -106,6 +107,7 @@ if (isset($_SESSION['ownerId'])) {
 
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
+echo "SQL Query: " . $sql;
 $stmt->bindParam(':id', $id, PDO::PARAM_STR);
 
 if (isset($_SESSION['ownerId'])) {
@@ -158,6 +160,12 @@ if ($stmt->errorCode() !== '00000') {
             width: 100px;
             /* Adjust the width as needed */
         }
+
+        #id01 {
+            z-index: 9999;
+            /* Adjust this value as needed */
+        }
+
 
         #map {
             display: flex;
@@ -271,7 +279,7 @@ if ($stmt->errorCode() !== '00000') {
         </div>
     </header>
 
-    <div id="id01" class="modal">
+    <div id="id01" tabindex="-1" role="dialog" class="modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
@@ -367,7 +375,7 @@ if ($stmt->errorCode() !== '00000') {
     </div>
 
     <!-- modal for business create -->
-    <div id="id03" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+    <div id="id03" class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
@@ -659,7 +667,7 @@ if ($stmt->errorCode() !== '00000') {
                                         $degree = $data['degree'];
                                         $yearExp = $data['year_exp'];
                                         $bus_applicant_id = $data['bus_applicant'];
-                                       $user_id = $_SESSION['ownerId'];
+                                        $user_id = $_SESSION['ownerId'];
                                 ?>
                                         <div class="single-sidebar m-0 p-0">
                                             <div class="top-agent">
@@ -673,7 +681,7 @@ if ($stmt->errorCode() !== '00000') {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+                                        <div id="<?php echo $modalId ?>" tabindex="-1" role="dialog" class="modal">
                                             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                                 <div class="modal-content w-100">
                                                     <div class="modal-header">
@@ -723,7 +731,7 @@ if ($stmt->errorCode() !== '00000') {
                                             </div>
                                         </div>
                                 <?php }
-                               } ?>
+                                } ?>
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
@@ -784,8 +792,8 @@ if ($stmt->errorCode() !== '00000') {
 
     <!-- Footer Section End -->
     <!-- Js Plugins -->
-    <!-- <script src="js/jquery-3.3.1.min.js"></script> -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/mixitup.min.js"></script>
@@ -869,6 +877,14 @@ if ($stmt->errorCode() !== '00000') {
             });
         });
 
+        function openLoginModal() {
+            $('#id01').modal('show');
+        }
+
+        function hideModal(modalId) {
+            $("#" + modalId).modal("hide");
+        }
+
         // Function to open the modal
         function openModal(logo, pos, des, modalId, jobspec, degree, exp, id) {
             // console.log(logo);
@@ -926,12 +942,10 @@ if ($stmt->errorCode() !== '00000') {
 
         function applyUser(modalId, user_id) {
             var app_id = $('#app_id').val();
-            var user_id = user_id;
-            // alert(user_id) 
 
             if (user_id == 0) {
-                $('#id01').modal('show');
-                $("#" + modalId).modal("hide");
+                openLoginModal();
+                hideModal(modalId);
             } else {
                 var payload = {
                     app_id: app_id,
@@ -956,14 +970,12 @@ if ($stmt->errorCode() !== '00000') {
                             },
                             showCancelButton: false,
                         });
-                        //for normal UI AHAHAHHAHAHA
-                        // swal.fire(data.title, data.message, data.icon);
                         window.location.reload();
                     }
                 });
             }
-
         };
+
 
 
 
