@@ -896,11 +896,71 @@ function addJob($request = null)
         $msg['message'] = $errorMsg;
         $msg['icon'] = "error";
         echo json_encode($msg);
-    }else{
+    } else {
         $msg['title'] = "Successful";
         $msg['message'] = "Sucessfully Added";
         $msg['icon'] = "success";
         $msg['status'] = "success";
+        echo json_encode($msg);
+    }
+};
+
+function edtJob($request = null)
+{
+    $pos = $request->pos;
+    $jobDescEdt = $request->jobDescEdt;
+    $degreeEdt = $request->degreeEdt;
+    $expEdt = $request->expEdt;
+    $id = $request->id;
+    $msg = array();
+
+    $edtJobSpecs = $request->edtJobSpec;
+    $commaSeparatedArray = [];
+
+    foreach ($edtJobSpecs as $jobSpecification) {
+        $jobSpecificationValue = $jobSpecification->value;
+        if (is_array($jobSpecificationValue)) {
+            $commaSeparated = implode(', ', $jobSpecificationValue);
+        } else {
+            $commaSeparated = $jobSpecificationValue;
+        }
+        $commaSeparatedArray[] = $commaSeparated;
+    }
+    $commaSeparatedStringJobSpeci = implode(',', $commaSeparatedArray);
+
+    $sql = "UPDATE business_applicant
+    SET pos_vacant = :pos,
+        job_desc = :jobdesc,
+        job_spec = :job_spec,
+        degree = :degree,
+        year_exp = :exp
+    WHERE bus_applicant = :id;";
+
+
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(
+        array(
+            ':pos' => $pos,
+            ':jobdesc' => $jobDescEdt,
+            ':job_spec' => $commaSeparatedStringJobSpeci,
+            ':degree' => $degreeEdt,
+            ':exp' => $expEdt,
+            ':id' => $id
+        )
+    );
+    if ($stmt->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    } else {
+        $msg['title'] = "Successful";
+        $msg['message'] = "Sucessfully Edited";
+        $msg['icon'] = "success";
         echo json_encode($msg);
     }
 };

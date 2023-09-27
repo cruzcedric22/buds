@@ -33,6 +33,9 @@ $bus_id = $_GET['a'];
       width: 100px;
       /* Adjust the width as needed */
     }
+    .swal2-container {
+      z-index: 9999;
+    }
   </style>
 </head>
 
@@ -195,7 +198,7 @@ $bus_id = $_GET['a'];
                       </script>
 
                       <!-- for edit position -->
-                      <div class="modal fade" id="modalPos" tabindex="-1">
+                      <div class="modal fade" id="modalPos">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -206,18 +209,18 @@ $bus_id = $_GET['a'];
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Position</label>
-                                  <input type="text" id="nameWithTitle" class="form-control" placeholder="Position" />
+                                  <input type="text" id="edtPos" class="form-control" placeholder="Position" />
                                 </div>
                               </div>
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Description</label>
-                                  <textarea class="form-control" id="jobDescArea" rows="3"></textarea>
+                                  <textarea class="form-control" id="edtjobDesc" rows="3"></textarea>
                                 </div>
                               </div>
                               <div class="row">
                                 <div class="col">
-                                  <label for="exampleFormControlTextarea1" class="form-label">Job Specification</label>
+                                  <label for="exampleFormControlTextarea2" class="form-label">Job Specification</label>
                                   <div id="uiJobDesc1">
                                     <div class="input-group">
                                       <!-- <input class="form-control addJobSpec1" id="exampleFormControlTextarea1" onkeydown="handleJobSpec1Input(event)">
@@ -241,7 +244,7 @@ $bus_id = $_GET['a'];
                                 <div class="modal-footer">
                                   <input type="hidden" id="hidden_id">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                  <button type="button" onclick="edtJob()" class="btn btn-primary">Save changes</button>
                                 </div>
                               </div>
                             </div>
@@ -250,7 +253,7 @@ $bus_id = $_GET['a'];
                       </div>
 
                       <!-- for add position -->
-                      <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+                      <div class="modal fade" id="modalCenter">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -351,12 +354,12 @@ $bus_id = $_GET['a'];
 
         function editJob(id, pos, jobdesc, jobspec, degree, exp) {
           $('#modalPos').modal('show');
-          $('#nameWithTitle').val(pos.replaceAll('_', ' '));
-          $('#jobDescArea').val(jobdesc.replaceAll('_', ' '));
+          $('#edtPos').val(pos.replaceAll('_', ' '));
+          $('#edtjobDesc').val(jobdesc.replaceAll('_', ' '));
           $('#degree').val(degree.replaceAll('_', ' '));
           $('#experience').val(exp.replaceAll('_', ' '));
           $('#hidden_id').val(id);
-          
+
           // Clear the previous content of #uiJobDesc1
           $("#uiJobDesc1").empty();
 
@@ -521,7 +524,55 @@ $bus_id = $_GET['a'];
               setFunction: 'addJob'
             },
             success: function(response) {
-              var data = json.parse(response);
+              var data = JSON.parse(response);
+              Swal.fire({
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                customClass: {
+                  confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+              });
+              window.location.reload();
+            }
+          });
+        };
+
+        function edtJob() {
+          var pos = $('#edtPos').val();
+          var jobDescEdt = $('#edtjobDesc').val();
+          var degreeEdt = $('#degree').val();
+          var expEdt = $('#experience').val();
+          var id = $('#hidden_id').val();
+          let edtJobSpec = [];
+          $(".addJobSpec1").each(function() {
+            let val = $(this).val(); // Trim to remove leading/trailing spaces
+            if (val !== "") {
+              edtJobSpec.push({
+                value: val
+              });
+            }
+          });
+
+          var payload = {
+            pos: pos,
+            jobDescEdt: jobDescEdt,
+            degreeEdt: degreeEdt,
+            edtJobSpec: edtJobSpec,
+            expEdt: expEdt,
+            id: id
+          };
+
+          $.ajax({
+            type: "POST",
+            url: 'controllers/business.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'edtJob'
+            },
+            success: function(response) {
+              var data = JSON.parse(response);
               Swal.fire({
                 title: data.title,
                 text: data.message,
