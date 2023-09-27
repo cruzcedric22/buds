@@ -161,7 +161,7 @@ if ($stmt->errorCode() !== '00000') {
             /* Adjust the width as needed */
         }
 
-        #id01 {
+        #swal {
             z-index: 9999;
             /* Adjust this value as needed */
         }
