@@ -42,76 +42,85 @@ $bus_id = $_GET['a'];
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-          <a href="index.php" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
-            </span>
-            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
-          </a>
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
-        </div>
-        <div class="menu-inner-shadow"></div>
-        <ul class="menu-inner py-1">
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Business Profile</span>
-          </li>
-          <li class="menu-item">
-            <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-pin"></i>
-              <div data-i18n="Analytics">Bulletin Board</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-info-circle"></i>
-              <div data-i18n="Analytics">Details</div>
-            </a>
-          </li>
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Business Content</span>
-          </li>
-          <li class="menu-item">
-            <a href="<?php echo "feature-post.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-share"></i>
-              <div data-i18n="Analytics">Feature Post</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="<?php echo "gallery.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-photo-album"></i>
-              <div data-i18n="Analytics">Gallery</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="<?php echo "reply.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-message-rounded"></i>
-              <div data-i18n="Analytics">Comments & Rating</div>
-            </a>
-          </li>
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Business Document</span>
-          </li>
-          <li class="menu-item">
-            <a href="<?php echo "requirement.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-paperclip"></i>
-              <div data-i18n="Analytics">Requirements</div>
-            </a>
-          </li>
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Job Applicants</span>
-          </li>
-          <li class="menu-item active">
-            <a href="<?php echo "job-applicants.php?a=" . $bus_id ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-user-detail"></i>
-              <div data-i18n="Analytics">Jobs</div>
-            </a>
-          </li>
-        </ul>
-      </aside>
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            <div class="app-brand demo">
+              <a href="index.php" class="app-brand-link">
+                <span class="app-brand-logo demo">
+                  <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
+                </span>
+                <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
+              </a>
+                <a href="javascript:void(0);"
+                    class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                </a>
+            </div>
+            <div class="menu-inner-shadow"></div>
+            <ul class="menu-inner py-1">
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Business Profile</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-pin"></i>
+                            <div data-i18n="Analytics">Bulletin Board</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-info-circle"></i>
+                            <div data-i18n="Analytics">Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Business Content</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "feature-post.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-share"></i>
+                            <div data-i18n="Analytics">Feature Post</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "gallery.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-photo-album"></i>
+                            <div data-i18n="Analytics">Gallery</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "reply.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+                            <div data-i18n="Analytics">Comments & Rating</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Business Document</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "requirement.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-paperclip"></i>
+                            <div data-i18n="Analytics">Requirements</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Job Applicants</span>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="<?php echo "job_position.php?a=".$bus_id ?>" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-user"></i>
+                        <div data-i18n="Analytics">Job Positions</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "job_applicant.php?a=".$bus_id ?>" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-user-detail"></i>
+                        <div data-i18n="Analytics">Job Applicants</div>
+                        </a>
+                    </li>
+                </ul>
+        </aside>
+
       <div class="layout-page">
         <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -158,6 +167,7 @@ $bus_id = $_GET['a'];
           </div>
         </nav>
         <hr>
+
 
         <section class="content">
           <div class="container-fluid">
