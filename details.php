@@ -107,7 +107,7 @@ if (isset($_SESSION['ownerId']) || $_SESSION['ownerId'] != "") {
 
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
-echo "SQL Query: " . $sql;
+// echo "SQL Query: " . $sql;
 $stmt->bindParam(':id', $id, PDO::PARAM_STR);
 
 if (isset($_SESSION['ownerId'])) {
@@ -143,6 +143,7 @@ if ($stmt->errorCode() !== '00000') {
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
@@ -278,8 +279,8 @@ if ($stmt->errorCode() !== '00000') {
             </div>
         </div>
     </header>
-
-    <div id="id01" tabindex="-1" role="dialog" class="modal">
+    <!-- <div id="id01" class="modal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"> -->
+    <div id="id01" tabindex="-1" role="dialog" style="z-index: 1;" class="modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
@@ -288,7 +289,7 @@ if ($stmt->errorCode() !== '00000') {
                 </div>
                 <div class="container mt-4">
                     <div class="card px-2 py-3" id="form1">
-                        <div class="form-data" v-if="!submitted">
+                        <div class="form-data">
                             <div class="forms-inputs mb-4">
                                 <!-- <form method="post"> -->
                                 <span>Email</span>
@@ -304,12 +305,12 @@ if ($stmt->errorCode() !== '00000') {
                             </div>
                         </div>
                         </form>
-                        <div class="success-data" v-else>
+                        <div class="success-data">
                             <div class="text-center d-flex flex-column">
                                 <h6 class="text-center fs-1">Don't have a user account? <a href="#id02" data-toggle="modal">Sign Up</a></h6>
                             </div>
                         </div>
-                        <div class="success-data" v-else>
+                        <div class="success-data">
                             <div class="text-center d-flex flex-column">
                                 <h6 class="text-center fs-1">Don't have a business account? <a href="#id03" data-toggle="modal">Sign Up</a></h6>
                             </div>
@@ -681,7 +682,7 @@ if ($stmt->errorCode() !== '00000') {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="<?php echo $modalId ?>" tabindex="-1" role="dialog" class="modal">
+                                        <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
                                             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                                 <div class="modal-content w-100">
                                                     <div class="modal-header">
@@ -794,6 +795,7 @@ if ($stmt->errorCode() !== '00000') {
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/mixitup.min.js"></script>
@@ -879,6 +881,7 @@ if ($stmt->errorCode() !== '00000') {
 
         function openLoginModal() {
             $('#id01').modal('show');
+            console.log("modal is open")
         }
 
         function hideModal(modalId) {
