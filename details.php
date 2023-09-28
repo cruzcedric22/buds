@@ -138,7 +138,8 @@ if ($stmt->errorCode() !== '00000') {
     <title>BuDS</title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
@@ -239,7 +240,9 @@ if ($stmt->errorCode() !== '00000') {
                                                 </div>
                                                 <ul class="dropdown dropleft">
                                                     <li>
-                                                        <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
+                                                        <h2>
+                                                            <?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?>
+                                                        </h2>
                                                     </li>
                                                     <li><a href="user.php">MY PROFILE</a></li>
                                                     <?php if ($_SESSION['role'] == 3) { ?>
@@ -279,13 +282,14 @@ if ($stmt->errorCode() !== '00000') {
             </div>
         </div>
     </header>
-    <div id="id01" class="modal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <!-- <div id="id01" tabindex="-1" role="dialog" style="z-index: 1;" class="modal"> -->
+
+    <div id="id01" tabindex="-1" style="z-index: 1000;" class="modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
                     <h3 class="text-center mb-6 font-weight-bold">LOG IN</h3>
-                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    <span onclick="document.getElementById('id01').style.display='none'"
+                        title="Close Modal">&times;</span>
                 </div>
                 <div class="container mt-4">
                     <div class="card px-2 py-3" id="form1">
@@ -307,12 +311,14 @@ if ($stmt->errorCode() !== '00000') {
                         </form>
                         <div class="success-data">
                             <div class="text-center d-flex flex-column">
-                                <h6 class="text-center fs-1">Don't have a user account? <a href="#id02" data-toggle="modal">Sign Up</a></h6>
+                                <h6 class="text-center fs-1">Don't have a user account? <a href="#id02"
+                                        data-toggle="modal">Sign Up</a></h6>
                             </div>
                         </div>
                         <div class="success-data">
                             <div class="text-center d-flex flex-column">
-                                <h6 class="text-center fs-1">Don't have a business account? <a href="#id03" data-toggle="modal">Sign Up</a></h6>
+                                <h6 class="text-center fs-1">Don't have a business account? <a href="#id03"
+                                        data-toggle="modal">Sign Up</a></h6>
                             </div>
                         </div>
                     </div>
@@ -322,12 +328,14 @@ if ($stmt->errorCode() !== '00000') {
     </div>
 
     <!-- modal for user create -->
-    <div id="id02" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+    <div id="id02" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+        class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
                     <h3 class="text-center mb-6 font-weight-bold">USER ACCOUNT REGISTRATION</h3>
-                    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    <span onclick="document.getElementById('id02').style.display='none'" class="close"
+                        title="Close Modal">&times;</span>
                 </div>
                 <div class="container mt-4">
                     <div class="card px-2 py-3" id="form2">
@@ -337,28 +345,33 @@ if ($stmt->errorCode() !== '00000') {
                             </form>
                             <div class="row">
                                 <div class="col">
-                                    <div class="forms-inputs mb-4"> <span>First Name</span> <input id="f_name" type="text">
+                                    <div class="forms-inputs mb-4"> <span>First Name</span> <input id="f_name"
+                                            type="text">
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="forms-inputs mb-4"> <span>Middle Name</span> <input id="m_name" type="text">
+                                    <div class="forms-inputs mb-4"> <span>Middle Name</span> <input id="m_name"
+                                            type="text">
                                     </div>
                                 </div>
 
                                 <div class="col">
-                                    <div class="forms-inputs mb-4"> <span>Last Name</span> <input id="l_name" type="text">
+                                    <div class="forms-inputs mb-4"> <span>Last Name</span> <input id="l_name"
+                                            type="text">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col">
-                                    <div class="forms-inputs mb-4"> <span>Email</span> <input type="text" id="emailUser"> </div>
+                                    <div class="forms-inputs mb-4"> <span>Email</span> <input type="text"
+                                            id="emailUser"> </div>
                                 </div>
                             </div>
                             <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" id="pass">
                             </div>
-                            <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" id="con_pass">
+                            <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password"
+                                    id="con_pass">
                             </div>
                             <!-- <div class="form-group form-check">
                               <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -381,7 +394,8 @@ if ($stmt->errorCode() !== '00000') {
             <div class="modal-content w-100">
                 <div class="modal-header">
                     <h3 class="text-center mb-6 font-weight-bold">BUSINESS ACCOUNT REGISTRATION</h3>
-                    <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    <span onclick="document.getElementById('id03').style.display='none'" class="close"
+                        title="Close Modal">&times;</span>
                 </div>
                 <div class="container mt-4">
                     <div class="card px-2 py-3" id="form2">
@@ -389,28 +403,34 @@ if ($stmt->errorCode() !== '00000') {
                             <form>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>Email</span> <input type="email" name="email" id="ownerEmail"></div>
+                                        <div class="forms-inputs mb-4"> <span>Email</span> <input type="email"
+                                                name="email" id="ownerEmail"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text" name="firstname" id="ownerFname"></div>
+                                        <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text"
+                                                name="firstname" id="ownerFname"></div>
                                     </div>
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text" name="middlename" id="ownerMname"></div>
+                                        <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text"
+                                                name="middlename" id="ownerMname"></div>
                                     </div>
 
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text" name="surname" id="ownerLname">
+                                        <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text"
+                                                name="surname" id="ownerLname">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" required id="ownerBirthday"></div>
+                                        <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date"
+                                                name="birthday" required id="ownerBirthday"></div>
                                     </div>
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age" required id="ownerAge"></div>
+                                        <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age"
+                                                required id="ownerAge"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -423,17 +443,25 @@ if ($stmt->errorCode() !== '00000') {
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="forms-inputs mb-4"> <span>Contact Number</span> <input type="tell" name="contactnumber" id="ownerNumber"></div>
+                                        <div class="forms-inputs mb-4"> <span>Contact Number</span> <input type="tell"
+                                                name="contactnumber" id="ownerNumber"></div>
                                     </div>
                                 </div>
-                                <div class="forms-inputs mb-4"> <span>Address</span> <input type="text" name="address" id="ownerAddress"></div>
-                                <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" name="password" id="ownerPass"></div>
-                                <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" name="passwordconfirm" id="ownerConPass"></div>
+                                <div class="forms-inputs mb-4"> <span>Address</span> <input type="text" name="address"
+                                        id="ownerAddress"></div>
+                                <div class="forms-inputs mb-4"> <span>Password</span> <input type="password"
+                                        name="password" id="ownerPass"></div>
+                                <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password"
+                                        name="passwordconfirm" id="ownerConPass"></div>
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="checkTerms">
-                                    <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
+                                    <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing
+                                        to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy
+                                            Policy</a>.</p>
                                 </div>
-                                <div class="mb-3"> <button disabled class="btn w-100" id="signUp" onclick="createBusinessOwner()" name="btnbusiness" type="button">SIGN UP</button></div>
+                                <div class="mb-3"> <button disabled class="btn w-100" id="signUp"
+                                        onclick="createBusinessOwner()" name="btnbusiness" type="button">SIGN
+                                        UP</button></div>
                         </div>
                         </form>
                     </div>
@@ -441,6 +469,7 @@ if ($stmt->errorCode() !== '00000') {
             </div>
         </div>
     </div>
+
     <!-- Header End -->
 
     <!-- Property Details Section Begin -->
@@ -467,7 +496,8 @@ if ($stmt->errorCode() !== '00000') {
                                     <div class="tab-board">
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Overview</a>
+                                                <a class="nav-link active" data-toggle="tab" href="#tabs-1"
+                                                    role="tab">Overview</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">FAQs</a>
@@ -532,7 +562,8 @@ if ($stmt->errorCode() !== '00000') {
                                             <ul>
                                                 <li>April 30, 2023</li>
                                             </ul>
-                                            <p>You can make your own combination. Enjoy the New Promo Combo Mix & Match for the first time for only 89 pesos!</p>
+                                            <p>You can make your own combination. Enjoy the New Promo Combo Mix & Match
+                                                for the first time for only 89 pesos!</p>
                                             <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
                                         </div>
                                     </div>
@@ -545,7 +576,8 @@ if ($stmt->errorCode() !== '00000') {
                                             <ul>
                                                 <li>June 29, 2023</li>
                                             </ul>
-                                            <p>Enjoy the Updated Price of our Family Meal for only 1,099 pesos! Visit Jollibee Now!</p>
+                                            <p>Enjoy the Updated Price of our Family Meal for only 1,099 pesos! Visit
+                                                Jollibee Now!</p>
                                             <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
                                         </div>
                                     </div>
@@ -656,7 +688,8 @@ if ($stmt->errorCode() !== '00000') {
                                     <h5>We're Hiring!</h5>
                                 </div>
                                 <?php
-                                if (($_SESSION['role'] == 3 || $_SESSION['ownerId'] == null)
+                                if (
+                                    ($_SESSION['role'] == 3 || $_SESSION['ownerId'] == null)
                                     || $_SESSION['role'] == null
                                 ) {
                                     foreach ($datas as $index => $data) {
@@ -669,26 +702,38 @@ if ($stmt->errorCode() !== '00000') {
                                         $yearExp = $data['year_exp'];
                                         $bus_applicant_id = $data['bus_applicant'];
                                         $user_id = $_SESSION['ownerId'];
-                                ?>
+                                        ?>
                                         <div class="single-sidebar m-0 p-0">
                                             <div class="top-agent">
                                                 <div class="ta-item">
-                                                    <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
+                                                    <div class="ta-pic set-bg"
+                                                        data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png">
+                                                    </div>
                                                     <div class="ta-text">
-                                                        <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
+                                                        <h6><a>
+                                                                <?php echo $data['pos_vacant'] ?>
+                                                            </a></h6>
                                                         <!-- Pass the JavaScript variables as separate parameters to openModal -->
-                                                        <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
+                                                        <button
+                                                            onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', `<?php echo $bus_applicant_id ?>`)"
+                                                            class="btn btn-success">Apply</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+                                        <div id="<?php echo $modalId ?>"
+                                            style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                            class="modal">
                                             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                                 <div class="modal-content w-100">
                                                     <div class="modal-header">
-                                                        <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
-                                                        <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
+                                                        <img src="img/company/jollibee.jpg" alt="Company Logo"
+                                                            class="circle-image"
+                                                            style="margin-right: 5px; border: 2px solid #355E3B;">
+                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">
+                                                            We're Hiring!</h3>
+                                                        <span onclick="closeModal('<?php echo $modalId ?>')" class="close"
+                                                            title="Close Modal">&times;</span>
                                                     </div>
                                                     <div class="container mt-4">
                                                         <div class="card px-2" id="jobBoardForm">
@@ -696,7 +741,13 @@ if ($stmt->errorCode() !== '00000') {
                                                                 <!-- Job Listings -->
                                                                 <div class="job-listing">
                                                                     <h4 class="jobTitle"><strong>Manager</strong></h4>
-                                                                    <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
+                                                                    <p id="des">The Restaurant Manager is responsible for the
+                                                                        development and achievement of the store business
+                                                                        objectives such as Sales and Profitability targets,
+                                                                        customer satisfaction & Food, Safety and Cleanliness
+                                                                        standards; People Management and Development; and
+                                                                        Store’s adherence to operating systems and standards and
+                                                                        compliance to all government requirements.</p>
                                                                     <h6><strong>Job Specification</strong></h6>
                                                                     <ul class="bullet-list">
                                                                     </ul>
@@ -707,10 +758,12 @@ if ($stmt->errorCode() !== '00000') {
                                                                 <h6><strong>Additional Information</strong></h6>
                                                                 <div class="row">
                                                                     <div class="col">
-                                                                        <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
+                                                                        <p class="degree"><strong>Degree:</strong> Bachelor's
+                                                                            Degree</p>
                                                                     </div>
                                                                     <div class="col">
-                                                                        <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
+                                                                        <p class="experience"><strong>Years of
+                                                                                Experience:</strong> 3 years</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -718,11 +771,14 @@ if ($stmt->errorCode() !== '00000') {
                                                                 <div class="row">
                                                                     <div class="col">
                                                                         <br>
-                                                                        <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
+                                                                        <h4 style="margin-top: 7px;"><strong>Submit
+                                                                                Application</strong></h4>
                                                                     </div>
                                                                     <div class="col text-right">
                                                                         <input type="hidden" id="app_id">
-                                                                        <br><button class="btn btn-success" onclick="applyUser('<?php echo $modalId ?>', '<?php echo $user_id ?>')" style="margin-bottom: 20px;">Submit Resume</button>
+                                                                        <br><button class="btn btn-success"
+                                                                            onclick="applyUser('<?php echo $modalId ?>', '<?php echo $user_id ?>')"
+                                                                            style="margin-bottom: 20px;">Submit Resume</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -731,7 +787,7 @@ if ($stmt->errorCode() !== '00000') {
                                                 </div>
                                             </div>
                                         </div>
-                                <?php }
+                                    <?php }
                                 } ?>
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
@@ -791,6 +847,9 @@ if ($stmt->errorCode() !== '00000') {
         </div>
     </footer>
 
+    <!-- <div id="id01" class="modal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"> -->
+
+
     <!-- Footer Section End -->
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -810,7 +869,7 @@ if ($stmt->errorCode() !== '00000') {
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var map = L.map('map').setView([14.6577, 120.9842], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -820,10 +879,10 @@ if ($stmt->errorCode() !== '00000') {
             var caloocanBoundary = L.geoJSON().addTo(map);
 
             // Load the boundary data and add it to the map
-            $.getJSON('boundary.geojson1.json', function(data) {
+            $.getJSON('boundary.geojson1.json', function (data) {
                 caloocanBoundary.addData(data);
 
-                caloocanBoundary.setStyle(function(feature) {
+                caloocanBoundary.setStyle(function (feature) {
                     return {
                         fillColor: 'transparent',
                         fillOpacity: 0,
@@ -832,7 +891,7 @@ if ($stmt->errorCode() !== '00000') {
                     };
                 });
 
-                caloocanBoundary.eachLayer(function(layer) {
+                caloocanBoundary.eachLayer(function (layer) {
                     layer.bindPopup("Barangay " + layer.feature.properties.NAME_3);
                 });
 
@@ -863,7 +922,7 @@ if ($stmt->errorCode() !== '00000') {
             var signUpButton = $("#signUp");
 
             // Add a change event handler
-            checkbox.change(function() {
+            checkbox.change(function () {
                 // Check if the checkbox is checked
                 if (checkbox.is(":checked")) {
                     // Checkbox is checked
@@ -880,8 +939,7 @@ if ($stmt->errorCode() !== '00000') {
         });
 
         function openLoginModal() {
-            $('#id01').modal('show');
-            console.log("modal is open")
+            $("#id01").css("display", "block");
         }
 
         function hideModal(modalId) {
@@ -913,7 +971,7 @@ if ($stmt->errorCode() !== '00000') {
             var jobspecItems = jobspec.split(",");
 
             // Loop through the items and create list items
-            $.each(jobspecItems, function(index, item) {
+            $.each(jobspecItems, function (index, item) {
                 // Remove any leading/trailing whitespace
                 item = item.trim();
 
@@ -962,7 +1020,7 @@ if ($stmt->errorCode() !== '00000') {
                         payload: JSON.stringify(payload),
                         setFunction: 'applyJobUser'
                     },
-                    success: function(response) {
+                    success: function (response) {
                         data = JSON.parse(response);
                         Swal.fire({
                             title: data.title,
@@ -1036,7 +1094,7 @@ if ($stmt->errorCode() !== '00000') {
                         payload: JSON.stringify(payload),
                         setFunction: 'createUser'
                     },
-                    success: function(response) {
+                    success: function (response) {
                         data = JSON.parse(response);
                         Swal.fire({
                             title: data.title,
@@ -1049,7 +1107,7 @@ if ($stmt->errorCode() !== '00000') {
                         });
                         //for normal UI AHAHAHHAHAHA
                         // swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 2000);
                     }
@@ -1127,7 +1185,7 @@ if ($stmt->errorCode() !== '00000') {
                         payload: JSON.stringify(payload),
                         setFunction: 'createOwner'
                     },
-                    success: function(response) {
+                    success: function (response) {
                         data = JSON.parse(response);
                         Swal.fire({
                             title: data.title,
@@ -1140,7 +1198,7 @@ if ($stmt->errorCode() !== '00000') {
                         });
                         //for normal UI AHAHAHHAHAHA
                         // swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 2000);
                     }
@@ -1175,7 +1233,7 @@ if ($stmt->errorCode() !== '00000') {
                     payload: JSON.stringify(payload),
                     setFunction: 'loginUser'
                 },
-                success: function(response) {
+                success: function (response) {
                     data = JSON.parse(response);
                     Swal.fire({
                         title: data.title,
@@ -1187,12 +1245,12 @@ if ($stmt->errorCode() !== '00000') {
                         showCancelButton: false,
                     });
                     if (data.role == 1) {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.href = "ceipo/index.php";
                         }, 2000);
 
                     } else {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 2000);
                     }
