@@ -389,7 +389,7 @@ if ($stmt->errorCode() !== '00000') {
     </div>
 
     <!-- modal for business create -->
-    <div id="id03" class="modal">
+    <div id="id03" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
