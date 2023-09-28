@@ -93,7 +93,7 @@ if (isset($_SESSION['ownerId']) || $_SESSION['ownerId'] != "") {
     FROM business_applicant AS bl
     LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
     LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-    WHERE bl.bus_id = :id
+    WHERE (bl.bus_id = :id AND bl.status = 1)
     AND (ap.app_id IS NULL OR ap.app_id <> :app_id);    
     ";
 } else {
@@ -102,7 +102,7 @@ if (isset($_SESSION['ownerId']) || $_SESSION['ownerId'] != "") {
             FROM business_applicant AS bl
             LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
             LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-            WHERE bl.bus_id = :id;";
+            WHERE bl.bus_id = :id AND bl.status = 1";
 }
 
 $pdo = Database::connection();
@@ -279,8 +279,8 @@ if ($stmt->errorCode() !== '00000') {
             </div>
         </div>
     </header>
-    <!-- <div id="id01" class="modal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"> -->
-    <div id="id01" tabindex="-1" role="dialog" style="z-index: 1;" class="modal">
+    <div id="id01" class="modal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <!-- <div id="id01" tabindex="-1" role="dialog" style="z-index: 1;" class="modal"> -->
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">

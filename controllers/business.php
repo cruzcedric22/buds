@@ -884,7 +884,7 @@ function addJob($request = null)
             ':jobSpec' => $commaSeparatedStringJobSpeci,
             ':degree' => $degree,
             ':year_exp' => $experience,
-            ':status' => 0 // Assuming 0 represents a certain status
+            ':status' => 1 // Assuming 1 represents a certain status
         )
     );
 
@@ -964,3 +964,40 @@ function edtJob($request = null)
         echo json_encode($msg);
     }
 };
+
+function edtJobStatus($request = null){
+    $jobId = $request->jobId;
+    $status = $request->status;
+
+    if($status == 1){
+        $sql = "UPDATE business_applicant SET status = 0 WHERE bus_applicant = :id";
+    }else{
+        $sql = "UPDATE business_applicant SET status = 1 WHERE bus_applicant = :id";
+    }
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute(
+        array(
+            ':id' => $jobId
+        )
+    );
+    if ($stmt->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    } else {
+        $msg['title'] = "Successful";
+        $msg['message'] = "Sucessfully Edited";
+        $msg['icon'] = "success";
+        echo json_encode($msg);
+    }
+
+
+
+};
+

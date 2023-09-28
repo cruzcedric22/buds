@@ -33,6 +33,7 @@ $bus_id = $_GET['a'];
       width: 100px;
       /* Adjust the width as needed */
     }
+
     .swal2-container {
       z-index: 9999;
     }
@@ -43,83 +44,82 @@ $bus_id = $_GET['a'];
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-            <div class="app-brand demo">
-              <a href="index.php" class="app-brand-link">
-                <span class="app-brand-logo demo">
-                  <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
-                </span>
-                <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
-              </a>
-                <a href="javascript:void(0);"
-                    class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
-                </a>
-            </div>
-            <div class="menu-inner-shadow"></div>
-            <ul class="menu-inner py-1">
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Business Profile</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-pin"></i>
-                            <div data-i18n="Analytics">Bulletin Board</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-info-circle"></i>
-                            <div data-i18n="Analytics">Details</div>
-                        </a>
-                    </li>
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Business Content</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "feature-post.php?a=" . $bus_id ?>" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-share"></i>
-                            <div data-i18n="Analytics">Feature Post</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "gallery.php?a=" . $bus_id ?>" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-photo-album"></i>
-                            <div data-i18n="Analytics">Gallery</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "reply.php?a=" . $bus_id ?>" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-message-rounded"></i>
-                            <div data-i18n="Analytics">Comments & Rating</div>
-                        </a>
-                    </li>
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Business Document</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "requirement.php?a=" . $bus_id ?>" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-paperclip"></i>
-                            <div data-i18n="Analytics">Requirements</div>
-                        </a>
-                    </li>
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Job Applicants</span>
-                    </li>
-                    <li class="menu-item active">
-                        <a href="<?php echo "job_position.php?a=".$bus_id ?>" class="menu-link">
-                        <i class="menu-icon tf-icons bx bxs-user"></i>
-                        <div data-i18n="Analytics">Job Positions</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="<?php echo "job_applicant.php?a=".$bus_id ?>" class="menu-link">
-                        <i class="menu-icon tf-icons bx bxs-user-detail"></i>
-                        <div data-i18n="Analytics">Job Applicants</div>
-                        </a>
-                    </li>
-                </ul>
-        </aside>
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="index.php" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
+            </span>
+            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
+          </a>
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+        <div class="menu-inner-shadow"></div>
+        <ul class="menu-inner py-1">
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Business Profile</span>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-pin"></i>
+              <div data-i18n="Analytics">Bulletin Board</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-info-circle"></i>
+              <div data-i18n="Analytics">Details</div>
+            </a>
+          </li>
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Business Content</span>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "feature-post.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-share"></i>
+              <div data-i18n="Analytics">Feature Post</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "gallery.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-photo-album"></i>
+              <div data-i18n="Analytics">Gallery</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "reply.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+              <div data-i18n="Analytics">Comments & Rating</div>
+            </a>
+          </li>
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Business Document</span>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "requirement.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-paperclip"></i>
+              <div data-i18n="Analytics">Requirements</div>
+            </a>
+          </li>
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Job Applicants</span>
+          </li>
+          <li class="menu-item active">
+            <a href="<?php echo "job_position.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-user"></i>
+              <div data-i18n="Analytics">Job Positions</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="<?php echo "job_applicant.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-user-detail"></i>
+              <div data-i18n="Analytics">Job Applicants</div>
+            </a>
+          </li>
+        </ul>
+      </aside>
 
       <div class="layout-page">
         <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
@@ -324,6 +324,29 @@ $bus_id = $_GET['a'];
         </section>
       </div>
 
+      <!-- Modal for job status -->
+      <div class="modal fade" id="jobStatus">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Status</h5>
+              <button type="button" onclick="closeModalJobStatus()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h3 id="jobStatusText" style="text-align: center; color: black;"></h3>
+              <input type="hidden" id="jobStatusId">
+              <input type="hidden" id="jobStatusNum">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="closeModalJobStatus()">Close</button>
+              <button type="button" class="btn btn-primary" onclick="jobStatusEdt()">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
       <script src="plugins/assets/vendor/js/bootstrap.js"></script>
@@ -361,60 +384,6 @@ $bus_id = $_GET['a'];
             removeAuthorDiv(this, key);
           });
         });
-
-        function editJob(id, pos, jobdesc, jobspec, degree, exp) {
-          $('#modalPos').modal('show');
-          $('#edtPos').val(pos.replaceAll('_', ' '));
-          $('#edtjobDesc').val(jobdesc.replaceAll('_', ' '));
-          $('#degree').val(degree.replaceAll('_', ' '));
-          $('#experience').val(exp.replaceAll('_', ' '));
-          $('#hidden_id').val(id);
-
-          // Clear the previous content of #uiJobDesc1
-          $("#uiJobDesc1").empty();
-
-          // Declare the jobspecItems array as an empty array
-          var jobspecItems = [];
-
-          var jobsec = jobspec.replaceAll('_', ' ');
-
-          jobspecItems = jobsec.split(',');
-          $.each(jobspecItems, function(index, item) {
-            // Remove any leading/trailing whitespace
-            item = item.trim();
-
-            // Skip empty items
-            if (item !== '') {
-              // Create a new div element with the specified structure
-              var newDiv = $("<div class='input-group'></div>");
-
-              // Create an input element and set its value
-              var input = $("<input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'>");
-              input.val(item);
-
-              // Create a button element with the specified attributes
-              var button = $("<button type='button' class='btn btn-icon btn-success minus-button-jobSpec1'><i class='bx bx-minus'></i></button>");
-              button.attr('data-key', item);
-
-              // Append the input and button elements to the new div
-              newDiv.append(input, button);
-
-              // Append the new div to #uiJobDesc1
-              $("#uiJobDesc1").append(newDiv);
-            }
-          });
-
-          // Create the plus variable outside the loop
-          var plus = $(
-            "<div class='input-group'><input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'><button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button></div>"
-          );
-
-          // Append the plus variable outside the loop
-          $("#uiJobDesc1").append(plus);
-        };
-
-
-
 
         function addJobSpec1() {
           let allVal = [];
@@ -596,8 +565,106 @@ $bus_id = $_GET['a'];
             }
           });
         };
-      </script>
 
+        function editJob(id, pos, jobdesc, jobspec, degree, exp) {
+          $('#modalPos').modal('show');
+          $('#edtPos').val(pos.replaceAll('_', ' '));
+          $('#edtjobDesc').val(jobdesc.replaceAll('_', ' '));
+          $('#degree').val(degree.replaceAll('_', ' '));
+          $('#experience').val(exp.replaceAll('_', ' '));
+          $('#hidden_id').val(id);
+
+          // Clear the previous content of #uiJobDesc1
+          $("#uiJobDesc1").empty();
+
+          // Declare the jobspecItems array as an empty array
+          var jobspecItems = [];
+
+          var jobsec = jobspec.replaceAll('_', ' ');
+
+          jobspecItems = jobsec.split(',');
+          $.each(jobspecItems, function(index, item) {
+            // Remove any leading/trailing whitespace
+            item = item.trim();
+
+            // Skip empty items
+            if (item !== '') {
+              // Create a new div element with the specified structure
+              var newDiv = $("<div class='input-group'></div>");
+
+              // Create an input element and set its value
+              var input = $("<input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'>");
+              input.val(item);
+
+              // Create a button element with the specified attributes
+              var button = $("<button type='button' class='btn btn-icon btn-success minus-button-jobSpec1'><i class='bx bx-minus'></i></button>");
+              button.attr('data-key', item);
+
+              // Append the input and button elements to the new div
+              newDiv.append(input, button);
+
+              // Append the new div to #uiJobDesc1
+              $("#uiJobDesc1").append(newDiv);
+            }
+          });
+
+          // Create the plus variable outside the loop
+          var plus = $(
+            "<div class='input-group'><input class='form-control addJobSpec1' id='exampleFormControlTextarea1' onkeydown='handleJobSpec1Input(event)'><button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button></div>"
+          );
+
+          // Append the plus variable outside the loop
+          $("#uiJobDesc1").append(plus);
+        };
+
+        function edtJobStatus(id, status) {
+          $('#jobStatus').modal('show');
+          if (status == 0) {
+            $('#jobStatusText').text("Are you sure you want to set this job to active");
+          } else {
+            $('#jobStatusText').text("Are you sure you want to set this job to inactive");
+          }
+          $('#jobStatusId').val(id);
+          $('#jobStatusNum').val(status);
+        };
+
+        function closeModalJobStatus() {
+          $('#jobStatus').modal('hide');
+        };
+
+        function jobStatusEdt() {
+          var jobId = $('#jobStatusId').val();
+          var status = $('#jobStatusNum').val();
+
+          var payload = {
+            jobId:jobId,
+            status:status
+          }
+
+          $.ajax({
+            type: "POST",
+            url: 'controllers/business.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'edtJobStatus'
+            },
+            success: function(response) {
+              var data = JSON.parse(response);
+              Swal.fire({
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                customClass: {
+                  confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+              });
+              window.location.reload();
+            }
+          });
+
+        };
+      </script>
 </body>
 
 </html>
