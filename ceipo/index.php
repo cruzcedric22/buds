@@ -1,22 +1,19 @@
-<?php 
+<?php
 session_start();
-if(empty( $_SESSION['ownerId'] )){
-header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-    exit; 
+if (empty($_SESSION['ownerId'])) {
+  header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+  exit;
 }
 ?>
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
-  data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Business Dashboard</title>
   <meta name="description" content="">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="plugins/assets/vendor/fonts/boxicons.css">
   <link rel="stylesheet" href="plugins/assets/vendor/css/core.css" class="template-customizer-core-css">
@@ -133,9 +130,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
         </ul>
       </aside>
       <div class="layout-page">
-        <nav
-          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-          id="layout-navbar">
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
             <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
               <i class="bx bx-menu bx-sm"></i>
@@ -146,7 +141,11 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="plugins/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    <?php if ($_SESSION['photo'] != "") { ?>
+                      <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt class="w-px-40 h-auto rounded-circle" />
+                    <?php } else { ?>
+                      <img src="img/testimonial-author/unknown.jpg" alt class="w-px-40 h-auto rounded-circle" />
+                    <?php } ?>
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -155,13 +154,16 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="plugins/assets/img/avatars/buds-with-text.png" alt
-                              class="w-px-40 h-auto rounded-circle" />
+                            <?php if ($_SESSION['photo'] != "") { ?>
+                              <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt class="w-px-40 h-auto rounded-circle" />
+                            <?php } else { ?>
+                              <img src="img/testimonial-author/unknown.jpg" alt class="w-px-40 h-auto rounded-circle" />
+                            <?php } ?>
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                        <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
-                        <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
+                          <span class="fw-semibold d-block"><?php echo $_SESSION['lname'] . ', ' . $_SESSION['fname'] ?></span>
+                          <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
                         </div>
                       </div>
                     </a>
