@@ -1,10 +1,13 @@
 <?php 
+session_start();
 include './includes/config.php';
 
-$sql = "SELECT * FROM business_applicant";
+$id = $_SESSION['bus_id'];
+
+$sql = "SELECT * FROM business_applicant WHERE bus_id = :id";
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
-
+$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 
 $data = [];
 
