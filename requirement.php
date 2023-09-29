@@ -338,9 +338,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -378,9 +378,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -418,9 +418,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -458,9 +458,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -498,9 +498,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);

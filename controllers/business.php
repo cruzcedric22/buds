@@ -965,13 +965,14 @@ function edtJob($request = null)
     }
 };
 
-function edtJobStatus($request = null){
+function edtJobStatus($request = null)
+{
     $jobId = $request->jobId;
     $status = $request->status;
 
-    if($status == 1){
+    if ($status == 1) {
         $sql = "UPDATE business_applicant SET status = 0 WHERE bus_applicant = :id";
-    }else{
+    } else {
         $sql = "UPDATE business_applicant SET status = 1 WHERE bus_applicant = :id";
     }
     $pdo = Database::connection();
@@ -996,8 +997,479 @@ function edtJobStatus($request = null){
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-
-
-
 };
 
+function addPics($request = null)
+{
+    // Check if 'bus_id' session variable is set
+    if (isset($_SESSION['bus_id'])) {
+        $id = $_SESSION['bus_id'];
+        $msg = array();
+        $sql = "SELECT pic1 FROM business_carousel WHERE bus_id = :id";
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+        $stmt->execute();
+        $numRows1 = $stmt->rowCount();
+        if ($numRows1 == 0) {
+            if (
+                !empty($_FILES['pic1']['name']) &&
+                !empty($_FILES['pic2']['name']) &&
+                !empty($_FILES['pic3']['name']) &&
+                !empty($_FILES['pic4']['name'])
+            ) {
+                // Define the target directory
+                $targetDirectory = '../img/gallery1/';
+
+                // Check if the target directory exists, and create it if not
+                if (!is_dir($targetDirectory)) {
+                    mkdir($targetDirectory, 0755, true);
+                }
+
+                // Initialize your PDO connection (assuming you have a class named Database for this)
+                $pdo = Database::connection();
+
+                // Define valid image extensions and initialize an array to store error messages
+                $validImageExtensions = ['jpg', 'jpeg', 'png'];
+                $errorMsgs = [];
+
+                // Initialize an array to store the generated filenames
+                $newImageNames = [];
+
+                // Loop through each file input
+                for ($i = 1; $i <= 4; $i++) {
+                    $fieldName = 'pic' . $i;
+                    $filename = $_FILES[$fieldName]['name'];
+                    $size = $_FILES[$fieldName]['size'];
+                    $tmp_name = $_FILES[$fieldName]['tmp_name'];
+
+                    $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+                    $imageExtension = strtolower($imageExtension);
+
+                    // Check if the file extension is valid
+                    if (!in_array($imageExtension, $validImageExtensions)) {
+                        $errorMsgs[] = "Invalid image extension for $fieldName";
+                    }
+
+                    // Check if the file size is within the limit
+                    if ($size > 512000) {
+                        $errorMsgs[] = "Image size is too large for $fieldName";
+                    }
+
+                    // Generate a unique filename
+                    $newImageName = uniqid() . '.' . $imageExtension;
+                    $targetPath = $targetDirectory . $newImageName;
+
+                    // Move the uploaded file to the destination directory
+                    if (!move_uploaded_file($tmp_name, $targetPath)) {
+                        $errorMsgs[] = "Failed to move uploaded image for $fieldName";
+                    } else {
+                        // Store the generated filename in the array
+                        $newImageNames[] = $newImageName;
+                    }
+                }
+
+                // Check if there are any error messages
+                if (!empty($errorMsgs)) {
+                    $msg['title'] = "Warning";
+                    $msg['message'] = implode("\n", $errorMsgs);
+                    $msg['icon'] = "warning";
+                    $msg['status'] = "error";
+                    echo json_encode($msg);
+                } else {
+                    // Insert the filenames into the database
+                    $sql = "INSERT INTO business_carousel (bus_id, pic1, pic2, pic3, pic4) VALUES (:id, :pic1, :pic2, :pic3, :pic4)";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+
+                    // Assign the generated filenames to the variables
+                    $stmt->bindParam(':pic1', $newImageNames[0], PDO::PARAM_STR);
+                    $stmt->bindParam(':pic2', $newImageNames[1], PDO::PARAM_STR);
+                    $stmt->bindParam(':pic3', $newImageNames[2], PDO::PARAM_STR);
+                    $stmt->bindParam(':pic4', $newImageNames[3], PDO::PARAM_STR);
+
+                    if ($stmt->execute()) {
+                        $msg['title'] = "Successful";
+                        $msg['message'] = "Success";
+                        $msg['icon'] = "success";
+                        $msg['status'] = "success";
+                        echo json_encode($msg);
+                    } else {
+                        $errorInfo = $stmt->errorInfo();
+                        $errorMsg = "SQL Error: " . $errorInfo[2];
+                        // Handle the error as needed (e.g., logging, displaying an error message)
+                        $msg['title'] = "Error";
+                        $msg['message'] = $errorMsg;
+                        $msg['icon'] = "error";
+                        echo json_encode($msg);
+                    }
+                }
+            } else {
+                $msg['title'] = "Error";
+                $msg['message'] = "Upload an image for all the fields";
+                $msg['icon'] = "error";
+                $msg['status'] = "error";
+                echo json_encode($msg);
+            }
+        } else {
+
+            if (!empty($_FILES['pic1']['name'])) {
+                $filename = $_FILES['pic1']['name'];
+                $size = $_FILES['pic1']['size'];
+                $tmp_name = $_FILES['pic1']['tmp_name'];
+
+                $validImageExtensions = ['jpg', 'jpeg', 'png'];
+                $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+                $imageExtension = strtolower($imageExtension);
+
+                if (!in_array($imageExtension, $validImageExtensions)) {
+                    $msg['title'] = "Warning";
+                    $msg['message'] = "Invalid image extension";
+                    $msg['icon'] = "warning";
+                    $msg['status'] = "error";
+                    echo json_encode($msg);
+                } elseif ($size > 512000) {
+                    $msg['title'] = "Warning";
+                    $msg['message'] = "Image size is too large";
+                    $msg['icon'] = "warning";
+                    $msg['status'] = "error";
+                    echo json_encode($msg);
+                }
+
+                $newImageName = uniqid() . '.' . $imageExtension;
+                $targetDirectory = '../img/requirements/';
+                $targetPath = $targetDirectory . $newImageName;
+
+                if (move_uploaded_file($tmp_name, $targetPath)) {
+                    $sql = "UPDATE business_requirement SET bus_mayorpermit = :clearance WHERE bus_id = :id";
+                    $pdo = Database::connection();
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute(
+                        array(
+                            ':clearance' => $newImageName,
+                            ':id' => $id
+                        )
+                    );
+                    if ($stmt->errorCode() !== '00000') {
+                        $errorInfo = $stmt->errorInfo();
+                        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                        // Handle the error as needed (e.g., logging, displaying an error message)
+                        $msg['title'] = "Error";
+                        $msg['message'] = $errorMsg;
+                        $msg['icon'] = "error";
+                        echo json_encode($msg);
+                    } else {
+                        $msg['title'] = "Successful";
+                        $msg['message'] = "Sucessfully Updated";
+                        $msg['icon'] = "success";
+                        $msg['status'] = "success";
+                        echo json_encode($msg);
+                    }
+                } else {
+                    $msg['title'] = "Error";
+                    $msg['message'] = "Failed to move uploaded image to destination";
+                    $msg['icon'] = "error";
+                    $msg['status'] = "error";
+                    $msg['debug'] = $_FILES; // Add this for debugging
+                    echo json_encode($msg);
+                }
+            }
+        }
+    }
+};
+
+function edtPic1($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['pic1']['name'])) {
+        $filename = $_FILES['pic1']['name'];
+        $size = $_FILES['pic1']['size'];
+        $tmp_name = $_FILES['pic1']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/gallery1/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_carousel SET pic1 = :pic1 WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':pic1' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};
+
+function edtPic2($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['pic2']['name'])) {
+        $filename = $_FILES['pic2']['name'];
+        $size = $_FILES['pic2']['size'];
+        $tmp_name = $_FILES['pic2']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/gallery1/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_carousel SET pic2 = :pic2 WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':pic2' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};
+
+function edtPic3($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['pic3']['name'])) {
+        $filename = $_FILES['pic3']['name'];
+        $size = $_FILES['pic3']['size'];
+        $tmp_name = $_FILES['pic3']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/gallery1/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_carousel SET pic3 = :pic3 WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':pic3' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};
+
+function edtPic4($request = null)
+{
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['pic4']['name'])) {
+        $filename = $_FILES['pic4']['name'];
+        $size = $_FILES['pic4']['size'];
+        $tmp_name = $_FILES['pic4']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/gallery1/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_carousel SET pic4 = :pic4 WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':pic4' => $newImageName,
+                    ':id' => $id
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};

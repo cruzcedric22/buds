@@ -1,11 +1,27 @@
 <?php
 session_start();
 // echo $_SESSION['ownerId'];
+require_once './includes/config.php';
 
 if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
     header('Location: manage.php');
 }
 $bus_id = $_GET['a'];
+
+$sql = "SELECT * FROM business_carousel WHERE bus_id = :id";
+$pdo = Database::connection();
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':id', $bus_id, PDO::PARAM_STR);
+$stmt->execute();
+$numRows1 = $stmt->rowCount();
+$datas = $stmt->fetchAll();
+
+foreach ($datas as $data) {
+    $pic1 = $data['pic1'];
+    $pic2 = $data['pic2'];
+    $pic3 = $data['pic3'];
+    $pic4 = $data['pic4'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -207,64 +223,108 @@ $bus_id = $_GET['a'];
                         </ul>
                     </div>
                 </nav>
-    
+
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="card mb-4">
+                                <div class="card mb-4 p-4">
                                     <h3 class="card-header"><strong>Gallery</strong></h3>
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start align-items-sm-center gap-2 ">
-                                            <div class="button-wrapper">
-                                                <label for="upload" class="btn btn-success mb-4" tabindex="0">
-                                                    <span class="d-none d-sm-block">Upload new photo</span>
-                                                    <i class="bx bx-upload d-block d-sm-none"></i>
-                                                    <input type="file" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg">
-                                                </label>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-lg-4 mb-3">
+                                            <div class="card p-4">
+                                                <div class="card-body">
+                                                    <h3 class="card-title"><b>Picture 1</b></h3>
+                                                    <img class="img-fluid d-flex mx-auto" src="<?php echo "img/gallery1/" . $pic1 ?>" alt="Card image cap" />
+                                                    <br>
+                                                    <div class="mb-3 row align-items-center">
+                                                        <label for="fileUpload" class="form-label">Upload File</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="file" name="pic1" class="form-control" id="fileUpload">
+                                                        </div>
+                                                    </div>
+                                                    <?php if ($numRows1 == 1) { ?>
+                                                        <div class="col-sm-2">
+                                                            <button type="button" onclick="EdtPic1()" class="btn btn-success">Update</button>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <div class="thumbnail img-responsive">
-                                                        <img src="plugins/assets/img/avatars/5.png" alt="img">
+                                        <div class="col-md-5 col-lg-4 mb-3">
+                                            <div class="card p-4">
+                                                <div class="card-body">
+                                                    <h3 class="card-title"><b>Picture 2</b></h3>
+                                                    <img class="img-fluid d-flex mx-auto" src="<?php echo "img/gallery1/" . $pic2 ?>" alt="Card image cap" />
+                                                    <br>
+                                                    <div class="mb-3 row align-items-center">
+                                                        <label for="fileUpload" class="form-label">Upload File</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="file" name="pic2" class="form-control" id="fileUpload">
+                                                        </div>
                                                     </div>
+                                                    <?php if ($numRows1 == 1) { ?>
+                                                        <div class="col-sm-2">
+                                                            <button type="button" onclick="EdtPic2()" class="btn btn-success">Update</button>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
-                                                <div class="col-sm-3">
-                                                    <div class="thumbnail img-responsive">
-                                                        <img src="plugins/assets/img/avatars/1.png" alt="img">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 col-lg-4 mb-3">
+                                            <div class="card p-4">
+                                                <div class="card-body">
+                                                    <h3 class="card-title"><b>Picture 3</b></h3>
+                                                    <img class="img-fluid d-flex mx-auto" src="<?php echo "img/gallery1/" .  $pic3 ?>" alt="Card image cap" />
+                                                    <br>
+                                                    <div class="mb-3 row align-items-center">
+                                                        <label for="fileUpload" class="form-label">Upload File</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="file" name="pic3" class="form-control" id="fileUpload">
+                                                        </div>
                                                     </div>
+                                                    <?php if ($numRows1 == 1) { ?>
+                                                        <div class="col-sm-2">
+                                                            <button type="button" onclick="EdtPic3()" class="btn btn-success">Update</button>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 col-lg-4 mb-3">
+                                            <div class="card p-4">
+                                                <div class="card-body">
+                                                    <h3 class="card-title"><b>Picture 4</b></h3>
+                                                    <img class="img-fluid d-flex mx-auto" src="<?php echo "img/gallery1/" . $pic4 ?>" alt="Card image cap" />
+                                                    <br>
+                                                    <div class="mb-3 row align-items-center">
+                                                        <label for="fileUpload" class="form-label">Upload File</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="file" name="pic4" class="form-control" id="fileUpload">
+                                                        </div>
+                                                    </div>
+                                                    <?php if ($numRows1 == 1) { ?>
+                                                        <div class="col-sm-2">
+                                                            <button type="button" onclick="EdtPic4()" class="btn btn-success">Update</button>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-
-                                    <div id="modal" class="modal fade" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog modal-dialog-centered modal-sm">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalCenterTitle">View Image
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body text-center">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
+                                <?php if ($numRows1 == 0) { ?>
+                                    <div class="col-sm-2">
+                                        <button type="button" onclick="AddPictures()" class="btn btn-success">Submit</button>
+                                    </div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
-                    <div class="content-backdrop fade"></div>
                 </div>
             </div>
         </div>
-        <div class="layout-overlay layout-menu-toggle"></div>
-        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
 
     <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
@@ -272,6 +332,7 @@ $bus_id = $_GET['a'];
     <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="plugins/assets/vendor/js/menu.js"></script>
     <script src="plugins/assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script>
@@ -290,6 +351,195 @@ $bus_id = $_GET['a'];
                 $('.col-6, .row .thumbnail').removeClass('blur');
             });
         });
+
+        function AddPictures() {
+            var formData = new FormData();
+            var payload = {};
+
+
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'addPics');
+
+            // Get the selected files
+            var picInputs = document.querySelectorAll('input[type="file"]');
+            picInputs.forEach(function(input) {
+                var files = input.files;
+                if (files.length > 0) {
+                    formData.append(input.name, files[0]);
+                }
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'controllers/business.php', true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        console.log('Data received:', data); // For debugging
+                        swal.fire(data.title, data.message, data.icon);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        // Handle error
+                        console.log('Error:', xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+        };
+
+        function EdtPic1(){
+            var formData = new FormData();
+            var payload = {};
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'edtPic1');
+
+            var pic1Input = $("input[name='pic1']")[0]; // Assuming it's the first input element
+            var pic1File = pic1Input.files[0];
+
+            formData.append('pic1', pic1File);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+
+        };
+
+        function EdtPic2(){
+            var formData = new FormData();
+            var payload = {};
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'edtPic2');
+
+            var pic2Input = $("input[name='pic2']")[0]; // Assuming it's the first input element
+            var pic2File = pic2Input.files[0];
+
+            formData.append('pic2', pic2File);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+
+        };
+
+        function EdtPic3(){
+            var formData = new FormData();
+            var payload = {};
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'edtPic3');
+
+            var pic3Input = $("input[name='pic3']")[0]; // Assuming it's the first input element
+            var pic3File = pic3Input.files[0];
+
+            formData.append('pic3', pic3File);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+
+        };
+
+        function EdtPic4(){
+            var formData = new FormData();
+            var payload = {};
+            formData.append('payload', JSON.stringify(payload));
+            formData.append('setFunction', 'edtPic4');
+
+            var pic4Input = $("input[name='pic4']")[0]; // Assuming it's the first input element
+            var pic4File = pic4Input.files[0];
+
+            formData.append('pic4', pic4File);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "controllers/business.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log("Server response:", xhr.responseText);
+                    if (xhr.status === 200) {
+                        // Handle success response
+                        var data = JSON.parse(xhr.responseText);
+                        // console.log("Data received:", data);
+                        swal.fire(data.title, data.message, data.icon);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        // Handle error
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the FormData object
+            xhr.send(formData);
+
+        };
     </script>
 
 </body>
