@@ -126,7 +126,6 @@ if ($stmt->errorCode() !== '00000') {
 
 
 $sql3 = "SELECT * FROM business_carousel WHERE bus_id = :id";
-$pdo = Database::connection();
 $stmt3 = $pdo->prepare($sql3);
 $stmt3->bindParam(':id', $id, PDO::PARAM_STR);
 $stmt3->execute();
@@ -139,6 +138,15 @@ foreach ($datas3 as $data) {
     $pic3 = $data['pic3'];
     $pic4 = $data['pic4'];
 }
+
+$sql4 = "SELECT * FROM business_post WHERE bus_id = :id";
+$stmt4 = $pdo->prepare($sql4);
+$stmt4->bindParam(':id', $id, PDO::PARAM_STR);
+$stmt4->execute();
+$numRows2 = $stmt4->rowCount();
+$datas4 = $stmt4->fetchAll();
+
+
 
 ?>
 <!DOCTYPE html>
@@ -510,6 +518,7 @@ foreach ($datas3 as $data) {
 
                                 <div class="pd-widget">
                                     <h4>GALLERYS</h4>
+                                    <?php if($numRows1 > 0){ ?>
                                     <div class="fp-slider owl-carousel">
                                         <?php if (isset($pic1)) { ?>
                                             <div class="fp-item set-bg" data-setbg=<?php echo "img/gallery1/" . $pic1 ?>>
@@ -544,6 +553,9 @@ foreach ($datas3 as $data) {
                                             </div>
                                         <?php } ?>
                                     </div>
+                                    <?php }else{ ?>
+                                        <p class="h4 text-muted mb-2 mt-0 pt-0">No available post</p>
+                                    <?php } ?>
                                 </div>
                                 <div class="pd-widget">
                                     <h4>Map Location</h4>
@@ -559,34 +571,25 @@ foreach ($datas3 as $data) {
                                         <br>
                                         <h4>FEATURE POST</h4>
                                     </div>
-                                    <div class="blog-item">
-                                        <div class="bi-pic">
-                                            <img src="img/post/1.jpg" alt="">
-                                        </div>
-                                        <div class="bi-text">
-                                            <h5><a href="#">NEW PROMO: Mix & Match</a></h5>
-                                            <ul>
-                                                <li>April 30, 2023</li>
-                                            </ul>
-                                            <p>You can make your own combination. Enjoy the New Promo Combo Mix & Match
-                                                for the first time for only 89 pesos!</p>
-                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
-                                        </div>
-                                    </div>
-                                    <div class="blog-item">
-                                        <div class="bi-pic">
-                                            <img src="img/post/2.jpg" alt="">
-                                        </div>
-                                        <div class="bi-text">
-                                            <h5><a href="#">Updated Price: Family Meal</a></h5>
-                                            <ul>
-                                                <li>June 29, 2023</li>
-                                            </ul>
-                                            <p>Enjoy the Updated Price of our Family Meal for only 1,099 pesos! Visit
-                                                Jollibee Now!</p>
-                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
-                                        </div>
-                                    </div>
+                                    <?php if ($numRows2 > 0) {
+                                        foreach ($datas4 as $data2) { ?>
+                                            <div class="blog-item">
+                                                <div class="bi-pic">
+                                                    <img src="<?php echo "img/post/" . $data2['photo'] ?>" style="" height="200" width="300" alt="">
+                                                </div>
+                                                <div class="bi-text">
+                                                    <h5><?php echo $data2['post_title'] ?></h5>
+                                                    <ul>
+                                                        <li><?php echo $data2['post_desc'] ?></li>
+                                                    </ul>
+                                                    <p><?php echo $data2['post_date'] ?></p>
+                                                    <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
+                                                </div>
+                                            </div>
+                                        <?php }
+                                    } else { ?>
+                                        <p class="h4 text-muted mb-5 mt-0 pt-0">No available post</p>
+                                    <?php } ?>
                                 </div>
 
                                 <div class="blog-details-content">
