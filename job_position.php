@@ -194,6 +194,7 @@ $bus_id = $_GET['a'];
                         <thead>
                           <tr>
                             <th>Position</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>

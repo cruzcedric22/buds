@@ -1473,3 +1473,224 @@ function edtPic4($request = null)
         echo json_encode($msg);
     }
 };
+
+function uploadPost($request = null)
+{
+    $title = $request->title;
+    $desc = $request->desc;
+    $date = $request->date;
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['pic']['name'])) {
+        $filename = $_FILES['pic']['name'];
+        $size = $_FILES['pic']['size'];
+        $tmp_name = $_FILES['pic']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/post/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "INSERT INTO business_post(bus_id,post_title,post_desc,photo,post_date) VALUES (:id, :title, :desc, :photo, :date)";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':id' => $id,
+                    ':title' => $title,
+                    ':desc' => $desc,
+                    ':photo' => $newImageName,
+                    ':date' => $date
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $msg['title'] = "Error";
+        $msg['message'] = "No image uploaded";
+        $msg['icon'] = "error";
+        $msg['status'] = "error";
+        echo json_encode($msg);
+    }
+};
+
+function editPost($request = null)
+{
+    $titleEdt = $request->titleEdt;
+    $descEdt = $request->descEdt;
+    $dateEdt = $request->dateEdt;
+    $msg = array();
+    $id = $_SESSION['bus_id'];
+
+    if (!empty($_FILES['pic']['name'])) {
+        $filename = $_FILES['pic']['name'];
+        $size = $_FILES['pic']['size'];
+        $tmp_name = $_FILES['pic']['tmp_name'];
+
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions)) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image extension";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        } elseif ($size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Image size is too large";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetDirectory = '../img/post/';
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (move_uploaded_file($tmp_name, $targetPath)) {
+            $sql = "UPDATE business_post SET post_title = :title,post_desc = :desc,photo = :photo,post_date = :date WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':id' => $id,
+                    ':title' => $titleEdt,
+                    ':desc' => $descEdt,
+                    ':photo' => $newImageName,
+                    ':date' => $dateEdt
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+        } else {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES; // Add this for debugging
+            echo json_encode($msg);
+        }
+    } else {
+        $titleEdt = $request->titleEdt;
+        $descEdt = $request->descEdt;
+        $dateEdt = $request->dateEdt;
+        $msg = array();
+        $id = $_SESSION['bus_id'];
+
+       $sql = "UPDATE business_post SET post_title = :title,post_desc = :desc,post_date = :date WHERE bus_id = :id";
+            $pdo = Database::connection();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                array(
+                    ':id' => $id,
+                    ':title' => $titleEdt,
+                    ':desc' => $descEdt,
+                    ':date' => $dateEdt
+                )
+            );
+            if ($stmt->errorCode() !== '00000') {
+                $errorInfo = $stmt->errorInfo();
+                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                // Handle the error as needed (e.g., logging, displaying an error message)
+                $msg['title'] = "Error";
+                $msg['message'] = $errorMsg;
+                $msg['icon'] = "error";
+                echo json_encode($msg);
+            } else {
+                $msg['title'] = "Successful";
+                $msg['message'] = "Sucessfully Updated";
+                $msg['icon'] = "success";
+                $msg['status'] = "success";
+                echo json_encode($msg);
+            }
+    }
+};
+
+function edtPostStatus($request = null)
+{
+    $postId = $request->postId;
+    $status = $request->status;
+
+    if ($status == 1) {
+        $sql = "UPDATE business_post SET status = 0 WHERE bus_post_id = :id";
+    } else {
+        $sql = "UPDATE business_post SET status = 1 WHERE bus_post_id = :id";
+    }
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute(
+        array(
+            ':id' => $postId
+        )
+    );
+    if ($stmt->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    } else {
+        $msg['title'] = "Successful";
+        $msg['message'] = "Sucessfully Edited";
+        $msg['icon'] = "success";
+        echo json_encode($msg);
+    }
+};
