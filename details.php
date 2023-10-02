@@ -139,7 +139,7 @@ foreach ($datas3 as $data) {
     $pic4 = $data['pic4'];
 }
 
-$sql4 = "SELECT * FROM business_post WHERE bus_id = :id";
+$sql4 = "SELECT * FROM business_post WHERE bus_id = :id AND status = 1";
 $stmt4 = $pdo->prepare($sql4);
 $stmt4->bindParam(':id', $id, PDO::PARAM_STR);
 $stmt4->execute();
