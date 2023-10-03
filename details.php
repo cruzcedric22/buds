@@ -146,6 +146,8 @@ $stmt4->execute();
 $numRows2 = $stmt4->rowCount();
 $datas4 = $stmt4->fetchAll();
 
+$nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mname'] . " " . $_SESSION['lname'];
+
 
 
 ?>
@@ -518,42 +520,42 @@ $datas4 = $stmt4->fetchAll();
 
                                 <div class="pd-widget">
                                     <h4>GALLERYS</h4>
-                                    <?php if($numRows1 > 0){ ?>
-                                    <div class="fp-slider owl-carousel">
-                                        <?php if (isset($pic1)) { ?>
-                                            <div class="fp-item set-bg" data-setbg=<?php echo "img/gallery1/" . $pic1 ?>>
-                                                <div class="fp-text">
-                                                    <h5 class="title"><?php echo $bus_name ?></h5>
-                                                    <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                    <?php if ($numRows1 > 0) { ?>
+                                        <div class="fp-slider owl-carousel">
+                                            <?php if (isset($pic1)) { ?>
+                                                <div class="fp-item set-bg" data-setbg=<?php echo "img/gallery1/" . $pic1 ?>>
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        <?php  } ?>
-                                        <?php if ($pic2 != "") { ?>
-                                            <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic2 ?>">
-                                                <div class="fp-text">
-                                                    <h5 class="title"><?php echo $bus_name ?></h5>
-                                                    <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                            <?php  } ?>
+                                            <?php if ($pic2 != "") { ?>
+                                                <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic2 ?>">
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        <?php } ?>
-                                        <?php if ($pic3 != "") { ?>
-                                            <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic3 ?>">
-                                                <div class="fp-text">
-                                                    <h5 class="title"><?php echo $bus_name ?></h5>
-                                                    <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                            <?php } ?>
+                                            <?php if ($pic3 != "") { ?>
+                                                <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic3 ?>">
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        <?php } ?>
-                                        <?php if ($pic4 != "") { ?>
-                                            <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic4 ?>">
-                                                <div class="fp-text">
-                                                    <h5 class="title"><?php echo $bus_name ?></h5>
-                                                    <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                            <?php } ?>
+                                            <?php if ($pic4 != "") { ?>
+                                                <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic4 ?>">
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
-                                    <?php }else{ ?>
+                                            <?php } ?>
+                                        </div>
+                                    <?php } else { ?>
                                         <p class="h4 text-muted mb-2 mt-0 pt-0">No available post</p>
                                     <?php } ?>
                                 </div>
@@ -591,7 +593,7 @@ $datas4 = $stmt4->fetchAll();
                                         <p class="h4 text-muted mb-5 mt-0 pt-0">No available post</p>
                                     <?php } ?>
                                 </div>
-
+                                <!-- ito edit -->
                                 <div class="blog-details-content">
                                     <div class="bc-widget">
                                         <h4>3 REVIEWS</h4>
@@ -615,43 +617,20 @@ $datas4 = $stmt4->fetchAll();
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <!-- <div class="co-item reply-item">
+                                            <div class="co-item reply-item">
                                                 <div class="ci-pic">
                                                     <img src="img/testimonial-author/roy.jpg" alt="">
                                                 </div>
                                                 <div class="ci-text">
                                                     <h5>Roy Lewis Collo</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
                                                     <p>Tapos may reply dito uwu</p>
                                                     <ul>
                                                         <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
                                                     </ul>
                                                 </div>
-                                            </div> -->
-                                            <div class="co-item">
-                                                <div class="ci-pic">
-                                                    <img src="img/testimonial-author/ramil.jpg" alt="">
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>Princess Angelica Ramil</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                    <p>Comment to pero pangalawa naman </p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1,2023</li>
-                                                    </ul>
-                                                </div>
+                                            </div>
+                                            <div id="UIcommentAndRating">
+
                                             </div>
                                         </div>
                                     </div>
@@ -676,10 +655,13 @@ $datas4 = $stmt4->fetchAll();
                                             </fieldset>
                                         </div>
                                     </div>
-                                    <form action="#" class="review-form">
-                                        <textarea placeholder="Leave a Comment"></textarea>
-
-                                        <button type="submit" class="site-btn">Send</button>
+                                    <form class="review-form">
+                                        <textarea placeholder="Leave a Comment" id="commentVal"></textarea>
+                                        <input type="hidden" value="<?php echo $_SESSION['ownerId'] ?>" id="commentAndRatingId">
+                                        <input type="hidden" value="<?php echo $nameCommentRate ?>" id="nameUserComment">
+                                        <input type="hidden" value="<?php echo $_SESSION['photo'] ?>" id="photoCommentVal">
+                                        <input type="hidden" value="<?php echo $id ?>" id="commentRatingBusId">
+                                        <button type="button" onclick="commentAndRating()" class="site-btn">Send</button>
                                     </form>
                                 </div>
                             </div>
@@ -913,9 +895,6 @@ $datas4 = $stmt4->fetchAll();
 
 
 
-
-
-
             // Get a reference to the checkbox element
             var checkbox = $("#checkTerms");
             var signUpButton = $("#signUp");
@@ -936,6 +915,87 @@ $datas4 = $stmt4->fetchAll();
                 }
             });
         });
+        let commentsAndRatings = [];
+        var currentDate = new Date();
+        var options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        var formattedDate = currentDate.toLocaleDateString(undefined, options);
+
+        function commentAndRating() {
+            let comment = $("#commentVal").val();
+            let rating = parseInt($("input[name='rating']:checked").val(), 10);
+            let userid = $("#commentAndRatingId").val();
+            let name = $('#nameUserComment').val();
+            let photo = $('#photoCommentVal').val();
+            let bus_id = $('#commentRatingBusId').val();
+
+
+            if (commentsAndRatings.length >= 1) {
+                if (!comment) {
+                    alert("Please enter a comment.");
+                    return; // Exit the function if comment is missing
+                } else {
+                    // If there is already one rating in the array, only add the comment
+                    commentsAndRatings[0].comment = comment;
+                    let commentAndRating = {
+                        comment: comment,
+                    };
+                    commentsAndRatings.push(commentAndRating);
+                }
+
+            } else {
+                if (!rating) {
+                    alert("Please select a rating.");
+                    return; // Exit the function if rating is missing
+                }
+
+                let commentAndRating = {
+                    comment: comment,
+                    rating: rating
+                };
+                commentsAndRatings.push(commentAndRating);
+            }
+
+            // console.log(commentsAndRatings);
+
+            let latestCommentRatingPair = commentsAndRatings[commentsAndRatings.length - 1];
+            console.log(latestCommentRatingPair);
+            console.log(commentsAndRatings.length);
+            // Create a new div with the desired structure
+            let newDiv = $('<div class="co-item">' +
+                '<div class="ci-pic">' +
+                '<img src="' + photo + '" alt="User Photo">' +
+                '</div>' +
+                '<div class="ci-text">' +
+                '<h5>' + name + '</h5>' +
+                '<div class="pr-rating">' + getStarIcons(latestCommentRatingPair.rating) + '</div>' +
+                '<p>' + latestCommentRatingPair.comment + '</p>' +
+                '<ul>' +
+                '<li><i class="fa fa-clock-o"></i>' + formattedDate + '</li>' +
+                '</ul>' +
+                '</div>' +
+                '</div>');
+
+            // Append the new div to a container (e.g., a parent div with an ID)
+            $('#UIcommentAndRating').append(newDiv);
+
+            // loop for the comment and rating
+            // commentsAndRatings.forEach(function(commentRatingPair) {
+            //     $('#UIcommentAndRating').append();
+            // });
+        };
+
+        function getStarIcons(rating) {
+            // Generate star icons based on the rating
+            let starIcons = '';
+            for (let i = 0; i < rating; i++) {
+                starIcons += '<i class="fa fa-star" style="margin-right: 2px;"></i>';
+            }
+            return starIcons;
+        };
 
         function openLoginModal() {
             $("#id01").css("display", "block");
