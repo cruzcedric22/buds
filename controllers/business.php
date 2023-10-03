@@ -1632,32 +1632,32 @@ function editPost($request = null)
         $msg = array();
         $id = $_SESSION['bus_id'];
 
-       $sql = "UPDATE business_post SET post_title = :title,post_desc = :desc,post_date = :date WHERE bus_id = :id";
-            $pdo = Database::connection();
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(
-                array(
-                    ':id' => $id,
-                    ':title' => $titleEdt,
-                    ':desc' => $descEdt,
-                    ':date' => $dateEdt
-                )
-            );
-            if ($stmt->errorCode() !== '00000') {
-                $errorInfo = $stmt->errorInfo();
-                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                // Handle the error as needed (e.g., logging, displaying an error message)
-                $msg['title'] = "Error";
-                $msg['message'] = $errorMsg;
-                $msg['icon'] = "error";
-                echo json_encode($msg);
-            } else {
-                $msg['title'] = "Successful";
-                $msg['message'] = "Sucessfully Updated";
-                $msg['icon'] = "success";
-                $msg['status'] = "success";
-                echo json_encode($msg);
-            }
+        $sql = "UPDATE business_post SET post_title = :title,post_desc = :desc,post_date = :date WHERE bus_id = :id";
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(
+            array(
+                ':id' => $id,
+                ':title' => $titleEdt,
+                ':desc' => $descEdt,
+                ':date' => $dateEdt
+            )
+        );
+        if ($stmt->errorCode() !== '00000') {
+            $errorInfo = $stmt->errorInfo();
+            $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+            // Handle the error as needed (e.g., logging, displaying an error message)
+            $msg['title'] = "Error";
+            $msg['message'] = $errorMsg;
+            $msg['icon'] = "error";
+            echo json_encode($msg);
+        } else {
+            $msg['title'] = "Successful";
+            $msg['message'] = "Sucessfully Updated";
+            $msg['icon'] = "success";
+            $msg['status'] = "success";
+            echo json_encode($msg);
+        }
     }
 };
 
@@ -1690,6 +1690,41 @@ function edtPostStatus($request = null)
     } else {
         $msg['title'] = "Successful";
         $msg['message'] = "Sucessfully Edited";
+        $msg['icon'] = "success";
+        echo json_encode($msg);
+    }
+};
+
+function commentAndRating($request = null)
+{
+    $comment = $request->comment;
+    $rating = $request->rating;
+    $userid = $request->userid;
+    $bus_id = $request->bus_id;
+
+    $sql = "INSERT INTO business_reviews(bus_id,user_id,rating,comment) VALUES (:bus_id, :user_id, :rating, :comment)";
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute(
+        array(
+            ':bus_id' => $bus_id,
+            ':user_id' => $userid,
+            ':rating' => $rating,
+            ':comment' => $comment
+        )
+    );
+    if ($stmt->errorCode() !== '00000') {
+        $errorInfo = $stmt->errorInfo();
+        $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+        // Handle the error as needed (e.g., logging, displaying an error message)
+        $msg['title'] = "Error";
+        $msg['message'] = $errorMsg;
+        $msg['icon'] = "error";
+        echo json_encode($msg);
+    } else {
+        $msg['title'] = "Successful";
+        $msg['message'] = "Your Feedback has been sent";
         $msg['icon'] = "success";
         echo json_encode($msg);
     }

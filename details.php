@@ -641,7 +641,7 @@ $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mnam
                                             <h4>LEAVE A COMMENT</h4><br>
                                         </div>
                                         <div class="row">
-                                            <fieldset class="rating">
+                                            <fieldset id="ratingUi" class="rating">
                                                 <input type="radio" id="star5" name="rating" value="5" />
                                                 <label for="star5">5 stars</label>
                                                 <input type="radio" id="star4" name="rating" value="4" />
@@ -915,6 +915,8 @@ $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mnam
                 }
             });
         });
+
+        // for comment and ratings
         let commentsAndRatings = [];
         var currentDate = new Date();
         var options = {
@@ -934,8 +936,23 @@ $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mnam
 
 
             if (commentsAndRatings.length >= 1) {
+                rating = null
+                var payload = {
+                    comment: comment,
+                    rating: rating,
+                    userid: userid,
+                    bus_id: bus_id
+                };
                 if (!comment) {
-                    alert("Please enter a comment.");
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Please input a comment.",
+                        icon: "warning",
+                        customClass: {
+                            confirmButton: 'swal-confirm-button',
+                        },
+                        showCancelButton: false,
+                    });
                     return; // Exit the function if comment is missing
                 } else {
                     // If there is already one rating in the array, only add the comment
@@ -947,23 +964,60 @@ $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mnam
                 }
 
             } else {
-                if (!rating) {
-                    alert("Please select a rating.");
-                    return; // Exit the function if rating is missing
-                }
-
-                let commentAndRating = {
+                var payload = {
                     comment: comment,
-                    rating: rating
+                    rating: rating,
+                    userid: userid,
+                    bus_id: bus_id
                 };
-                commentsAndRatings.push(commentAndRating);
+
+                if (!rating) {
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Please input a rating.",
+                        icon: "warning",
+                        customClass: {
+                            confirmButton: 'swal-confirm-button',
+                        },
+                        showCancelButton: false,
+                    });
+                    return; // Exit the function if rating is missing
+                } else {
+                    let commentAndRating = {
+                        comment: comment,
+                        rating: rating
+                    };
+                    commentsAndRatings.push(commentAndRating);
+                    $('#ratingUi').html("");
+                }
             }
 
             // console.log(commentsAndRatings);
+            $.ajax({
+                    type: "POST",
+                    url: 'controllers/business.php',
+                    data: {
+                        payload: JSON.stringify(payload),
+                        setFunction: 'commentAndRating'
+                    },
+                    success: function(response) {
+                        data = JSON.parse(response);
+                        Swal.fire({
+                            title: data.title,
+                            text: data.message,
+                            icon: data.icon,
+                            customClass: {
+                                confirmButton: 'swal-confirm-button',
+                            },
+                            showCancelButton: false,
+                        });
+                        // window.location.reload();
+                    }
+                });
 
             let latestCommentRatingPair = commentsAndRatings[commentsAndRatings.length - 1];
-            console.log(latestCommentRatingPair);
-            console.log(commentsAndRatings.length);
+            // console.log(latestCommentRatingPair);
+            // console.log(commentsAndRatings.length);
             // Create a new div with the desired structure
             let newDiv = $('<div class="co-item">' +
                 '<div class="ci-pic">' +
@@ -979,13 +1033,12 @@ $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mnam
                 '</div>' +
                 '</div>');
 
-            // Append the new div to a container (e.g., a parent div with an ID)
-            $('#UIcommentAndRating').append(newDiv);
-
+            // Append the new div to a container (e.g., a parent div with an ID
             // loop for the comment and rating
             // commentsAndRatings.forEach(function(commentRatingPair) {
             //     $('#UIcommentAndRating').append();
             // });
+            $('#UIcommentAndRating').append(newDiv);
         };
 
         function getStarIcons(rating) {
