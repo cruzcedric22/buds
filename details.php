@@ -7,13 +7,14 @@ if (isset($_SESSION['role'])) {
         header('Location: ceipo/index.php');
     }
 }
-// ini_set('display_errors', 0);
-// ini_set('display_startup_errors', 0);
-// error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
 // print_r($_SESSION);
 
 
 $id = $_GET['ID'];
+$_SESSION['bus_id'] = $_GET['ID'];
 //old query
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
 $sql = "SELECT * FROM business_list AS bl 
@@ -87,7 +88,7 @@ if ($rs = $conn->query($sql)) {
     }
 }
 
-if (isset($_SESSION['ownerId']) || $_SESSION['ownerId'] != "") {
+if (isset($_SESSION['ownerId'])) {
     // Execute this block when 'ownerId' is set in the session.
     $sql = "SELECT *
     FROM business_applicant AS bl
@@ -122,6 +123,7 @@ if ($stmt->errorCode() !== '00000') {
     // Example: error_log("SQL Error: " . $errorInfo[2]);
 } else {
     $datas = $stmt->fetchAll();
+    $numRows = $stmt->rowCount();
 }
 
 
@@ -146,7 +148,10 @@ $stmt4->execute();
 $numRows2 = $stmt4->rowCount();
 $datas4 = $stmt4->fetchAll();
 
-$nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mname'] . " " . $_SESSION['lname'];
+if(isset($_SESSION['fname']) || isset($_SESSION['mname']) || isset($_SESSION['lname'])){
+    $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mname'] . " " . $_SESSION['lname'];
+}
+
 
 $sql5 = "SELECT * FROM business_reviews AS br 
 INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
@@ -157,6 +162,30 @@ $stmt5->bindParam(':id', $id, PDO::PARAM_STR);
 $stmt5->execute();
 $numRows3 = $stmt5->rowCount();
 $datas5 = $stmt5->fetchAll();
+
+
+if (isset($_SESSION['ownerId'])) {
+    $sql6 = "SELECT * FROM business_reviews AS br 
+    INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
+    INNER JOIN owner_list AS ol ON br.user_id = ol.ID
+    WHERE (br.bus_id = :id AND ol.ID = :userid)"; // Fixed the ON condition
+
+    $stmt6 = $pdo->prepare($sql6);
+    $stmt6->bindParam(':id', $id, PDO::PARAM_STR);
+    $stmt6->bindParam(':userid', $_SESSION['ownerId'], PDO::PARAM_STR); // Fixed variable name from $stmt to $stmt6
+    $stmt6->execute();
+
+    $numRows6 = $stmt6->rowCount();
+    $datas6 = $stmt6->fetchAll();
+
+    if ($stmt6->errorCode() !== '00000') {
+        $errorInfo = $stmt6->errorInfo(); // Fixed variable name from $stmt to $stmt6
+        // Log or handle the error appropriately.
+        echo "SQL Error: " . $errorInfo[2];
+    }
+
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -658,6 +687,7 @@ $datas5 = $stmt5->fetchAll();
                                         <div class="row">
                                             <h4>LEAVE A COMMENT</h4><br>
                                         </div>
+                                        <?php if($numRows6 === 0){ ?>
                                         <div class="row">
                                             <fieldset id="ratingUi" class="rating">
                                                 <input type="radio" id="star5" name="rating" value="5" />
@@ -672,6 +702,7 @@ $datas5 = $stmt5->fetchAll();
                                                 <label for="star1">1 star</label>
                                             </fieldset>
                                         </div>
+                                        <?php } ?>
                                     </div>
                                     <form class="review-form">
                                         <textarea placeholder="Leave a Comment" id="commentVal"></textarea>
@@ -679,7 +710,7 @@ $datas5 = $stmt5->fetchAll();
                                         <input type="hidden" value="<?php echo $nameCommentRate ?>" id="nameUserComment">
                                         <input type="hidden" value="<?php echo $_SESSION['photo'] ?>" id="photoCommentVal">
                                         <input type="hidden" value="<?php echo $id ?>" id="commentRatingBusId">
-                                        <button type="button" onclick="commentAndRating()" class="site-btn">Send</button>
+                                        <button type="button" onclick="commentAndRating('<?php echo $numRows6 ?>')" class="site-btn">Send</button>
                                     </form>
                                 </div>
                             </div>
@@ -944,120 +975,114 @@ $datas5 = $stmt5->fetchAll();
         };
         var formattedDate = currentDate.toLocaleDateString(undefined, options);
 
-        function commentAndRating() {
-            let comment = $("#commentVal").val();
-            let rating = parseInt($("input[name='rating']:checked").val(), 10);
-            let userid = $("#commentAndRatingId").val();
-            let name = $('#nameUserComment').val();
-            let photo = $('#photoCommentVal').val();
-            let bus_id = $('#commentRatingBusId').val();
+        function commentAndRating(userStats) {
+    let comment = $("#commentVal").val();
+    let rating = parseInt($("input[name='rating']:checked").val(), 10);
+    let userid = $("#commentAndRatingId").val();
+    let name = $('#nameUserComment').val();
+    let photo = $('#photoCommentVal').val();
+    let bus_id = $('#commentRatingBusId').val();
 
-
-            if (commentsAndRatings.length >= 1) {
-                rating = null
-                var payload = {
-                    comment: comment,
-                    rating: rating,
-                    userid: userid,
-                    bus_id: bus_id
-                };
-                if (!comment) {
-                    Swal.fire({
-                        title: "Warning",
-                        text: "Please input a comment.",
-                        icon: "warning",
-                        customClass: {
-                            confirmButton: 'swal-confirm-button',
-                        },
-                        showCancelButton: false,
-                    });
-                    return; // Exit the function if comment is missing
-                } else {
-                    // If there is already one rating in the array, only add the comment
-                    commentsAndRatings[0].comment = comment;
-                    let commentAndRating = {
-                        comment: comment,
-                    };
-                    commentsAndRatings.push(commentAndRating);
-                }
-
-            } else {
-                var payload = {
-                    comment: comment,
-                    rating: rating,
-                    userid: userid,
-                    bus_id: bus_id
-                };
-
-                if (!rating) {
-                    Swal.fire({
-                        title: "Warning",
-                        text: "Please input a rating.",
-                        icon: "warning",
-                        customClass: {
-                            confirmButton: 'swal-confirm-button',
-                        },
-                        showCancelButton: false,
-                    });
-                    return; // Exit the function if rating is missing
-                } else {
-                    let commentAndRating = {
-                        comment: comment,
-                        rating: rating
-                    };
-                    commentsAndRatings.push(commentAndRating);
-                    $('#ratingUi').html("");
-                }
-            }
-
-            // console.log(commentsAndRatings);
-            $.ajax({
-                type: "POST",
-                url: 'controllers/business.php',
-                data: {
-                    payload: JSON.stringify(payload),
-                    setFunction: 'commentAndRating'
-                },
-                success: function(response) {
-                    data = JSON.parse(response);
-                    Swal.fire({
-                        title: data.title,
-                        text: data.message,
-                        icon: data.icon,
-                        customClass: {
-                            confirmButton: 'swal-confirm-button',
-                        },
-                        showCancelButton: false,
-                    });
-                    // window.location.reload();
-                }
-            });
-
-            let latestCommentRatingPair = commentsAndRatings[commentsAndRatings.length - 1];
-            // console.log(latestCommentRatingPair);
-            // console.log(commentsAndRatings.length);
-            // Create a new div with the desired structure
-            let newDiv = $('<div class="co-item">' +
-                '<div class="ci-pic">' +
-                '<img src="' + photo + '" alt="User Photo">' +
-                '</div>' +
-                '<div class="ci-text">' +
-                '<h5>' + name + '</h5>' +
-                '<div class="pr-rating">' + getStarIcons(latestCommentRatingPair.rating) + '</div>' +
-                '<p>' + latestCommentRatingPair.comment + '</p>' +
-                '<ul>' +
-                '<li><i class="fa fa-clock-o"></i>' + formattedDate + '</li>' +
-                '</ul>' +
-                '</div>' +
-                '</div>');
-
-            // Append the new div to a container (e.g., a parent div with an ID
-            // loop for the comment and rating
-            // commentsAndRatings.forEach(function(commentRatingPair) {
-            //     $('#UIcommentAndRating').append();
-            // });
-            $('#UIcommentAndRating').append(newDiv);
+    if (userStats >= 1 && commentsAndRatings.length >= 1) {
+        // If there is already one rating in the array, only add the comment
+        commentsAndRatings[0].comment = comment;
+        let commentAndRating = {
+            comment: comment,
         };
+        commentsAndRatings.push(commentAndRating);
+    } else if (userStats >= 1) {
+        var payload = {
+            comment: comment,
+            rating: rating,
+            userid: userid,
+            bus_id: bus_id
+        };
+        if (!comment) {
+            Swal.fire({
+                title: "Warning",
+                text: "Please input a comment.",
+                icon: "warning",
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+            });
+            return; // Exit the function if comment is missing
+        }
+    } else {
+        var payload = {
+            comment: comment,
+            rating: rating,
+            userid: userid,
+            bus_id: bus_id
+        };
+
+        if (!rating) {
+            Swal.fire({
+                title: "Warning",
+                text: "Please input a rating.",
+                icon: "warning",
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+            });
+            return; // Exit the function if rating is missing
+        } else {
+            let commentAndRating = {
+                comment: comment,
+                rating: rating
+            };
+            commentsAndRatings.push(commentAndRating);
+            $('#ratingUi').html("");
+        }
+    }
+
+    // Rest of your code, including the AJAX request and UI update
+    $.ajax({
+        type: "POST",
+        url: 'controllers/business.php',
+        data: {
+            payload: JSON.stringify(payload),
+            setFunction: 'commentAndRating'
+        },
+        success: function(response) {
+            data = JSON.parse(response);
+            Swal.fire({
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+            });
+            window.location.reload();
+        }
+    });
+
+    let latestCommentRatingPair = commentsAndRatings[commentsAndRatings.length - 1];
+    
+
+    // Create a new div with the desired structure
+    let newDiv = $('<div class="co-item">' +
+        '<div class="ci-pic">' +
+        '<img src="' + photo + '" alt="User Photo">' +
+        '</div>' +
+        '<div class="ci-text">' +
+        '<h5>' + name + '</h5>' +
+        '<div class="pr-rating">' + getStarIcons(latestCommentRatingPair.rating) + '</div>' +
+        '<p>' + latestCommentRatingPair.comment + '</p>' +
+        '<ul>' +
+        '<li><i class="fa fa-clock-o"></i>' + formattedDate + '</li>' +
+        '</ul>' +
+        '</div>' +
+        '</div>');
+
+    // Append the new div to a container (e.g., a parent div with an ID)
+    $('#UIcommentAndRating').append(newDiv);
+};
+
 
         function getStarIcons(rating) {
             // Generate star icons based on the rating
@@ -1161,7 +1186,7 @@ $datas5 = $stmt5->fetchAll();
                             },
                             showCancelButton: false,
                         });
-                        window.location.reload();
+                        // window.location.reload();
                     }
                 });
             }

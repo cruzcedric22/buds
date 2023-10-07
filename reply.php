@@ -5,6 +5,18 @@ if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
   header('Location: manage.php');
 }
 $bus_id = $_GET['a'];
+$sql5 = "SELECT * 
+FROM business_reviews AS br 
+INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
+INNER JOIN owner_list AS ol ON br.user_id = ol.ID 
+WHERE br.bus_id = :id
+ORDER BY br.curr_time DESC
+LIMIT 5;";
+$stmt5 = $pdo->prepare($sql5);
+$stmt5->bindParam(':id', $bus_id, PDO::PARAM_STR);
+$stmt5->execute();
+$numRows3 = $stmt5->rowCount();
+$datas5 = $stmt5->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
