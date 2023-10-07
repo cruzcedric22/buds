@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once './includes/config.php';
 // echo $_SESSION['ownerId'];
 if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
   header('Location: manage.php');
@@ -10,13 +11,39 @@ FROM business_reviews AS br
 INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
 INNER JOIN owner_list AS ol ON br.user_id = ol.ID 
 WHERE br.bus_id = :id
-ORDER BY br.curr_time DESC
-LIMIT 5;";
+ORDER BY br.curr_time DESC;";
+$pdo = Database::connection();
 $stmt5 = $pdo->prepare($sql5);
 $stmt5->bindParam(':id', $bus_id, PDO::PARAM_STR);
 $stmt5->execute();
 $numRows3 = $stmt5->rowCount();
-$datas5 = $stmt5->fetchAll();
+$datas = $stmt5->fetchAll();
+
+$sql6 = "SELECT * 
+FROM business_reviews AS br 
+INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
+INNER JOIN owner_list AS ol ON br.user_id = ol.ID 
+WHERE br.bus_id = :id
+AND br.rating IS NOT NULL
+ORDER BY br.curr_time DESC;
+";
+$stmt6 = $pdo->prepare($sql5);
+$stmt6->bindParam(':id', $bus_id, PDO::PARAM_STR);
+$stmt6->execute();
+$numRows4 = $stmt6->rowCount();
+$datas1 = $stmt6->fetchAll();
+$totalRating = 0; // Initialize the variable
+$counter =0;
+
+foreach($datas1 as $data){
+  if($data['rating'] != null){
+   $totalRating += $data['rating'];
+   $counter ++;
+  }
+}
+echo $counter;
+echo $totalRating;
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -38,7 +65,7 @@ $datas5 = $stmt5->fetchAll();
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/css/lightbox.min.css">
 
 <body>
-  <div class="layout-wrapper layout-content-navbar">
+  <!-- <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
@@ -172,7 +199,7 @@ $datas5 = $stmt5->fetchAll();
               </li>
             </ul>
           </div>
-        </nav>
+        </nav> -->
         <div class="container-xxl flex-grow-1 mt-4">
           <div class="row">
             <div class="col-lg-8 order-0">
