@@ -41,8 +41,9 @@ foreach($datas1 as $data){
    $counter ++;
   }
 }
-echo $counter;
-echo $totalRating;
+echo $numRows3;
+// echo $counter;
+// echo $totalRating;
 $totalAve = $totalRating/$counter;
 $totalAve;
 
@@ -67,7 +68,7 @@ $totalAve;
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/css/lightbox.min.css">
 
 <body>
-  <!-- <div class="layout-wrapper layout-content-navbar">
+  <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
@@ -201,7 +202,7 @@ $totalAve;
               </li>
             </ul>
           </div>
-        </nav> -->
+        </nav>
         <div class="container-xxl flex-grow-1 mt-4">
           <div class="row">
             <div class="col-lg-8 order-0">
