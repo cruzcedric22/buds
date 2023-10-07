@@ -43,6 +43,8 @@ foreach($datas1 as $data){
 }
 echo $counter;
 echo $totalRating;
+$totalAve = $totalRating/$counter;
+$totalAve;
 
 ?>
 <!DOCTYPE html>
