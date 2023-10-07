@@ -156,7 +156,8 @@ if(isset($_SESSION['fname']) || isset($_SESSION['mname']) || isset($_SESSION['ln
 $sql5 = "SELECT * FROM business_reviews AS br 
 INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
 INNER JOIN owner_list AS ol ON br.user_id = ol.ID
-WHERE (br.bus_id = :id AND bl.bus_id = :id)";
+WHERE (br.bus_id = :id AND bl.bus_id = :id)
+ORDER BY br.curr_time DESC";
 $stmt5 = $pdo->prepare($sql5);
 $stmt5->bindParam(':id', $id, PDO::PARAM_STR);
 $stmt5->execute();
@@ -635,47 +636,47 @@ if (isset($_SESSION['ownerId'])) {
                                     <div class="bc-widget">
                                         <h4><?php echo $numRows3 . " REVIEWS" ?></h4>
                                         <div class="comment-option">
-                                            <?php
-                                            foreach ($datas5 as $data5) {
-                                                $dateString = $data5['curr_time']; // Assuming you have the date as a string in this format
-                                                $timestamp = strtotime($dateString);
-                                                $formattedDate = date('F j, Y', $timestamp); ?>
-                                                <div class="co-item">
-                                                    <div class="ci-pic">
-                                                        <?php if ($data5['photo'] != null && $data5['photo'] != " ") { ?>
-                                                            <img src="<?php echo "img/profile-picture/" . $data5['photo'] ?>" alt="">
-                                                        <?php } else { ?>
-                                                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                        <?php
+                                        for ($i = 0; $i < 5 && $i < count($datas5); $i++) {
+                                            $data5 = $datas5[$i];
+                                            $dateString = $data5['curr_time']; // Assuming you have the date as a string in this format
+                                            $timestamp = strtotime($dateString);
+                                            $formattedDate = date('F j, Y', $timestamp);
+                                        ?>
+                                            <div class="co-item">
+                                                <div class="ci-pic">
+                                                    <?php if ($data5['photo'] != null && $data5['photo'] != " ") { ?>
+                                                        <img src="<?php echo "img/profile-picture/" . $data5['photo'] ?>" alt="">
+                                                    <?php } else { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="ci-text">
+                                                    <h5><?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?></h5>
+                                                    <div class="pr-rating">
+                                                        <?php for ($j = 0; $j < $data5['rating']; $j++) { ?>
+                                                            <i class="fa fa-star"></i>
                                                         <?php } ?>
                                                     </div>
+                                                    <p><?php echo $data5['comment'] ?></p>
+                                                    <ul>
+                                                        <li><i class="fa fa-clock-o"><?php echo ' ' . $formattedDate ?></i></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <?php if ($data5['bus_reply'] != null && $data5['bus_reply'] != " ") { ?>
+                                                <div class="co-item reply-item">
+                                                    <div class="ci-pic">
+                                                        <img src="<?php echo "img/logo/" . $data5['Businesslogo'] ?>" alt="">
+                                                    </div>
                                                     <div class="ci-text">
-                                                        <h5><?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?></h5>
-                                                        <div class="pr-rating">
-                                                            <?php for ($i = 0; $i < $data5['rating']; $i++) { ?>
-                                                                <i class="fa fa-star"></i>
-                                                            <?php } ?>
-                                                        </div>
-                                                        <p><?php echo $data5['comment'] ?></p>
-                                                        <ul>
-                                                            <li><i class="fa fa-clock-o"><?php echo ' ' . $formattedDate ?></i></li>
-                                                        </ul>
+                                                        <h5><?php echo $data5['BusinessName'] ?></h5>
+                                                        <p><?php echo $data5['bus_reply'] ?></p>
                                                     </div>
                                                 </div>
-                                                <?php if ($data5['bus_reply'] != null && $data5['bus_reply'] != " ") { ?>
-                                                    <div class="co-item reply-item">
-                                                        <div class="ci-pic">
-                                                            <img src="<?php echo "img/logo/" . $data5['Businesslogo'] ?>" alt="">
-                                                        </div>
-                                                        <div class="ci-text">
-                                                            <h5><?php echo $data5['BusinessName'] ?></h5>
-                                                            <p><?php echo $data5['bus_reply'] ?></p>
-                                                            <!-- <ul>
-                                                            <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
-                                                        </ul> -->
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-                                            <?php } ?>
+                                            <?php }
+                                        }
+                                        ?>
                                             <div id="UIcommentAndRating">
 
                                             </div>
