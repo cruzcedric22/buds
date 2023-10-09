@@ -688,7 +688,7 @@ if (isset($_SESSION['ownerId'])) {
                                         <div class="row">
                                             <h4>LEAVE A COMMENT</h4><br>
                                         </div>
-                                        <?php if($numRows6 === 0){ ?>
+                                        <?php if($numRows6 === 0 || !isset($_SESSION['ownerId'])){ ?>
                                         <div class="row">
                                             <fieldset id="ratingUi" class="rating">
                                                 <input type="radio" id="star5" name="rating" value="5" />
@@ -984,7 +984,10 @@ if (isset($_SESSION['ownerId'])) {
     let photo = $('#photoCommentVal').val();
     let bus_id = $('#commentRatingBusId').val();
 
-    if (userStats >= 1 && commentsAndRatings.length >= 1) {
+    if(userid == ""){
+        openLoginModal();
+    }else{
+        if (userStats >= 1 && commentsAndRatings.length >= 1) {
         // If there is already one rating in the array, only add the comment
         commentsAndRatings[0].comment = comment;
         let commentAndRating = {
@@ -1082,6 +1085,7 @@ if (isset($_SESSION['ownerId'])) {
 
     // Append the new div to a container (e.g., a parent div with an ID)
     $('#UIcommentAndRating').append(newDiv);
+    };
 };
 
 

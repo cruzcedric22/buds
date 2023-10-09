@@ -1729,3 +1729,27 @@ function commentAndRating($request = null)
         echo json_encode($msg);
     }
 };
+
+function reply($request = null){
+    $reply = $request->reply;
+    $replyId = $request->replyId;
+
+    $sql = "UPDATE business_reviews SET bus_reply = :reply  WHERE bus_rev_id = :id";
+    $pdo = Database::connection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $replyId, PDO::PARAM_STR);
+    $stmt->bindParam(':reply', $reply, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->errorCode() !== '00000') {
+        echo $errorInfo = $stmt->errorInfo();
+        // Log or handle the error appropriately.
+        // Example: error_log("SQL Error: " . $errorInfo[2]);
+    }else{
+        $msg['title'] = "Successful";
+        $msg['message'] = "Your Feedback has been sent";
+        $msg['icon'] = "success";
+        echo json_encode($msg);
+    }
+   
+
+};

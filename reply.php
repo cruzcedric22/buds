@@ -11,7 +11,8 @@ FROM business_reviews AS br
 INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
 INNER JOIN owner_list AS ol ON br.user_id = ol.ID 
 WHERE br.bus_id = :id
-ORDER BY br.curr_time DESC;";
+ORDER BY br.curr_time DESC
+;";
 $pdo = Database::connection();
 $stmt5 = $pdo->prepare($sql5);
 $stmt5->bindParam(':id', $bus_id, PDO::PARAM_STR);
@@ -19,15 +20,20 @@ $stmt5->execute();
 $numRows3 = $stmt5->rowCount();
 $datas = $stmt5->fetchAll();
 
+foreach($datas as $data){
+  $logo = $data['Businesslogo'];
+}
+
 $sql6 = "SELECT * 
 FROM business_reviews AS br 
 INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
 INNER JOIN owner_list AS ol ON br.user_id = ol.ID 
 WHERE br.bus_id = :id
-AND br.rating IS NOT NULL
-ORDER BY br.curr_time DESC;
+-- AND br.rating IS NOT NULL
+ORDER BY br.curr_time DESC
+LIMIT 5;
 ";
-$stmt6 = $pdo->prepare($sql5);
+$stmt6 = $pdo->prepare($sql6);
 $stmt6->bindParam(':id', $bus_id, PDO::PARAM_STR);
 $stmt6->execute();
 $numRows4 = $stmt6->rowCount();
@@ -41,11 +47,10 @@ foreach($datas1 as $data){
    $counter ++;
   }
 }
-echo $numRows3;
+// echo $numRows3;
 // echo $counter;
 // echo $totalRating;
 $totalAve = $totalRating/$counter;
-$totalAve;
 
 ?>
 <!DOCTYPE html>
@@ -212,14 +217,14 @@ $totalAve;
                     <div class="card-body">
                       <h5 class="card-title text-primary">Congratulations Owner! 🎉</h5>
                       <p class="mb-4">
-                        You received <span class="fw-bold">4.8/5 ratings</span> and 20 comments to your business as of
+                        You received <span class="fw-bold"><?php echo $totalAve ?>/5 ratings</span> and <?php echo $numRows3 ?> comments to your business as of
                         today.
                       </p>
                     </div>
                   </div>
                   <div class="col-sm-5 text-center text-sm-left">
                     <div class="card-body px-md-4">
-                      <img src="plugins/assets/img/avatars/logo.png" height="130" />
+                      <img src="<?php echo "img/logo/" . $logo ?>" height="130" />
                     </div>
                   </div>
                 </div>
@@ -236,7 +241,7 @@ $totalAve;
                         </div>
                       </div>
                       <span class="fw-semibold d-block mb-1">Rating</span>
-                      <h3 class="card-title mb-2">4.8 / 5</h3>
+                      <h3 class="card-title mb-2"><?php echo $totalAve. ' ' ?>/ 5</h3>
                     </div>
                   </div>
                 </div>
@@ -249,7 +254,7 @@ $totalAve;
                         </div>
                       </div>
                       <span class="fw-semibold d-block mb-1">Total Comments</span>
-                      <h3 class="card-title mb-2">20 </i></h3>
+                      <h3 class="card-title mb-2"><?php echo $numRows3 ?></i></h3>
                     </div>
                   </div>
                 </div>
@@ -259,7 +264,7 @@ $totalAve;
         </div>
 
 
-        <div class="container d-flex justify-content-center mt-4">
+        <div class="container d-flex justify-content-center">
           <div class="row">
             <div class="col-md-12">
 
@@ -269,143 +274,47 @@ $totalAve;
                   <h6 class="card-subtitle">Latest Comments section by users</h6>
                 </div>
 
-                <div class="comment-widgets m-b-20">
+                <div class="comment-widgets m-b-10">
+                  
+                <?php foreach ($datas1 as $data1){ 
+                  $dateString = $data1['curr_time']; // Assuming you have the date as a string in this format
+                  $timestamp = strtotime($dateString);
+                  $formattedDate = date('F j, Y', $timestamp);?>
+                      <div class="d-flex flex-row comment-row">
+                      <?php if ($_SESSION['photo'] != "") { ?>
+                        <div class="p-2"><span class="round"><img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="user" width="50"></span></div>
+                        <?php } else { ?>
+                          <div class="p-2"><span class="round"><img src="img/testimonial-author/unknown.jpg" alt="user" width="50"></span></div>
+                        <?php } ?>
+                        <div class="comment-text w-100">
+                          <h5 class="mb-0"><?php echo $data1['Firstname'] . ' ' . $data1['MiddleName'] . ' ' . $data1['Surname'] ?></h5>
+                          <div class="pr-rating">
+                          <?php for ($j = 0; $j < $data1['rating']; $j++) { ?>
+                            <i class='bx bxs-star'></i>
+                          <?php } ?>
+                          </div>
+                          <div class="comment-footer">
+                            <span class="date"><?php echo ' ' . $formattedDate ?></span>
+                            <a data-bs-toggle="collapse" href="<?php echo "#collapseExample1".$data1['bus_rev_id'] ?>" role="button" aria-expanded="false" aria-controls="collapseExample">
+                              <i class='bx bxs-chat'></i>Reply</a>
+                            </span>
+                          </div>
+                          <p class="m-b-5 m-t-5"><?php echo $data1['comment'] ?></p>
 
-                  <div class="d-flex flex-row comment-row">
-                    <div class="p-2"><span class="round"><img src="plugins/assets/img/avatars/1.png" alt="user" width="50"></span></div>
-                    <div class="comment-text w-100">
-                      <h5 class="mb-0">Lalaking Random</h5>
-                      <div class="pr-rating">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                      </div>
-                      <div class="comment-footer">
-                        <span class="date">July 01, 2023 </span>
-                        <a data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
-                          <i class='bx bxs-chat'></i> Reply</a>
-                        </span>
-                      </div>
-                      <p class="m-b-5 m-t-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                        printer took a galley of type and scrambled it</p>
+                          <div class="collapse" id="<?php echo "collapseExample1".$data1['bus_rev_id'] ?>">
+                            <div class="d-grid d-sm-flex p-3 border">
 
-                      <div class="collapse" id="collapseExample1">
-                        <div class="d-grid d-sm-flex p-3 border">
-
-                          <div class="col mb-0">
-                            <textarea class="form-control"></textarea>
-                            <br>
-                            <button type="button" class="btn btn-success">Reply</button>
+                              <div class="col mb-0">
+                                <textarea class="form-control" id="<?php echo 'replyVal'.$data1['bus_rev_id'] ?>"></textarea>
+                                <br>
+                                <button type="button" class="btn btn-success" onclick="reply('<?php echo $data1['bus_rev_id'] ?>')">Reply</button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                  <?php } ?>
 
-                  <div class="d-flex flex-row comment-row">
-                    <div class="p-2"><span class="round"><img src="plugins/assets/img/avatars/1.png" alt="user" width="50"></span></div>
-                    <div class="comment-text w-100">
-                      <h5 class="mb-0">Lalaking Random</h5>
-                      <div class="pr-rating">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                      </div>
-                      <div class="comment-footer">
-                        <span class="date">July 01, 2023 </span>
-                        <a data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
-                          <i class='bx bxs-chat'></i> Reply</a>
-                        </span>
-                      </div>
-                      <p class="m-b-5 m-t-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                        printer took a galley of type and scrambled it</p>
-
-                      <div class="collapse" id="collapseExample2">
-                        <div class="d-grid d-sm-flex p-3 border">
-
-                          <div class="col mb-0">
-                            <textarea class="form-control"></textarea>
-                            <br>
-                            <button type="button" class="btn btn-success">Reply</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="d-flex flex-row comment-row">
-                    <div class="p-2"><span class="round"><img src="plugins/assets/img/avatars/1.png" alt="user" width="50"></span></div>
-                    <div class="comment-text w-100">
-                      <h5 class="mb-0">Lalaking Random</h5>
-                      <div class="pr-rating">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                      </div>
-                      <div class="comment-footer">
-                        <span class="date">July 01, 2023 </span>
-                        <a data-bs-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample">
-                          <i class='bx bxs-chat'></i> Reply</a>
-                        </span>
-                      </div>
-                      <p class="m-b-5 m-t-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                        printer took a galley of type and scrambled it</p>
-
-                      <div class="collapse" id="collapseExample3">
-                        <div class="d-grid d-sm-flex p-3 border">
-
-                          <div class="col mb-0">
-                            <textarea class="form-control"></textarea>
-                            <br>
-                            <button type="button" class="btn btn-success">Reply</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="d-flex flex-row comment-row">
-                    <div class="p-2"><span class="round"><img src="plugins/assets/img/avatars/1.png" alt="user" width="50"></span></div>
-                    <div class="comment-text w-100">
-                      <h5 class="mb-0">Lalaking Random</h5>
-                      <div class="pr-rating">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                      </div>
-                      <div class="comment-footer">
-                        <span class="date">July 01, 2023 </span>
-                        <a data-bs-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample">
-                          <i class='bx bxs-chat'></i> Reply</a>
-                        </span>
-                      </div>
-                      <p class="m-b-5 m-t-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                        printer took a galley of type and scrambled it</p>
-
-                      <div class="collapse" id="collapseExample4">
-                        <div class="d-grid d-sm-flex p-3 border">
-
-                          <div class="col mb-0">
-                            <textarea class="form-control"></textarea>
-                            <br>
-                            <button type="button" class="btn btn-success">Reply</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                 </div>
               </div>
@@ -413,14 +322,49 @@ $totalAve;
             </div>
           </div>
         </div>
+
         <div class="layout-overlay layout-menu-toggle"></div>
       </div>
       <script src="plugins/assets/vendor/js/bootstrap.js"></script>
+      <!-- Include jQuery from a CDN (Content Delivery Network) -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
       <script src="plugins/assets/vendor/js/menu.js"></script>
       <script src="plugins/assets/js/main.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script>
+        function reply(repId){
+          var reply = $('#replyVal'+repId).val();
+          var replyId = repId;
+          var payload = {
+            reply:reply,
+            replyId:replyId
+          };
+          $.ajax({
+                    type: "POST",
+                    url: 'controllers/business.php',
+                    data: {
+                        payload: JSON.stringify(payload),
+                        setFunction: 'reply'
+                    },
+                    success: function(response) {
+                        data = JSON.parse(response);
+                        Swal.fire({
+                            title: data.title,
+                            text: data.message,
+                            icon: data.icon,
+                            customClass: {
+                                confirmButton: 'swal-confirm-button',
+                            },
+                            showCancelButton: false,
+                        });
+                        window.location.reload();
+                    }
+                });
+        };
+      </script>
 
 </html>
 </body>
