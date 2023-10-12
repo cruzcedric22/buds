@@ -4,7 +4,7 @@ require_once('./includes/config.php');
 
 if (isset($_SESSION['role'])) {
     if ($_SESSION['role'] == 1) {
-        header('Location: ceipo/index.php');
+        header('Location: CEIPO/client/index');
     }
 }
 ini_set('display_errors', 0);
@@ -1406,7 +1406,7 @@ if (isset($_SESSION['ownerId'])) {
                     });
                     if (data.role == 1) {
                         setTimeout(function() {
-                            window.location.href = "ceipo/index.php";
+                            window.location.href = "CEIPO/client/index.php";
                         }, 2000);
 
                     } else {

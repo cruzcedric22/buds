@@ -77,6 +77,7 @@ if (isset($_GET['a'])) {
     if ($rs->num_rows > 0) {
       while ($row = $rs->fetch_assoc()) {
         $disp .= '
+        <div class="py-3 px-2 pb-1 border-bottom">
         <div class="row">
           <div class="col-lg-4">
             <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
@@ -98,6 +99,7 @@ if (isset($_GET['a'])) {
                 ' . $row['BusinessDescrip'] . '
               </p>
               </div>
+            </div>
             </div>';
       }
     }

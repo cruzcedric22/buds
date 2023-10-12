@@ -264,7 +264,7 @@ $totalAve = $totalRating/$counter;
         </div>
 
 
-        <div class="container d-flex justify-content-center">
+        <div class="container max-width-800 justify-content-center mt-4">
           <div class="row">
             <div class="col-md-12">
 
@@ -274,7 +274,7 @@ $totalAve = $totalRating/$counter;
                   <h6 class="card-subtitle">Latest Comments section by users</h6>
                 </div>
 
-                <div class="comment-widgets m-b-10">
+                <div class="comment-widgets m-b-20">
                   
                 <?php foreach ($datas1 as $data1){ 
                   $dateString = $data1['curr_time']; // Assuming you have the date as a string in this format

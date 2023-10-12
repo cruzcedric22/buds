@@ -225,23 +225,33 @@ function addBusiness($request = null)
                                 $msg['status'] = "error";
                                 echo json_encode($msg);
                             }
-
+                            
                             $targetDirectory = '../img/requirements/';
-                            $newImageName1 = uniqid() . '.' . $imageExtension1;
+                            $newImageName1 = uniqid().''.$id;
                             $targetPath1 = $targetDirectory . $newImageName1;
+                            // $newImageName1 = uniqid() . '.' . $imageExtension1; -original
+                            // $targetPath1 = $targetDirectory . $newImageName1;
 
-                            $newImageName2 = uniqid() . '.' . $imageExtension2;
-                            $targetPath2 = $targetDirectory . $newImageName2;
+                            $newImageName2 =  uniqid().''.$id;
+                            $targetPath2 = $targetDirectory . $newImageName2;                          
+                            //$newImageName2 = uniqid() . '.' . $imageExtension2;-original
+                            //$targetPath2 = $targetDirectory . $newImageName2;
 
-                            $newImageName3 = uniqid() . '.' . $imageExtension3;
+                            $newImageName3 = uniqid().''.$id;
                             $targetPath3 = $targetDirectory . $newImageName3;
+                            //$newImageName3 = uniqid() . '.' . $imageExtension3;-original
+                            //$targetPath3 = $targetDirectory . $newImageName3;
 
-                            $newImageName4 = uniqid() . '.' . $imageExtension4;
+                            $newImageName4 =  uniqid().''.$id;
                             $targetPath4 = $targetDirectory . $newImageName4;
+                            //$newImageName4 = uniqid() . '.' . $imageExtension4; -original
+                            //$targetPath4 = $targetDirectory . $newImageName4;
+                            
 
-                            $newImageName5 = uniqid() . '.' . $imageExtension5;
+                            $newImageName5 =  uniqid().''.$id;
                             $targetPath5 = $targetDirectory . $newImageName5;
-
+                            //$newImageName5 = uniqid() . '.' . $imageExtension5; -original
+                            //$targetPath5 = $targetDirectory . $newImageName5;
                             if ((move_uploaded_file($tmp_name1, $targetPath1) && move_uploaded_file($tmp_name2, $targetPath2))
                                 && (move_uploaded_file($tmp_name3, $targetPath3) && move_uploaded_file($tmp_name4, $targetPath4))
                                 && move_uploaded_file($tmp_name5, $targetPath5)
