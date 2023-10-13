@@ -1191,7 +1191,9 @@ if (isset($_SESSION['ownerId'])) {
                             },
                             showCancelButton: false,
                         });
-                        // window.location.reload();
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     }
                 });
             }
