@@ -501,11 +501,24 @@ function edtBusinessBrgyClear($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
+                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $stmt1 = $pdo->prepare($sql2);
+                $stmt1->execute();
+                if ($stmt->errorCode() !== '00000') {
+                    $errorInfo = $stmt->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                    // Handle the error as needed (e.g., logging, displaying an error message)
+                    $msg['title'] = "Error";
+                    $msg['message'] = $errorMsg;
+                    $msg['icon'] = "error";
+                    echo json_encode($msg);
+                }else{
                 $msg['title'] = "Successful";
                 $msg['message'] = "Sucessfully Updated";
                 $msg['icon'] = "success";
                 $msg['status'] = "success";
                 echo json_encode($msg);
+                }
             }
         } else {
             $msg['title'] = "Error";
@@ -575,11 +588,24 @@ function edtDTIPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
+                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $stmt1 = $pdo->prepare($sql2);
+                $stmt1->execute();
+                if ($stmt->errorCode() !== '00000') {
+                    $errorInfo = $stmt->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                    // Handle the error as needed (e.g., logging, displaying an error message)
+                    $msg['title'] = "Error";
+                    $msg['message'] = $errorMsg;
+                    $msg['icon'] = "error";
+                    echo json_encode($msg);
+                }else{
                 $msg['title'] = "Successful";
                 $msg['message'] = "Sucessfully Updated";
                 $msg['icon'] = "success";
                 $msg['status'] = "success";
                 echo json_encode($msg);
+                }
             }
         } else {
             $msg['title'] = "Error";
@@ -649,11 +675,24 @@ function edtSanitaryPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
+                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $stmt1 = $pdo->prepare($sql2);
+                $stmt1->execute();
+                if ($stmt->errorCode() !== '00000') {
+                    $errorInfo = $stmt->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                    // Handle the error as needed (e.g., logging, displaying an error message)
+                    $msg['title'] = "Error";
+                    $msg['message'] = $errorMsg;
+                    $msg['icon'] = "error";
+                    echo json_encode($msg);
+                }else{
                 $msg['title'] = "Successful";
                 $msg['message'] = "Sucessfully Updated";
                 $msg['icon'] = "success";
                 $msg['status'] = "success";
                 echo json_encode($msg);
+                }
             }
         } else {
             $msg['title'] = "Error";
@@ -723,11 +762,24 @@ function edtCedulaPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
+                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $stmt1 = $pdo->prepare($sql2);
+                $stmt1->execute();
+                if ($stmt->errorCode() !== '00000') {
+                    $errorInfo = $stmt->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                    // Handle the error as needed (e.g., logging, displaying an error message)
+                    $msg['title'] = "Error";
+                    $msg['message'] = $errorMsg;
+                    $msg['icon'] = "error";
+                    echo json_encode($msg);
+                }else{
                 $msg['title'] = "Successful";
                 $msg['message'] = "Sucessfully Updated";
                 $msg['icon'] = "success";
                 $msg['status'] = "success";
                 echo json_encode($msg);
+                }
             }
         } else {
             $msg['title'] = "Error";
@@ -797,11 +849,24 @@ function edtMayorPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
+                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $stmt1 = $pdo->prepare($sql2);
+                $stmt1->execute();
+                if ($stmt->errorCode() !== '00000') {
+                    $errorInfo = $stmt->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
+                    // Handle the error as needed (e.g., logging, displaying an error message)
+                    $msg['title'] = "Error";
+                    $msg['message'] = $errorMsg;
+                    $msg['icon'] = "error";
+                    echo json_encode($msg);
+                }else{
                 $msg['title'] = "Successful";
                 $msg['message'] = "Sucessfully Updated";
                 $msg['icon'] = "success";
                 $msg['status'] = "success";
                 echo json_encode($msg);
+                }
             }
         } else {
             $msg['title'] = "Error";
