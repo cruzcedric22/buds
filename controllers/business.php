@@ -1825,6 +1825,4 @@ function reply($request = null){
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-   
-
 };
