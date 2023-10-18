@@ -193,10 +193,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Barangay Clearance</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($brgyClearance != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $brgyClearance ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -206,7 +206,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editBrgyClearance()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -214,10 +213,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>DTI Permit</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($dtiPermit != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $dtiPermit ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -227,7 +226,6 @@ foreach ($datas as $data) {
                                                                 <button type="butoon" onclick="editDTIPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -235,10 +233,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Sanitary Permit</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($sanitaryPermit != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/", $sanitaryPermit ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -248,7 +246,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editSanitaryPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -256,10 +253,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Cedula</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($cedula != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $cedula ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -269,7 +266,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editCedula()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -277,10 +273,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Mayor's Permit</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($mayorPermit != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $mayorPermit ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php } ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -290,7 +286,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editMayorPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
