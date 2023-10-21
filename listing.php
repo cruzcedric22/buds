@@ -527,9 +527,11 @@ else {
                         </div>
                       </div>
                     <?php } ?>
-                  <?php } else {
-                    echo $disp;
-                  } ?>
+                    <?php } else { ?>
+                      <div id="newFilteredUi">
+                       <?php  echo $disp; ?>
+                      </div>
+                      <?php } ?>
                 </div>
               </div>
             </div>
@@ -560,7 +562,8 @@ else {
      Footer Section End -->
 
   <!-- Js Plugins -->
-  <script src="js/jquery-3.3.1.min.js"></script>
+  <!-- <script src="js/jquery-3.3.1.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.magnific-popup.min.js"></script>
   <script src="js/mixitup.min.js"></script>
@@ -846,7 +849,8 @@ else {
               setFunction: 'searchBusinessFilter'
             },
             success: function(response) {
-              var data = JSON.parse(response);
+              console.log(response); // Check the response data
+              $("#newFilteredUi").html(response);
             }
           });
     };

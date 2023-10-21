@@ -1829,39 +1829,124 @@ function reply($request = null){
 
 function searchBusinessFilter($request = null)
 {
+    $pdo = Database::connection();
     $location = $request->location;
-$category = $request->category;
+    $category = $request->category;
 
-$sql = [];
-$sql1 = [];
+    $sql = [];
+    $sql1 = [];
 
-foreach ($location as $locSpecification) {
-    $locSpecificationValue = $locSpecification->val;
-    if (!empty($locSpecificationValue)) {
-        $sql[] = "location LIKE '%" . $locSpecificationValue . "%'";
+    foreach ($location as $locSpecification) {
+        $locSpecificationValue = $locSpecification->val;
+        if (!empty($locSpecificationValue)) {
+            $sql[] = 'blg.location = "' . $locSpecificationValue . '"';
+        }
     }
-}
 
-foreach ($category as $catSpecification) {
-    $catSpecificationValue = $catSpecification->value;
-    if (!empty($catSpecificationValue)) {
-        $sql1[] = "category LIKE '%" . $catSpecificationValue . "%";
+    foreach ($category as $catSpecification) {
+        $catSpecificationValue = $catSpecification->value;
+        if (!empty($catSpecificationValue)) {
+            $sql1[] = 'cl.ID= ' . $catSpecificationValue . '';
+        }
     }
-}
 
-$imploadedData = implode(" OR ", $sql);
-$imploadedData1 = implode(" OR ", $sql1);
+    $imploadedData = implode(" OR ", $sql);
+    $imploadedData1 = implode(" OR ", $sql1);
 
-if (!empty($imploadedData) && !empty($imploadedData1)) {
-    // Both location and category conditions exist
-   $query = $imploadedData . ' '. $imploadedData1;
-} else if (!empty($imploadedData)) {
-    // Only location condition exists
-    $query = $imploadedData;
-} else if (!empty($imploadedData1)) {
-    // Only category condition exists
-    $query = $imploadedData1;
-} 
+    if (!empty($imploadedData) && !empty($imploadedData1)) {
+        // Both location and category conditions exist
+        $query1 = "SELECT *
+        FROM business_list AS bl
+        INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+        INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+        WHERE
+            ($imploadedData)
+            AND
+            ($imploadedData1)
+            AND
+            (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
+        LIMIT 5;
+        ";
+    } else if (!empty($imploadedData)) {
+        // Only location condition exists
+        $query1 = "SELECT *
+        FROM business_list AS bl
+        INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+        INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+        WHERE
+            ($imploadedData)
+            AND
+            (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
+        LIMIT 5;";
+    } else if (!empty($imploadedData1)) {
+        // Only category condition exists
+        $query1 = "SELECT *
+        FROM business_list AS bl
+        INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+        INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+        WHERE         
+            ($imploadedData1)
+            AND
+            (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
+        LIMIT 5;";
+    } else {
+        $query1 = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4  LIMIT 5";
+    }
 
-return $query;
+    $counter1 = 0;
+    $totalRating1 = 0;
+
+    $stmt = $pdo->prepare($query1);
+    $disp = "";
+    if ($stmt->execute()) {
+        $totalRecords = $stmt->rowCount();
+        if ($totalRecords > 0) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $idRate = $row['bus_id'];
+                $disp .= '
+                <div class="py-3 px-2 pb-1 border-bottom">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
+                    </div>
+                    <div class="col-lg-8">
+                    <div class="d-md-flex align-items-md-center">
+                        <div class="name"><h4><a href="./details.php?ID=' . $row['bus_id'] . '"><strong>' . $row['BusinessName'] . '</strong></a></h4>
+                        <span class="city">' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . '</span>
+                        </div>
+                    </div>';
+                $disp .= '<div class="text-warning mb-1 me-2">';
+                $sql3 = "SELECT * FROM business_reviews WHERE bus_id = $idRate";
+                $stmt1 = $pdo->prepare($sql3);
+                if ($stmt1->execute()) {
+                    $totalRecords1 = $stmt1->rowCount();
+                    if ($totalRecords1 > 0) {
+                        while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                            if ($row1['rating'] != null) {
+                                $totalRating1 += $row1['rating'];
+                                $counter1++;
+                            }
+                        }
+                        $totalAve = (int)($totalRating1 / $counter1);
+                        for ($j = 0; $j < $totalAve; $j++) {
+                            $disp .= '<i class="fa fa-star"></i>';
+                        }
+                    } else {
+                        $disp .= "Please Rate Us";
+                    }
+                } else {
+                    echo "Error";
+                }
+                $disp .= '</div>';
+                $disp .= ' <p class="text-truncate mb-4 mb-md-0">
+                        ' . $row['BusinessDescrip'] . '
+                    </p>
+                    </div>
+                    </div>
+                    </div>';
+            }
+        }
+    }
+
+    echo $disp;
 };
