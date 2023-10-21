@@ -456,8 +456,8 @@ else {
                   <div class="box border-bottom">
                     <div class="box-label text-uppercase d-flex align-items-center">Location </div>
                     <div class="my-1">
-                      <div><input type="checkbox" class="tick" value="north" id="north"> <label>NORTH </label></div>
-                      <div><input type="checkbox" class="tick" value="south" id="south"> <label>SOUTH </label></div>
+                      <div><input type="checkbox" onclick ="filterBus()" class="tick busloc" value="North" id="north"> <label>NORTH </label></div>
+                      <div><input type="checkbox"  onclick ="filterBus()" class="tick busloc" value="South" id="south"> <label>SOUTH </label></div>
                     </div>
                   </div>
                   <div class="box border-bottom">
@@ -467,7 +467,7 @@ else {
                       $query = "SELECT * FROM category_list";
                       $result = $conn->query($query);
                       while ($row = $result->fetch_assoc()) {
-                        echo '<div><input type="checkbox" class="tick" value="' . $row['ID'] . '" id="brand_' . $row['ID'] . '"> <label> ' . $row['category'] . ' </label></div>';
+                        echo '<div><input type="checkbox" class="tick buscat" onclick ="filterBus()" value="' . $row['ID'] . '" id="brand_' . $row['ID'] . '"> <label> ' . $row['category'] . ' </label></div>';
                       }
                       ?>
                     </div>
@@ -810,10 +810,45 @@ else {
           }
         }
       });
+    };
 
+    function filterBus(){
+      var locSpecificationsValue = [];
+      $(".busloc:checked").each(function() {
+        var locSpecificationValue = $(this).val().trim();
+        if (locSpecificationValue !== "") {
+          locSpecificationsValue.push({
+            val: locSpecificationValue
+          });
+        }
+      });  
 
+      var catSpecificationsValue = [];
+      $(".buscat:checked").each(function() {
+        var catSpecificationValue = $(this).val().trim();
+        if (catSpecificationValue !== "") {
+          catSpecificationsValue.push({
+            value: catSpecificationValue
+          });
+        }
+      }); 
 
+      var payload = {
+        location: locSpecificationsValue,
+        category: catSpecificationsValue
+      };
 
+      $.ajax({
+            type: "POST",
+            url: 'controllers/business.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'searchBusinessFilter'
+            },
+            success: function(response) {
+              var data = JSON.parse(response);
+            }
+          });
     };
   </script>
 </body>

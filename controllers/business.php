@@ -1826,3 +1826,42 @@ function reply($request = null){
         echo json_encode($msg);
     }
 };
+
+function searchBusinessFilter($request = null)
+{
+    $location = $request->location;
+$category = $request->category;
+
+$sql = [];
+$sql1 = [];
+
+foreach ($location as $locSpecification) {
+    $locSpecificationValue = $locSpecification->val;
+    if (!empty($locSpecificationValue)) {
+        $sql[] = "location LIKE '%" . $locSpecificationValue . "%'";
+    }
+}
+
+foreach ($category as $catSpecification) {
+    $catSpecificationValue = $catSpecification->value;
+    if (!empty($catSpecificationValue)) {
+        $sql1[] = "category LIKE '%" . $catSpecificationValue . "%";
+    }
+}
+
+$imploadedData = implode(" OR ", $sql);
+$imploadedData1 = implode(" OR ", $sql1);
+
+if (!empty($imploadedData) && !empty($imploadedData1)) {
+    // Both location and category conditions exist
+   $query = $imploadedData . ' '. $imploadedData1;
+} else if (!empty($imploadedData)) {
+    // Only location condition exists
+    $query = $imploadedData;
+} else if (!empty($imploadedData1)) {
+    // Only category condition exists
+    $query = $imploadedData1;
+} 
+
+return $query;
+};
