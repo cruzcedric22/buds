@@ -849,7 +849,6 @@ else {
               setFunction: 'searchBusinessFilter'
             },
             success: function(response) {
-              console.log(response); // Check the response data
               $("#newFilteredUi").html(response);
             }
           });
