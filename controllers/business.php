@@ -2,8 +2,10 @@
 require_once("../includes/config.php");
 session_start();
 
+if(isset($_SESSION['bus_id'])){
+    $_SESSION['bus_id'];
+}
 
-$_SESSION['bus_id'];
 
 
 
