@@ -6,7 +6,7 @@ require_once "includes/config.php";
 
 if (isset($_SESSION['role'])) {
   if ($_SESSION['role'] == 1) {
-    header('Location: ceipo/index.php');
+    header('Location: CEIPO/client/index.php');
   }
 }
 
@@ -131,8 +131,8 @@ if (!$stmt1->execute()) {
                     <ul>
                       <li class="profile-dropdown">
                         <div class="user-profile">
-                          <?php if (isset($_SESSION['photo'])) { ?>
-                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                          <?php if ($_SESSION['photo'] != "") { ?>
+                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
                           <?php } else { ?>
                             <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                           <?php } ?>
@@ -864,7 +864,7 @@ if (!$stmt1->execute()) {
           });
           if (data.role == 1) {
             setTimeout(function() {
-              window.location.href = "ceipo/index.php";
+              window.location.href = "CEIPO/client/index.php";
             }, 2000);
 
           } else {

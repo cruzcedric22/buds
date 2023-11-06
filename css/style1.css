@@ -277,7 +277,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  //width: 15%;
+  /* width: 15%; */
 }
 
 .primary-btn {
@@ -361,7 +361,7 @@ button {
 }
 
 .btn{
-    //height: 38px;
+    /* height: 38px; */
     background-color: #355E3B;
     color: #fff;
 }
@@ -443,9 +443,9 @@ button {
   background: #355E3B;
   border-bottom: 1px solid #ebebeb;
 }
-.hs-top .logo {
+/* .hs-top .logo {
 
-}
+} */
 .hs-top .logo a {
   display: inline-block;
 }
@@ -1754,8 +1754,8 @@ button {
 }
 
 .fs-about .fs-logo a img {
-  width 50px;
-  height 30px;
+  width: 50px;
+  height:30px;
 }
 
 .fs-about .fs-logo a {

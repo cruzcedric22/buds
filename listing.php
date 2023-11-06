@@ -29,6 +29,10 @@ if (isset($_GET['a'])) {
           cl.category LIKE :search_query
           OR
           bl.BusinessName LIKE :search_query
+          AND 
+          (bl.BusinessStatus = 1 
+          OR
+          bl.BusinessStatus = 4)
          LIMIT 5");
 
   $stmt->bindParam(':search_query', $search_query, PDO::PARAM_STR);
@@ -53,7 +57,8 @@ if (isset($_GET['a'])) {
   $sql = "SELECT * FROM business_list AS bl
   INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
   INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
-  WHERE bl.BusinessCategory = :cat AND cl.ID = :cat LIMIT 4";
+  WHERE bl.BusinessCategory = :cat AND cl.ID = :cat 
+  AND (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4) LIMIT 4";
 
   // Assuming you have previously created a PDO object named $pdo
   $stmt = $pdo->prepare($sql);
@@ -69,35 +74,55 @@ if (isset($_GET['a'])) {
       echo "No results found.";
     } 
   }
-} else {
+} 
+else {
   // die("No search query provided.");
-  $sql = "SELECT * FROM business_list LIMIT 5";
+  $counter1 =0; 
+  $totalRating1 = 0;
+  $sql = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4  LIMIT 5";
   $disp = "";
   if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {
       while ($row = $rs->fetch_assoc()) {
-        $disp .= '
-        <div class="row">
-          <div class="col-lg-4">
-            <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
-          </div>
-          <div class="col-lg-8">
-             <div class="d-md-flex align-items-md-center">
-               <div class="name"><h4><a href="./details.php?ID=' . $row['bus_id'] . '"><strong>' . $row['BusinessName'] . '</strong></a></h4>
-               <span class="city">' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . '</span>
-               </div>
-             </div>
-             <div class="text-warning mb-1 me-2">
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-             </div>
-              <p class="text-truncate mb-4 mb-md-0">
+        $idRate = $row['bus_id'];
+          $disp .= '
+          <div class="py-3 px-2 pb-1 border-bottom">
+          <div class="row">
+            <div class="col-lg-4">
+              <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
+            </div>
+            <div class="col-lg-8">
+              <div class="d-md-flex align-items-md-center">
+                <div class="name"><h4><a href="./details.php?ID=' . $row['bus_id'] . '"><strong>' . $row['BusinessName'] . '</strong></a></h4>
+                <span class="city">' . $row['BusinessAddress'] . ' Brgy. ' . $row['BusinessBrgy'] . '</span>
+                </div>
+              </div>';
+             $disp .= '<div class="text-warning mb-1 me-2">';
+            $sql3 = "SELECT * FROM business_reviews WHERE bus_id = $idRate";
+            if ($rq = $conn->query($sql3)) {
+              if ($rq->num_rows > 0) {
+                while ($row1 = $rq->fetch_assoc()) {
+                  if($row1['rating'] != null){
+                    $totalRating1 += $row1['rating'];
+                    $counter1 ++;
+                    }
+                }
+                $totalAve = (int)($totalRating1 / $counter1);
+                for ($j = 0; $j < $totalAve; $j++) { 
+                  $disp .='<i class="fa fa-star"></i>';
+                 }
+              } else{
+                $disp .= "Please Rate Us";
+              }             
+            }else{
+              echo "Error";
+            }
+            $disp .= '</div>';
+            $disp .= ' <p class="text-truncate mb-4 mb-md-0">
                 ' . $row['BusinessDescrip'] . '
               </p>
               </div>
+            </div>
             </div>';
       }
     }
@@ -198,8 +223,8 @@ if (isset($_GET['a'])) {
                     <ul>
                       <li class="profile-dropdown">
                         <div class="user-profile">
-                          <?php if (isset($_SESSION['photo'])) { ?>
-                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                          <?php if ($_SESSION['photo'] != "") { ?>
+                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
                           <?php } else { ?>
                             <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                           <?php } ?>
@@ -431,8 +456,8 @@ if (isset($_GET['a'])) {
                   <div class="box border-bottom">
                     <div class="box-label text-uppercase d-flex align-items-center">Location </div>
                     <div class="my-1">
-                      <div><input type="checkbox" class="tick" value="north" id="north"> <label>NORTH </label></div>
-                      <div><input type="checkbox" class="tick" value="south" id="south"> <label>SOUTH </label></div>
+                      <div><input type="checkbox" onclick ="filterBus()" class="tick busloc" value="North" id="north"> <label>NORTH </label></div>
+                      <div><input type="checkbox"  onclick ="filterBus()" class="tick busloc" value="South" id="south"> <label>SOUTH </label></div>
                     </div>
                   </div>
                   <div class="box border-bottom">
@@ -442,7 +467,7 @@ if (isset($_GET['a'])) {
                       $query = "SELECT * FROM category_list";
                       $result = $conn->query($query);
                       while ($row = $result->fetch_assoc()) {
-                        echo '<div><input type="checkbox" class="tick" value="' . $row['ID'] . '" id="brand_' . $row['ID'] . '"> <label> ' . $row['category'] . ' </label></div>';
+                        echo '<div><input type="checkbox" class="tick buscat" onclick ="filterBus()" value="' . $row['ID'] . '" id="brand_' . $row['ID'] . '"> <label> ' . $row['category'] . ' </label></div>';
                       }
                       ?>
                     </div>
@@ -465,12 +490,36 @@ if (isset($_GET['a'])) {
                               <span class="city"><?php echo $data['BusinessAddress'] . ' Brgy ' . $data['BusinessBrgy'] ?></span>
                             </div>
                           </div>
+                          <?php 
+                           $id_rating = $data['bus_id'];
+                           $populateRatingQuery = "SELECT * FROM business_reviews WHERE bus_id = :id;";
+                           $stmt3 = $pdo->prepare($populateRatingQuery);
+                           $stmt3->bindParam(':id', $id_rating, PDO::PARAM_STR);
+                           if (!$stmt3->execute()) {
+                              $errorInfo = $stmt3->errorInfo();
+                              echo "SQL Error: " . $errorInfo[2];
+                           }else{
+                              $datas2 = $stmt3 ->fetchAll();
+                              if (empty($datas2)) {
+                                echo "Please rate us.";
+                              } 
+                            }
+                           ?>
                           <div class="text-warning mb-1 me-2">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                          <?php $counter =0; 
+                           $totalRating2 = 0; // Initialize the variable?>
+                            <?php foreach ($datas2 as $data2){ 
+                                if($data2['rating'] != null){
+                                $totalRating2 += $data2['rating'];
+                                $counter ++;
+                                }
+                              }
+                               $totalAve = $totalRating2/$counter;
+                                for ($j = 0; $j < $totalAve; $j++) { 
+                                ?> 
+                              <i class="fa fa-star"></i>
+                              <?php } 
+                            ?>
                           </div>
                           <p class="text-truncate mb-4 mb-md-0">
                             <?php echo $data['BusinessDescrip'] ?>
@@ -478,9 +527,11 @@ if (isset($_GET['a'])) {
                         </div>
                       </div>
                     <?php } ?>
-                  <?php } else {
-                    echo $disp;
-                  } ?>
+                    <?php } else { ?>
+                      <div id="newFilteredUi">
+                       <?php  echo $disp; ?>
+                      </div>
+                      <?php } ?>
                 </div>
               </div>
             </div>
@@ -508,10 +559,11 @@ if (isset($_GET['a'])) {
     </div>
   </footer>
   <!-- Footer
-    <!-- Footer Section End -->
+     Footer Section End -->
 
   <!-- Js Plugins -->
-  <script src="js/jquery-3.3.1.min.js"></script>
+  <!-- <script src="js/jquery-3.3.1.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.magnific-popup.min.js"></script>
   <script src="js/mixitup.min.js"></script>
@@ -761,10 +813,45 @@ if (isset($_GET['a'])) {
           }
         }
       });
+    };
 
+    function filterBus(){
+      var locSpecificationsValue = [];
+      $(".busloc:checked").each(function() {
+        var locSpecificationValue = $(this).val().trim();
+        if (locSpecificationValue !== "") {
+          locSpecificationsValue.push({
+            val: locSpecificationValue
+          });
+        }
+      });  
 
+      var catSpecificationsValue = [];
+      $(".buscat:checked").each(function() {
+        var catSpecificationValue = $(this).val().trim();
+        if (catSpecificationValue !== "") {
+          catSpecificationsValue.push({
+            value: catSpecificationValue
+          });
+        }
+      }); 
 
+      var payload = {
+        location: locSpecificationsValue,
+        category: catSpecificationsValue
+      };
 
+      $.ajax({
+            type: "POST",
+            url: 'controllers/business.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'searchBusinessFilter'
+            },
+            success: function(response) {
+              $("#newFilteredUi").html(response);
+            }
+          });
     };
   </script>
 </body>

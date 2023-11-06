@@ -115,14 +115,72 @@ foreach ($datas as $data) {
                         <span class="menu-header-text">Job Applicants</span>
                     </li>
                     <li class="menu-item">
-                        <a href="<?php echo "job-applicants.php?a=".$bus_id ?>" class="menu-link">
-                        <i class="menu-icon tf-icons bx bxs-user-detail"></i>
-                        <div data-i18n="Analytics">Jobs</div>
+                        <a href="<?php echo "job_position.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user"></i>
+                            <div data-i18n="Analytics">Job Positions</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?php echo "job_applicant.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-detail"></i>
+                            <div data-i18n="Analytics">Job Applicants</div>
                         </a>
                     </li>
                 </ul>
             </aside>
             <div class="layout-page">
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                            <i class="bx bx-menu bx-sm"></i>
+                        </a>
+                    </div>
+                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                    <div class="avatar avatar-online">
+                                        <?php if ($_SESSION['photo'] != "") { ?>
+                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
+                                        <?php } else { ?>
+                                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                        <?php } ?>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar avatar-online">
+                                                        <?php if ($_SESSION['photo'] != "") { ?>
+                                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
+                                                        <?php } else { ?>
+                                                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="fw-semibold d-block"><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></span>
+                                                    <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="logout.php">
+                                            <i class="bx bx-power-off me-2"></i>
+                                            <span class="align-middle">Log Out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
@@ -135,10 +193,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Barangay Clearance</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($brgyClearance != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $brgyClearance ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -148,7 +206,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editBrgyClearance()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,10 +213,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>DTI Permit</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
+                                                    <?php if ($dtiPermit != "") { ?>
                                                         <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $dtiPermit ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -169,7 +226,6 @@ foreach ($datas as $data) {
                                                                 <button type="butoon" onclick="editDTIPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,10 +233,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Sanitary Permit</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
-                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/",$sanitaryPermit ?>" alt="Card image cap" />
+                                                    <?php if ($sanitaryPermit != "") { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/", $sanitaryPermit ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -190,7 +246,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editSanitaryPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -198,10 +253,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Cedula</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
-                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/".$cedula ?>" alt="Card image cap" />
+                                                    <?php if ($cedula != "") { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $cedula ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php }  ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -211,7 +266,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editCedula()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,10 +273,10 @@ foreach ($datas as $data) {
                                             <div class="card p-4">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Mayor's Permit</b></h3>
-                                                    <?php if ($status == 1 || $status == 4) { ?>
-                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/".$mayorPermit ?>" alt="Card image cap" />
+                                                    <?php if ($mayorPermit != "") { ?>
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $mayorPermit ?>" alt="Card image cap" />
                                                         <br>
-                                                    <?php } else { ?>
+                                                    <?php } ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
@@ -232,7 +286,6 @@ foreach ($datas as $data) {
                                                                 <button type="button" onclick="editMayorPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -280,9 +333,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -320,9 +373,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -360,9 +413,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -400,9 +453,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
@@ -440,9 +493,9 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);

@@ -8,7 +8,7 @@ if (isset($_SESSION['ownerId']) && !empty($_SESSION['ownerId'])) {
     // echo $_SESSION['ownerId'];
 
     $ownerId = $_SESSION['ownerId'];
-}elseif(isset($_SESSION['ownerId2'])){
+} elseif (isset($_SESSION['ownerId2'])) {
     $ownerId = $_SESSION['ownerId2'];
     $_SESSION['ownerId'] = $ownerId;
 } else {
@@ -141,7 +141,11 @@ if ($rs = $conn->query($sql)) {
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                <?php if ($_SESSION['photo'] != "") { ?>
+                                                    <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
+                                                <?php } else { ?>
+                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                <?php } ?>
                                             </div>
                                             <ul class="dropdown dropleft">
                                                 <li>

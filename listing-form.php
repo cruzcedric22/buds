@@ -120,7 +120,11 @@ if ($rs = $conn->query($sql)) {
                   <ul>
                     <li class="profile-dropdown">
                       <div class="user-profile">
-                        <img src="img/testimonial-author/blankpic.jpg" alt="User's Name">
+                        <?php if ($_SESSION['photo'] != "") { ?>
+                          <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
+                        <?php } else { ?>
+                          <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                        <?php } ?>
                       </div>
                       <ul class="dropdown dropleft">
                         <li>

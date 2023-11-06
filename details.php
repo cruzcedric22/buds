@@ -4,7 +4,7 @@ require_once('./includes/config.php');
 
 if (isset($_SESSION['role'])) {
     if ($_SESSION['role'] == 1) {
-        header('Location: ceipo/index.php');
+        header('Location: CEIPO/client/index');
     }
 }
 ini_set('display_errors', 0);
@@ -14,6 +14,7 @@ error_reporting(0);
 
 
 $id = $_GET['ID'];
+$_SESSION['bus_id'] = $_GET['ID'];
 //old query
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
 $sql = "SELECT * FROM business_list AS bl 
@@ -90,22 +91,24 @@ if ($rs = $conn->query($sql)) {
 if (isset($_SESSION['ownerId'])) {
     // Execute this block when 'ownerId' is set in the session.
     $sql = "SELECT *
-            FROM business_applicant AS bl
-            LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
-            LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-            WHERE bl.bus_id = :id
-            AND (ap.app_id IS NULL OR ap.app_id != :app_id);";
+    FROM business_applicant AS bl
+    LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
+    LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
+    WHERE (bl.bus_id = :id AND bl.status = 1)
+    AND (ap.app_id IS NULL OR ap.app_id <> :app_id);    
+    ";
 } else {
     // Execute this block when 'ownerId' is not set in the session.
     $sql = "SELECT *
             FROM business_applicant AS bl
             LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
             LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
-            WHERE bl.bus_id = :id;";
+            WHERE bl.bus_id = :id AND bl.status = 1";
 }
 
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
+// echo "SQL Query: " . $sql;
 $stmt->bindParam(':id', $id, PDO::PARAM_STR);
 
 if (isset($_SESSION['ownerId'])) {
@@ -120,7 +123,70 @@ if ($stmt->errorCode() !== '00000') {
     // Example: error_log("SQL Error: " . $errorInfo[2]);
 } else {
     $datas = $stmt->fetchAll();
+    $numRows = $stmt->rowCount();
 }
+
+
+$sql3 = "SELECT * FROM business_carousel WHERE bus_id = :id";
+$stmt3 = $pdo->prepare($sql3);
+$stmt3->bindParam(':id', $id, PDO::PARAM_STR);
+$stmt3->execute();
+$numRows1 = $stmt3->rowCount();
+$datas3 = $stmt3->fetchAll();
+
+foreach ($datas3 as $data) {
+    $pic1 = $data['pic1'];
+    $pic2 = $data['pic2'];
+    $pic3 = $data['pic3'];
+    $pic4 = $data['pic4'];
+}
+
+$sql4 = "SELECT * FROM business_post WHERE bus_id = :id AND status = 1";
+$stmt4 = $pdo->prepare($sql4);
+$stmt4->bindParam(':id', $id, PDO::PARAM_STR);
+$stmt4->execute();
+$numRows2 = $stmt4->rowCount();
+$datas4 = $stmt4->fetchAll();
+
+if(isset($_SESSION['fname']) || isset($_SESSION['mname']) || isset($_SESSION['lname'])){
+    $nameCommentRate = $nameCommentRate = $_SESSION['fname'] . " " . $_SESSION['mname'] . " " . $_SESSION['lname'];
+}
+
+
+$sql5 = "SELECT * FROM business_reviews AS br 
+INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
+INNER JOIN owner_list AS ol ON br.user_id = ol.ID
+WHERE (br.bus_id = :id AND bl.bus_id = :id)
+ORDER BY br.curr_time DESC";
+$stmt5 = $pdo->prepare($sql5);
+$stmt5->bindParam(':id', $id, PDO::PARAM_STR);
+$stmt5->execute();
+$numRows3 = $stmt5->rowCount();
+$datas5 = $stmt5->fetchAll();
+
+
+if (isset($_SESSION['ownerId'])) {
+    $sql6 = "SELECT * FROM business_reviews AS br 
+    INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
+    INNER JOIN owner_list AS ol ON br.user_id = ol.ID
+    WHERE (br.bus_id = :id AND ol.ID = :userid)"; // Fixed the ON condition
+
+    $stmt6 = $pdo->prepare($sql6);
+    $stmt6->bindParam(':id', $id, PDO::PARAM_STR);
+    $stmt6->bindParam(':userid', $_SESSION['ownerId'], PDO::PARAM_STR); // Fixed variable name from $stmt to $stmt6
+    $stmt6->execute();
+
+    $numRows6 = $stmt6->rowCount();
+    $datas6 = $stmt6->fetchAll();
+
+    if ($stmt6->errorCode() !== '00000') {
+        $errorInfo = $stmt6->errorInfo(); // Fixed variable name from $stmt to $stmt6
+        // Log or handle the error appropriately.
+        echo "SQL Error: " . $errorInfo[2];
+    }
+
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -141,6 +207,7 @@ if ($stmt->errorCode() !== '00000') {
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
@@ -158,6 +225,12 @@ if ($stmt->errorCode() !== '00000') {
             width: 100px;
             /* Adjust the width as needed */
         }
+
+        #swal {
+            z-index: 9999;
+            /* Adjust this value as needed */
+        }
+
 
         #map {
             display: flex;
@@ -222,15 +295,17 @@ if ($stmt->errorCode() !== '00000') {
                                         <ul>
                                             <li class="profile-dropdown">
                                                 <div class="user-profile">
-                                                    <?php if (isset($_SESSION['photo'])) { ?>
-                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php if ($_SESSION['photo'] != "") { ?>
+                                                        <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
                                                     <?php } else { ?>
                                                         <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                                     <?php } ?>
                                                 </div>
                                                 <ul class="dropdown dropleft">
                                                     <li>
-                                                        <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
+                                                        <h2>
+                                                            <?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?>
+                                                        </h2>
                                                     </li>
                                                     <li><a href="user.php">MY PROFILE</a></li>
                                                     <?php if ($_SESSION['role'] == 3) { ?>
@@ -271,16 +346,16 @@ if ($stmt->errorCode() !== '00000') {
         </div>
     </header>
 
-    <div id="id01" class="modal">
+    <div id="id01" tabindex="-1" style="z-index: 1000;" class="modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content w-100">
                 <div class="modal-header">
                     <h3 class="text-center mb-6 font-weight-bold">LOG IN</h3>
-                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    <span onclick="document.getElementById('id01').style.display='none'" title="Close Modal">&times;</span>
                 </div>
                 <div class="container mt-4">
                     <div class="card px-2 py-3" id="form1">
-                        <div class="form-data" v-if="!submitted">
+                        <div class="form-data">
                             <div class="forms-inputs mb-4">
                                 <!-- <form method="post"> -->
                                 <span>Email</span>
@@ -296,12 +371,12 @@ if ($stmt->errorCode() !== '00000') {
                             </div>
                         </div>
                         </form>
-                        <div class="success-data" v-else>
+                        <div class="success-data">
                             <div class="text-center d-flex flex-column">
                                 <h6 class="text-center fs-1">Don't have a user account? <a href="#id02" data-toggle="modal">Sign Up</a></h6>
                             </div>
                         </div>
-                        <div class="success-data" v-else>
+                        <div class="success-data">
                             <div class="text-center d-flex flex-column">
                                 <h6 class="text-center fs-1">Don't have a business account? <a href="#id03" data-toggle="modal">Sign Up</a></h6>
                             </div>
@@ -422,9 +497,12 @@ if ($stmt->errorCode() !== '00000') {
                                 <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" name="passwordconfirm" id="ownerConPass"></div>
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="checkTerms">
-                                    <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
+                                    <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing
+                                        to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy
+                                            Policy</a>.</p>
                                 </div>
-                                <div class="mb-3"> <button disabled class="btn w-100" id="signUp" onclick="createBusinessOwner()" name="btnbusiness" type="button">SIGN UP</button></div>
+                                <div class="mb-3"> <button disabled class="btn w-100" id="signUp" onclick="createBusinessOwner()" name="btnbusiness" type="button">SIGN
+                                        UP</button></div>
                         </div>
                         </form>
                     </div>
@@ -432,6 +510,7 @@ if ($stmt->errorCode() !== '00000') {
             </div>
         </div>
     </div>
+
     <!-- Header End -->
 
     <!-- Property Details Section Begin -->
@@ -479,26 +558,44 @@ if ($stmt->errorCode() !== '00000') {
 
                                 <div class="pd-widget">
                                     <h4>GALLERYS</h4>
-                                    <div class="fp-slider owl-carousel">
-                                        <div class="fp-item set-bg" data-setbg="img/gallery/1.jpg">
-                                            <div class="fp-text">
-                                                <h5 class="title">Jollibee</h5>
-                                                <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-                                            </div>
+                                    <?php if ($numRows1 > 0) { ?>
+                                        <div class="fp-slider owl-carousel">
+                                            <?php if (isset($pic1)) { ?>
+                                                <div class="fp-item set-bg" data-setbg=<?php echo "img/gallery1/" . $pic1 ?>>
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php  } ?>
+                                            <?php if ($pic2 != "") { ?>
+                                                <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic2 ?>">
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                            <?php if ($pic3 != "") { ?>
+                                                <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic3 ?>">
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                            <?php if ($pic4 != "") { ?>
+                                                <div class="fp-item set-bg" data-setbg="<?php echo "img/gallery1/" . $pic4 ?>">
+                                                    <div class="fp-text">
+                                                        <h5 class="title"><?php echo $bus_name ?></h5>
+                                                        <p><span class="icon_pin_alt"></span><?php echo $bus_add ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
-                                        <div class="fp-item set-bg" data-setbg="img/gallery/2.jpg">
-                                            <div class="fp-text">
-                                                <h5 class="title">Jollibee</h5>
-                                                <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-                                            </div>
-                                        </div>
-                                        <div class="fp-item set-bg" data-setbg="img/gallery/3.jpg">
-                                            <div class="fp-text">
-                                                <h5 class="title">Jollibee</h5>
-                                                <p><span class="icon_pin_alt"></span> Maypajo, Caloocan City</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php } else { ?>
+                                        <p class="h4 text-muted mb-2 mt-0 pt-0">No available post</p>
+                                    <?php } ?>
                                 </div>
                                 <div class="pd-widget">
                                     <h4>Map Location</h4>
@@ -514,94 +611,74 @@ if ($stmt->errorCode() !== '00000') {
                                         <br>
                                         <h4>FEATURE POST</h4>
                                     </div>
-                                    <div class="blog-item">
-                                        <div class="bi-pic">
-                                            <img src="img/post/1.jpg" alt="">
-                                        </div>
-                                        <div class="bi-text">
-                                            <h5><a href="#">NEW PROMO: Mix & Match</a></h5>
-                                            <ul>
-                                                <li>April 30, 2023</li>
-                                            </ul>
-                                            <p>You can make your own combination. Enjoy the New Promo Combo Mix & Match for the first time for only 89 pesos!</p>
-                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
-                                        </div>
-                                    </div>
-                                    <div class="blog-item">
-                                        <div class="bi-pic">
-                                            <img src="img/post/2.jpg" alt="">
-                                        </div>
-                                        <div class="bi-text">
-                                            <h5><a href="#">Updated Price: Family Meal</a></h5>
-                                            <ul>
-                                                <li>June 29, 2023</li>
-                                            </ul>
-                                            <p>Enjoy the Updated Price of our Family Meal for only 1,099 pesos! Visit Jollibee Now!</p>
-                                            <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
-                                        </div>
-                                    </div>
+                                    <?php if ($numRows2 > 0) {
+                                        foreach ($datas4 as $data2) { ?>
+                                            <div class="blog-item">
+                                                <div class="bi-pic">
+                                                    <img src="<?php echo "img/post/" . $data2['photo'] ?>" style="" height="200" width="300" alt="">
+                                                </div>
+                                                <div class="bi-text">
+                                                    <h5><?php echo $data2['post_title'] ?></h5>
+                                                    <ul>
+                                                        <li><?php echo $data2['post_desc'] ?></li>
+                                                    </ul>
+                                                    <p><?php echo $data2['post_date'] ?></p>
+                                                    <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
+                                                </div>
+                                            </div>
+                                        <?php }
+                                    } else { ?>
+                                        <p class="h4 text-muted mb-5 mt-0 pt-0">No available post</p>
+                                    <?php } ?>
                                 </div>
-
+                                <!-- ito edit -->
                                 <div class="blog-details-content">
                                     <div class="bc-widget">
-                                        <h4>3 REVIEWS</h4>
+                                        <h4><?php echo $numRows3 . " REVIEWS" ?></h4>
                                         <div class="comment-option">
+                                        <?php
+                                        for ($i = 0; $i < 5 && $i < count($datas5); $i++) {
+                                            $data5 = $datas5[$i];
+                                            $dateString = $data5['curr_time']; // Assuming you have the date as a string in this format
+                                            $timestamp = strtotime($dateString);
+                                            $formattedDate = date('F j, Y', $timestamp);
+                                        ?>
                                             <div class="co-item">
                                                 <div class="ci-pic">
-                                                    <img src="img/testimonial-author/arceo.jpg" alt="">
+                                                    <?php if ($data5['photo'] != null && $data5['photo'] != " ") { ?>
+                                                        <img src="<?php echo "img/profile-picture/" . $data5['photo'] ?>" alt="">
+                                                    <?php } else { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } ?>
                                                 </div>
                                                 <div class="ci-text">
-                                                    <h5>Kenjie P. Arceo</h5>
+                                                    <h5><?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?></h5>
                                                     <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
+                                                        <?php for ($j = 0; $j < $data5['rating']; $j++) { ?>
+                                                            <i class="fa fa-star"></i>
+                                                        <?php } ?>
                                                     </div>
-                                                    <p>Basta may comment dito uwu</p>
+                                                    <p><?php echo $data5['comment'] ?></p>
                                                     <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
+                                                        <li><i class="fa fa-clock-o"><?php echo ' ' . $formattedDate ?></i></li>
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <!-- <div class="co-item reply-item">
-                                                <div class="ci-pic">
-                                                    <img src="img/testimonial-author/roy.jpg" alt="">
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>Roy Lewis Collo</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
+                                            <?php if ($data5['bus_reply'] != null && $data5['bus_reply'] != " ") { ?>
+                                                <div class="co-item reply-item">
+                                                    <div class="ci-pic">
+                                                        <img src="<?php echo "img/logo/" . $data5['Businesslogo'] ?>" alt="">
                                                     </div>
-                                                    <p>Tapos may reply dito uwu</p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1, 2023</li>
-                                                    </ul>
-                                                </div>
-                                            </div> -->
-                                            <div class="co-item">
-                                                <div class="ci-pic">
-                                                    <img src="img/testimonial-author/ramil.jpg" alt="">
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>Princess Angelica Ramil</h5>
-                                                    <div class="pr-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
+                                                    <div class="ci-text">
+                                                        <h5><?php echo $data5['BusinessName'] ?></h5>
+                                                        <p><?php echo $data5['bus_reply'] ?></p>
                                                     </div>
-                                                    <p>Comment to pero pangalawa naman </p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o"></i> July 1,2023</li>
-                                                    </ul>
                                                 </div>
+                                            <?php }
+                                        }
+                                        ?>
+                                            <div id="UIcommentAndRating">
+
                                             </div>
                                         </div>
                                     </div>
@@ -611,8 +688,9 @@ if ($stmt->errorCode() !== '00000') {
                                         <div class="row">
                                             <h4>LEAVE A COMMENT</h4><br>
                                         </div>
+                                        <?php if($numRows6 === 0 || !isset($_SESSION['ownerId'])){ ?>
                                         <div class="row">
-                                            <fieldset class="rating">
+                                            <fieldset id="ratingUi" class="rating">
                                                 <input type="radio" id="star5" name="rating" value="5" />
                                                 <label for="star5">5 stars</label>
                                                 <input type="radio" id="star4" name="rating" value="4" />
@@ -625,11 +703,15 @@ if ($stmt->errorCode() !== '00000') {
                                                 <label for="star1">1 star</label>
                                             </fieldset>
                                         </div>
+                                        <?php } ?>
                                     </div>
-                                    <form action="#" class="review-form">
-                                        <textarea placeholder="Leave a Comment"></textarea>
-
-                                        <button type="submit" class="site-btn">Send</button>
+                                    <form class="review-form">
+                                        <textarea placeholder="Leave a Comment" id="commentVal"></textarea>
+                                        <input type="hidden" value="<?php echo $_SESSION['ownerId'] ?>" id="commentAndRatingId">
+                                        <input type="hidden" value="<?php echo $nameCommentRate ?>" id="nameUserComment">
+                                        <input type="hidden" value="<?php echo $_SESSION['photo'] ?>" id="photoCommentVal">
+                                        <input type="hidden" value="<?php echo $id ?>" id="commentRatingBusId">
+                                        <button type="button" onclick="commentAndRating('<?php echo $numRows6 ?>')" class="site-btn">Send</button>
                                     </form>
                                 </div>
                             </div>
@@ -647,7 +729,8 @@ if ($stmt->errorCode() !== '00000') {
                                     <h5>We're Hiring!</h5>
                                 </div>
                                 <?php
-                                if (($_SESSION['role'] == 3 || $_SESSION['ownerId'] == null)
+                                if (
+                                    ($_SESSION['role'] == 3 || $_SESSION['ownerId'] == null)
                                     || $_SESSION['role'] == null
                                 ) {
                                     foreach ($datas as $index => $data) {
@@ -659,14 +742,17 @@ if ($stmt->errorCode() !== '00000') {
                                         $degree = $data['degree'];
                                         $yearExp = $data['year_exp'];
                                         $bus_applicant_id = $data['bus_applicant'];
-                                       $user_id = $_SESSION['ownerId'];
+                                        $user_id = $_SESSION['ownerId'];
                                 ?>
                                         <div class="single-sidebar m-0 p-0">
                                             <div class="top-agent">
                                                 <div class="ta-item">
-                                                    <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
+                                                    <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png">
+                                                    </div>
                                                     <div class="ta-text">
-                                                        <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
+                                                        <h6><a>
+                                                                <?php echo $data['pos_vacant'] ?>
+                                                            </a></h6>
                                                         <!-- Pass the JavaScript variables as separate parameters to openModal -->
                                                         <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
                                                     </div>
@@ -678,7 +764,8 @@ if ($stmt->errorCode() !== '00000') {
                                                 <div class="modal-content w-100">
                                                     <div class="modal-header">
                                                         <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
+                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">
+                                                            We're Hiring!</h3>
                                                         <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
                                                     </div>
                                                     <div class="container mt-4">
@@ -687,7 +774,13 @@ if ($stmt->errorCode() !== '00000') {
                                                                 <!-- Job Listings -->
                                                                 <div class="job-listing">
                                                                     <h4 class="jobTitle"><strong>Manager</strong></h4>
-                                                                    <p id="des">The Restaurant Manager is responsible for the development and achievement of the store business objectives such as Sales and Profitability targets, customer satisfaction & Food, Safety and Cleanliness standards; People Management and Development; and Store’s adherence to operating systems and standards and compliance to all government requirements.</p>
+                                                                    <p id="des">The Restaurant Manager is responsible for the
+                                                                        development and achievement of the store business
+                                                                        objectives such as Sales and Profitability targets,
+                                                                        customer satisfaction & Food, Safety and Cleanliness
+                                                                        standards; People Management and Development; and
+                                                                        Stores adherence to operating systems and standards and
+                                                                        compliance to all government requirements.</p>
                                                                     <h6><strong>Job Specification</strong></h6>
                                                                     <ul class="bullet-list">
                                                                     </ul>
@@ -698,10 +791,12 @@ if ($stmt->errorCode() !== '00000') {
                                                                 <h6><strong>Additional Information</strong></h6>
                                                                 <div class="row">
                                                                     <div class="col">
-                                                                        <p class="degree"><strong>Degree:</strong> Bachelor's Degree</p>
+                                                                        <p class="degree"><strong>Degree:</strong> Bachelor's
+                                                                            Degree</p>
                                                                     </div>
                                                                     <div class="col">
-                                                                        <p class="experience"><strong>Years of Experience:</strong> 3 years</p>
+                                                                        <p class="experience"><strong>Years of
+                                                                                Experience:</strong> 3 years</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -709,7 +804,8 @@ if ($stmt->errorCode() !== '00000') {
                                                                 <div class="row">
                                                                     <div class="col">
                                                                         <br>
-                                                                        <h4 style="margin-top: 7px;"><strong>Submit Application</strong></h4>
+                                                                        <h4 style="margin-top: 7px;"><strong>Submit
+                                                                                Application</strong></h4>
                                                                     </div>
                                                                     <div class="col text-right">
                                                                         <input type="hidden" id="app_id">
@@ -723,7 +819,7 @@ if ($stmt->errorCode() !== '00000') {
                                             </div>
                                         </div>
                                 <?php }
-                               } ?>
+                                } ?>
                                 <div class="single-sidebar">
                                     <div class="section-title sidebar-title">
                                         <h5>Related Business</h5>
@@ -782,10 +878,14 @@ if ($stmt->errorCode() !== '00000') {
         </div>
     </footer>
 
+    <!-- <div id="id01" class="modal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"> -->
+
+
     <!-- Footer Section End -->
     <!-- Js Plugins -->
-    <!-- <script src="js/jquery-3.3.1.min.js"></script> -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/mixitup.min.js"></script>
@@ -845,9 +945,6 @@ if ($stmt->errorCode() !== '00000') {
 
 
 
-
-
-
             // Get a reference to the checkbox element
             var checkbox = $("#checkTerms");
             var signUpButton = $("#signUp");
@@ -868,6 +965,146 @@ if ($stmt->errorCode() !== '00000') {
                 }
             });
         });
+
+        // for comment and ratings
+        let commentsAndRatings = [];
+        var currentDate = new Date();
+        var options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        var formattedDate = currentDate.toLocaleDateString(undefined, options);
+
+        function commentAndRating(userStats) {
+    let comment = $("#commentVal").val();
+    let rating = parseInt($("input[name='rating']:checked").val(), 10);
+    let userid = $("#commentAndRatingId").val();
+    let name = $('#nameUserComment').val();
+    let photo = $('#photoCommentVal').val();
+    let bus_id = $('#commentRatingBusId').val();
+
+    if(userid == ""){
+        openLoginModal();
+    }else{
+        if (userStats >= 1 && commentsAndRatings.length >= 1) {
+        // If there is already one rating in the array, only add the comment
+        commentsAndRatings[0].comment = comment;
+        let commentAndRating = {
+            comment: comment,
+        };
+        commentsAndRatings.push(commentAndRating);
+    } else if (userStats >= 1) {
+        var payload = {
+            comment: comment,
+            rating: rating,
+            userid: userid,
+            bus_id: bus_id
+        };
+        if (!comment) {
+            Swal.fire({
+                title: "Warning",
+                text: "Please input a comment.",
+                icon: "warning",
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+            });
+            return; // Exit the function if comment is missing
+        }
+    } else {
+        var payload = {
+            comment: comment,
+            rating: rating,
+            userid: userid,
+            bus_id: bus_id
+        };
+
+        if (!rating) {
+            Swal.fire({
+                title: "Warning",
+                text: "Please input a rating.",
+                icon: "warning",
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+            });
+            return; // Exit the function if rating is missing
+        } else {
+            let commentAndRating = {
+                comment: comment,
+                rating: rating
+            };
+            commentsAndRatings.push(commentAndRating);
+            $('#ratingUi').html("");
+        }
+    }
+
+    // Rest of your code, including the AJAX request and UI update
+    $.ajax({
+        type: "POST",
+        url: 'controllers/business.php',
+        data: {
+            payload: JSON.stringify(payload),
+            setFunction: 'commentAndRating'
+        },
+        success: function(response) {
+            data = JSON.parse(response);
+            Swal.fire({
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+            });
+            window.location.reload();
+        }
+    });
+
+    let latestCommentRatingPair = commentsAndRatings[commentsAndRatings.length - 1];
+    
+
+    // Create a new div with the desired structure
+    let newDiv = $('<div class="co-item">' +
+        '<div class="ci-pic">' +
+        '<img src="' + photo + '" alt="User Photo">' +
+        '</div>' +
+        '<div class="ci-text">' +
+        '<h5>' + name + '</h5>' +
+        '<div class="pr-rating">' + getStarIcons(latestCommentRatingPair.rating) + '</div>' +
+        '<p>' + latestCommentRatingPair.comment + '</p>' +
+        '<ul>' +
+        '<li><i class="fa fa-clock-o"></i>' + formattedDate + '</li>' +
+        '</ul>' +
+        '</div>' +
+        '</div>');
+
+    // Append the new div to a container (e.g., a parent div with an ID)
+    $('#UIcommentAndRating').append(newDiv);
+    };
+};
+
+
+        function getStarIcons(rating) {
+            // Generate star icons based on the rating
+            let starIcons = '';
+            for (let i = 0; i < rating; i++) {
+                starIcons += '<i class="fa fa-star" style="margin-right: 2px;"></i>';
+            }
+            return starIcons;
+        };
+
+        function openLoginModal() {
+            $("#id01").css("display", "block");
+        }
+
+        function hideModal(modalId) {
+            $("#" + modalId).modal("hide");
+        }
 
         // Function to open the modal
         function openModal(logo, pos, des, modalId, jobspec, degree, exp, id) {
@@ -926,12 +1163,10 @@ if ($stmt->errorCode() !== '00000') {
 
         function applyUser(modalId, user_id) {
             var app_id = $('#app_id').val();
-            var user_id = user_id;
-            // alert(user_id) 
 
             if (user_id == 0) {
-                $('#id01').modal('show');
-                $("#" + modalId).modal("hide");
+                openLoginModal();
+                hideModal(modalId);
             } else {
                 var payload = {
                     app_id: app_id,
@@ -956,14 +1191,14 @@ if ($stmt->errorCode() !== '00000') {
                             },
                             showCancelButton: false,
                         });
-                        //for normal UI AHAHAHHAHAHA
-                        // swal.fire(data.title, data.message, data.icon);
-                        window.location.reload();
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
                     }
                 });
             }
-
         };
+
 
 
 
@@ -1173,7 +1408,7 @@ if ($stmt->errorCode() !== '00000') {
                     });
                     if (data.role == 1) {
                         setTimeout(function() {
-                            window.location.href = "ceipo/index.php";
+                            window.location.href = "CEIPO/client/index.php";
                         }, 2000);
 
                     } else {
